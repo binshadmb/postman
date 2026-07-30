@@ -5,13 +5,14 @@ First runnable shell for the Khagatara Postman venture: overseas customers uploa
 ## Run
 
 ```powershell
-npm start
+npm install
+npm run dev
 ```
 
 Open:
 
 ```text
-http://localhost:4173
+http://localhost:3000
 ```
 
 ## Included
@@ -21,11 +22,11 @@ http://localhost:4173
 - Country/currency selector for the Europe-facing reference-price model
 - Theme selector and font-size control
 - Track Order and Account placeholder workflows
-- Static local server with no external dependency install required
+- Next.js Pages Router shell using plain CSS and public browser assets
 
 ## Deploy
 
-Vercel uses `index.js` as a tiny serverless entrypoint that serves the static files. Browser-only code lives in `client.js`, so server execution never touches `document`.
+This now matches the simple Next.js deployment style used by other Khagatara projects. Vercel runs `next build`; browser-only tab/calculator code lives in `public/client.js`.
 
 ## Next Build Step
 
