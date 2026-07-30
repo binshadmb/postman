@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Postman Khagatara</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#home" aria-label="Postman Khagatara home">
+          <span class="brand-mark">PK</span>
+          <span>
+            <strong>Postman</strong>
+            <small>Khagatara</small>
+          </span>
+        </a>
+        <nav id="motherTabs" class="mother-tabs" aria-label="Main sections"></nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <a class="icon-button" href="#home" title="Home" aria-label="Home">⌂</a>
+          <label class="search">
+            <span>Search</span>
+            <input id="searchInput" type="search" placeholder="Order, AWB, module">
+          </label>
+          <label>
+            Theme
+            <select id="themeSelect">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+          <label>
+            Font
+            <input id="fontSize" type="range" min="12.5" max="18" step="0.5" value="15">
+          </label>
+          <button class="account-button" type="button">Account</button>
+        </header>
+
+        <section id="homeView" class="home-view">
+          <div class="hero">
+            <div class="hero-copy">
+              <p class="eyebrow">postman.khagatara.com</p>
+              <h1>Print, post, track, and prove delivery inside India.</h1>
+              <p class="hero-text">A service desk for overseas senders who need Indian documents, cards, registered mail, media ads, and bulk mail handled locally.</p>
+              <div class="quick-actions">
+                <button class="primary-action" type="button" data-open="print-post">New print order</button>
+                <button class="secondary-action" type="button" data-open="track">Track order</button>
+              </div>
+            </div>
+            <div class="workflow-visual" aria-label="Order workflow visual">
+              <div class="desk-card document">
+                <span class="line strong"></span>
+                <span class="line"></span>
+                <span class="line short"></span>
+              </div>
+              <div class="desk-card envelope">
+                <span class="stamp"></span>
+                <span class="address-line"></span>
+                <span class="address-line short"></span>
+              </div>
+              <div class="desk-card receipt">
+                <span class="barcode"></span>
+                <strong>AWB</strong>
+                <span>Tracking ready</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <article>
+              <span>Mother Tabs</span>
+              <strong>7</strong>
+            </article>
+            <article>
+              <span>Child Tabs</span>
+              <strong>49</strong>
+            </article>
+            <article>
+              <span>Calculators</span>
+              <strong>5</strong>
+            </article>
+            <article>
+              <span>Phase</span>
+              <strong>1 → 2</strong>
+            </article>
+          </div>
+        </section>
+
+        <section id="moduleView" class="module-view" hidden>
+          <div class="module-head">
+            <div>
+              <p id="breadcrumb" class="breadcrumb"></p>
+              <h2 id="moduleTitle"></h2>
+            </div>
+            <span id="moduleBadge" class="module-badge"></span>
+          </div>
+          <nav id="childTabs" class="child-tabs" aria-label="Child tabs"></nav>
+          <div id="panel" class="panel"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

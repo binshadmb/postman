@@ -1,0 +1,9 @@
+{
+  "name": "postman-khagatara",
+  "version": "0.1.0",
+  "private": true,
+  "description": "postman.khagatara.com first runnable project shell",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
