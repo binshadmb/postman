@@ -28,7 +28,7 @@ module.exports = function handler(req, res) {
   fs.readFile(filePath, (error, data) => {
     if (error) {
       res.statusCode = 404;
-      res.end("Not found");
+      res.end(`Not found: ${fileName}`);
       return;
     }
 

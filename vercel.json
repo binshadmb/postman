@@ -1,5 +1,15 @@
 {
   "installCommand": "npm install",
+  "functions": {
+    "index.js": {
+      "includeFiles": [
+        "index.html",
+        "styles.css",
+        "client.js",
+        "favicon.svg"
+      ]
+    }
+  },
   "routes": [
     {
       "src": "/(.*)",
