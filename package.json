@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "postman.khagatara.com first runnable project shell",
+  "main": "index.js",
   "scripts": {
     "build": "node scripts/build-static.js",
     "start": "node scripts/local-server.js"

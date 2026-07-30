@@ -25,7 +25,7 @@ http://localhost:4173
 
 ## Deploy
 
-Vercel runs `npm run build` and publishes the generated `dist` folder as a static site. Browser-only code lives in `client.js`, so Vercel should not execute it as a server function.
+Vercel uses `index.js` as a tiny serverless entrypoint that serves the static files. Browser-only code lives in `client.js`, so server execution never touches `document`.
 
 ## Next Build Step
 
