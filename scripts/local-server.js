@@ -2,7 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const root = __dirname;
+const root = path.resolve(process.env.STATIC_ROOT || path.join(__dirname, ".."));
 const port = Number(process.env.PORT || 4173);
 
 const types = {
@@ -20,6 +20,7 @@ const server = http.createServer((req, res) => {
   const requestedPath =
     urlPath === "/" ? "index.html" :
     urlPath === "/favicon.ico" ? "favicon.svg" :
+    urlPath === "/favicon.png" ? "favicon.svg" :
     urlPath.replace(/^[/\\]+/, "");
   const safePath = path.normalize(requestedPath).replace(/^(\.\.[/\\])+/, "");
   const filePath = path.join(root, safePath);

@@ -4,6 +4,7 @@
   "private": true,
   "description": "postman.khagatara.com first runnable project shell",
   "scripts": {
-    "start": "node server.js"
+    "build": "node scripts/build-static.js",
+    "start": "node scripts/local-server.js"
   }
 }

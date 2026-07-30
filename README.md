@@ -23,6 +23,10 @@ http://localhost:4173
 - Track Order and Account placeholder workflows
 - Static local server with no external dependency install required
 
+## Deploy
+
+Vercel runs `npm run build` and publishes the generated `dist` folder as a static site. Browser-only code lives in `client.js`, so Vercel should not execute it as a server function.
+
 ## Next Build Step
 
 Move this shell into Next.js App Router with Neon, Prisma, Razorpay, Brevo, file storage, PDF generation, and order tracking once Phase 1 validation is complete.
