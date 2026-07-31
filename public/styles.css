@@ -121,12 +121,21 @@ button {
   color: var(--ink);
   padding: 10px 12px;
   text-align: left;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, color 0.15s, transform 0.15s, border-color 0.15s;
+}
+
+.tab-button:hover {
+  background: var(--surface-2);
+  transform: scale(1.03);
 }
 
 .tab-button.active {
   background: var(--ink);
   color: var(--surface);
-  border-color: var(--ink);
+  border-color: var(--red);
+  border-left-width: 3px;
+  transform: none;
 }
 
 .tab-button small {
@@ -137,6 +146,8 @@ button {
 .main {
   min-width: 0;
   padding: 18px;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .topbar {
@@ -505,10 +516,4 @@ input[type="range"] {
   overflow: hidden;
   clip: rect(0,0,0,0);
   white-space: nowrap;
-}
-
-/* ── Active mother tab accent ────────────────────────────────────────────── */
-.tab-button {
-  border-left: 3px solid transparent;
-  transition: border-color 0.15s, background 0.15s;
 }

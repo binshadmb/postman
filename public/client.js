@@ -306,7 +306,7 @@ function uploadPanel() {
         <textarea rows="3" placeholder="e.g. Print pages 1-3 only, use A4 landscape…"
           style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical"></textarea>
       </label>
-      <button type="button" onclick="openModule('print-post',3)"
+      <button type="button" onclick="openModule('print-post',1)"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         Continue to Print Options →
       </button>
@@ -781,19 +781,26 @@ function renderPanel() {
 // ── Render mother/child tabs ───────────────────────────────────────────────
 
 function renderMotherTabs() {
-  motherTabsEl.innerHTML = modules.map((m, i) => `
-    <button class="tab-button${m.id === state.moduleId && !homeView.hidden ? " active" : ""}"
+  motherTabsEl.innerHTML = modules.map((m, i) => {
+    const isActive = m.id === state.moduleId && !homeView.hidden;
+    return `
+    <button class="tab-button${isActive ? " active" : ""}"
       type="button" data-module="${m.id}"
-      style="border-left:3px solid ${m.id === state.moduleId && !homeView.hidden ? m.color : "transparent"}">
+      style="border-left:3px solid ${isActive ? m.color : "transparent"};${isActive ? `background:var(--ink);color:var(--surface);` : ""}"
+      onmouseover="if(!this.classList.contains('active')){this.style.background='var(--surface-2)';this.style.color='${m.color}';this.style.borderLeftColor='${m.color}';}"
+      onmouseout="if(!this.classList.contains('active')){this.style.background='transparent';this.style.color='var(--ink)';this.style.borderLeftColor='transparent';}">
       <span>${m.icon} ${i + 1}. ${m.title}</span>
       <small>${m.children.length}</small>
-    </button>`).join("");
+    </button>`;
+  }).join("");
 }
 
 function renderChildTabs() {
   const mod = activeModule();
   childTabsEl.innerHTML = mod.children.map((c, i) => `
-    <button class="tab-button${i === state.childIndex ? " active" : ""}" type="button" data-child="${i}">
+    <button class="tab-button child-tab${i === state.childIndex ? " active" : ""}"
+      type="button" data-child="${i}"
+      style="${i === state.childIndex ? `background:${mod.color};color:#fff;border-color:${mod.color};` : ""}">
       <span>${c.label}</span>
     </button>`).join("");
 }
@@ -822,11 +829,13 @@ function render() {
 
 function openModule(moduleId, childIndex) {
   state.moduleId = moduleId;
-  state.childIndex = typeof childIndex === "number" ? childIndex : 3;
+  state.childIndex = typeof childIndex === "number" ? childIndex : 0;
   homeView.hidden = true;
   moduleView.hidden = false;
   render();
-  window.scrollTo(0, 0);
+  // Scroll the main content area to its top — not the whole page (which would show the hero)
+  const mainEl = document.querySelector(".main");
+  if (mainEl) mainEl.scrollTop = 0;
 }
 
 function proceedToCheckout() {
@@ -842,8 +851,8 @@ document.addEventListener("click", (e) => {
   const homeBtn  = e.target.closest("[href='#home'], [href='#home'] *");
   const accBtn   = e.target.closest("#accountBtn");
 
-  if (modBtn)   openModule(modBtn.dataset.module, modules.find((m) => m.id === modBtn.dataset.module)?.children.findIndex((c) => c.id === "calculator") ?? 3);
-  if (childBtn) { state.childIndex = Number(childBtn.dataset.child); render(); }
+  if (modBtn)   openModule(modBtn.dataset.module, 0);
+  if (childBtn) { state.childIndex = Number(childBtn.dataset.child); render(); const mainEl = document.querySelector(".main"); if (mainEl) mainEl.scrollTop = 0; }
   if (openBtn)  openModule(openBtn.dataset.open, openBtn.dataset.open === "track" ? 0 : 3);
   if (homeBtn)  { homeView.hidden = false; moduleView.hidden = true; renderMotherTabs(); }
   if (accBtn)   openModule("account", 0);
