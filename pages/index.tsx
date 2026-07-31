@@ -110,6 +110,7 @@ export default function Home() {
         </main>
       </div>
 
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
       <Script src="/client.js" strategy="afterInteractive" />
     </>
   );

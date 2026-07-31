@@ -163,7 +163,7 @@ function calcShell(title, fields, total, rows) {
       <span style="color:var(--muted);font-size:0.85rem">${title}</span>
       <strong style="font-size:2.6rem;font-weight:800">${money(total)}</strong>
       ${rows.map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line)"><span>${k}</span><strong>${v}</strong></div>`).join("")}
-      <button type="button" onclick="proceedToCheckout()" style="margin-top:8px;background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">Proceed to checkout →</button>
+      <button type="button" onclick="proceedToCheckout(${total}, { module: state.moduleId })" style="margin-top:8px;background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">Proceed to checkout →</button>
     </aside>
   </div>`;
 }
@@ -835,8 +835,63 @@ function openModule(moduleId, childIndex) {
   render();
 }
 
-function proceedToCheckout() {
-  alert("Checkout integration (Razorpay) comes in Phase 2. For now, email postman@khagatara.com with your order details.");
+async function proceedToCheckout(amountInInr, orderNotes) {
+  try {
+    // 1. Ask our backend to create a Razorpay order
+    const res = await fetch("/api/razorpay/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: amountInInr,
+        currency: "INR",
+        notes: orderNotes || {},
+      }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert("Could not start payment. Please try again or email postman@khagatara.com.");
+      console.error("create-order failed:", data);
+      return;
+    }
+
+    // 2. Open Razorpay Checkout modal (razorpay checkout.js must be loaded on the page)
+    const rzp = new Razorpay({
+      key: data.keyId,
+      amount: data.amount,
+      currency: data.currency,
+      name: "Postman — Khagatara",
+      description: "Order payment",
+      order_id: data.orderId,
+      handler: async function (response) {
+        // 3. Verify payment signature on the backend
+        const verifyRes = await fetch("/api/razorpay/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(response),
+        });
+        const verifyData = await verifyRes.json();
+
+        if (verifyRes.ok && verifyData.verified) {
+          alert("Payment successful! Order ID: " + verifyData.orderId);
+          // TODO: redirect to order confirmation / refresh order history
+        } else {
+          alert("Payment verification failed. Please contact support with your payment ID.");
+        }
+      },
+      modal: {
+        ondismiss: function () {
+          console.log("Checkout closed without completing payment.");
+        },
+      },
+      theme: { color: "#b72d32" },
+    });
+
+    rzp.open();
+  } catch (err) {
+    console.error("Checkout error:", err);
+    alert("Something went wrong starting payment. Please try again.");
+  }
 }
 
 // ── Event listeners ────────────────────────────────────────────────────────
@@ -848,11 +903,20 @@ document.addEventListener("click", (e) => {
   const homeBtn  = e.target.closest("[href='#home'], [href='#home'] *");
   const accBtn   = e.target.closest("#accountBtn");
 
+  if (!(modBtn || childBtn || openBtn || homeBtn || accBtn)) return;
+
+  // Re-rendering below replaces the clicked button's DOM node, which drops
+  // focus back to <body> and makes the browser reset scroll to the top.
+  // Snapshot the scroll position and restore it right after the DOM update.
+  const scrollY = window.scrollY;
+
   if (modBtn)   openModule(modBtn.dataset.module, 0);
   if (childBtn) { state.childIndex = Number(childBtn.dataset.child); render(); }
   if (openBtn)  openModule(openBtn.dataset.open, openBtn.dataset.open === "track" ? 0 : 3);
   if (homeBtn)  { homeView.hidden = false; moduleView.hidden = true; renderMotherTabs(); }
   if (accBtn)   openModule("account", 0);
+
+  requestAnimationFrame(() => window.scrollTo(0, scrollY));
 });
 
 document.addEventListener("input", (e) => {
