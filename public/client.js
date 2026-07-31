@@ -319,7 +319,7 @@ function calcShell(title, fields, total, rows) {
     <aside style="align-self:start;display:grid;gap:14px;padding:18px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line)">
       <span style="color:var(--muted);font-size:0.85rem">${title}</span>
       <strong style="font-size:2.6rem;font-weight:800">${money(total)}</strong>
-      ${rows.map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line)"><span>${k}</span><strong>${v}</strong></div>`).join("")}
+      ${(rows || []).map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line)"><span>${k}</span><strong>${v}</strong></div>`).join("")}
       <button type="button" onclick="proceedToCheckout(${total}, { module: state.moduleId })" style="margin-top:8px;background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">Proceed to checkout →</button>
     </aside>
   </div>`;
@@ -348,11 +348,7 @@ function printPostCalc() {
     opt("sides", "Sides", ["Single-sided", "Double-sided"], d.sides),
     opt("post", "Post Type", ["Regular", "Speed Post", "Registered", "Courier"], d.post),
     currencyField()
-  ].join(""), total, [
-    ["India cost floor", money(Math.ceil(total * 0.25))],
-    ["Sender reference (EU)", money(total * 1.05)],
-    ["Best volume line", "A4 B&W + Speed Post"],
-  ]);
+  ].join(""), total, []);
 }
 
 function cardsCalc() {
@@ -370,11 +366,7 @@ function cardsCalc() {
     opt("design", "Design Type", ["Template", "Custom Photo"], d.design),
     opt("addon", "Add-on", ["None", "Note Card", "Ribbon/Seal", "Gift Voucher"], d.addon),
     currencyField()
-  ].join(""), total, [
-    ["UK price anchor", "~£3.50 per delivered card"],
-    ["India cost estimate", money(45)],
-    ["Best occasion", "Festivals / Family"],
-  ]);
+  ].join(""), total, []);
 }
 
 function registeredCalc() {
@@ -389,11 +381,7 @@ function registeredCalc() {
     opt("service", "Service Type", ["Registered", "Speed Post", "Courier"], d.service),
     opt("legal", "Legal Format Check", ["No", "Yes"], d.legal),
     currencyField()
-  ].join(""), total, [
-    ["Receipt/tracking", "Included"],
-    ["Proof of posting", "Booking slip PDF"],
-    ["Legal disclaimer", "Posting service only"],
-  ]);
+  ].join(""), total, []);
 }
 
 function adsCalc() {
@@ -411,11 +399,7 @@ function adsCalc() {
     opt("adtype", "Ad Type", ["Obituary", "Matrimonial", "Legal Notice", "Classified", "Display"], d.adtype || "Obituary"),
     opt("proof", "Proof Delivery", ["E-paper clipping", "Physical Tearsheet"], d.proof),
     currencyField()
-  ].join(""), total, [
-    ["Paper rate (base)", money(cost)],
-    ["Service margin", "20%"],
-    ["Pricing model", "Cost-plus convenience"],
-  ]);
+  ].join(""), total, []);
 }
 
 function bulkCalc() {
@@ -430,11 +414,7 @@ function bulkCalc() {
     opt("unit", "Per-unit Type", ["A4 B&W Letter", "A4 Color Letter", "A5 B&W", "A5 Color", "Greeting Card"], d.unit),
     opt("data", "Data Source", ["CSV Upload", "Saved Recipient List"], d.data),
     currencyField()
-  ].join(""), total, [
-    ["Unit reference price", money(unit)],
-    ["Volume discount applied", `${Math.round(discount * 100)}%`],
-    ["CSV processing", "Included in price"],
-  ]);
+  ].join(""), total, []);
 }
 
 // ── Panel content for every child tab ─────────────────────────────────────
