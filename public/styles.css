@@ -506,6 +506,75 @@ input[type="range"] {
   gap: 14px;
 }
 
+.market-slider {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 14px;
+}
+
+.market-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(300px, 1fr);
+  gap: 14px;
+  animation: market-slide 24s linear infinite;
+}
+
+.market-slider:hover .market-track {
+  animation-play-state: paused;
+}
+
+.market-track article {
+  display: grid;
+  gap: 8px;
+  min-height: 148px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--red);
+  border-radius: 8px;
+  background: var(--surface-2);
+}
+
+.market-track span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.market-track strong {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.market-track b {
+  color: var(--red);
+  line-height: 1.35;
+}
+
+.market-track small {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+@keyframes market-slide {
+  0%, 18% {
+    transform: translateX(0);
+  }
+  25%, 43% {
+    transform: translateX(calc(-25% - 4px));
+  }
+  50%, 68% {
+    transform: translateX(calc(-50% - 8px));
+  }
+  75%, 93% {
+    transform: translateX(calc(-75% - 11px));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .site-footer {
   display: flex;
   flex-wrap: wrap;

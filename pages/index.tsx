@@ -91,6 +91,35 @@ export default function Home() {
               <article><span>Phase</span><strong>1 → 2</strong></article>
             </div>
 
+            <section className="market-slider" aria-label="Market rate comparison">
+              <div className="market-track">
+                <article>
+                  <span>UK to India document send</span>
+                  <strong>Market: £42.95 / approx ₹5,565</strong>
+                  <b>Our rate: from ₹58</b>
+                  <small>Difference: approx ₹5,507 less when the customer uploads and we print/post inside India.</small>
+                </article>
+                <article>
+                  <span>India domestic tracked document</span>
+                  <strong>Market: ₹35 + 18% GST = approx ₹41 postage only</strong>
+                  <b>Our rate: from ₹58</b>
+                  <small>Difference: ₹17 for print setup, handling, packing, and service labor.</small>
+                </article>
+                <article>
+                  <span>Private international document courier</span>
+                  <strong>Market: from ₹3,739 for 1 kg</strong>
+                  <b>Our rate: from ₹366 for prepared print-and-post orders</b>
+                  <small>Difference: approx ₹3,373 less for suitable document jobs handled locally.</small>
+                </article>
+                <article>
+                  <span>Manual print + post handling</span>
+                  <strong>Market: customer pays postage plus printing plus travel/time</strong>
+                  <b>Our rate: shown upfront before checkout</b>
+                  <small>Difference: one order covers GST handling, materials, packing, and admin processing.</small>
+                </article>
+              </div>
+            </section>
+
             {/* Module cards on home */}
             <div id="moduleCards" className="module-cards" />
           </section>
