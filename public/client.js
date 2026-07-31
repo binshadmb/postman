@@ -833,9 +833,6 @@ function openModule(moduleId, childIndex) {
   homeView.hidden = true;
   moduleView.hidden = false;
   render();
-  // Scroll the main content area to its top — not the whole page (which would show the hero)
-  const mainEl = document.querySelector(".main");
-  if (mainEl) mainEl.scrollTop = 0;
 }
 
 function proceedToCheckout() {
@@ -852,7 +849,7 @@ document.addEventListener("click", (e) => {
   const accBtn   = e.target.closest("#accountBtn");
 
   if (modBtn)   openModule(modBtn.dataset.module, 0);
-  if (childBtn) { state.childIndex = Number(childBtn.dataset.child); render(); const mainEl = document.querySelector(".main"); if (mainEl) mainEl.scrollTop = 0; }
+  if (childBtn) { state.childIndex = Number(childBtn.dataset.child); render(); }
   if (openBtn)  openModule(openBtn.dataset.open, openBtn.dataset.open === "track" ? 0 : 3);
   if (homeBtn)  { homeView.hidden = false; moduleView.hidden = true; renderMotherTabs(); }
   if (accBtn)   openModule("account", 0);

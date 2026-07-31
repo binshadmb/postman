@@ -146,8 +146,6 @@ button {
 .main {
   min-width: 0;
   padding: 18px;
-  height: 100vh;
-  overflow-y: auto;
 }
 
 .topbar {
