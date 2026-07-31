@@ -107,6 +107,13 @@ export default function Home() {
             <nav id="childTabs" className="child-tabs" aria-label="Child tabs" />
             <div id="panel" className="panel" />
           </section>
+
+          <footer className="site-footer">
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/refund">Refund/Cancellation</a>
+            <a href="/contact">Contact</a>
+          </footer>
         </main>
       </div>
 

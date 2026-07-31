@@ -8,16 +8,53 @@ datasource db {
 }
 
 model PrintConfig {
-  id                Int      @id @default(1)
+  id Int @id @default(1)
 
-  bondPaperAvailable      Boolean  @default(true)
-  premiumPaperAvailable   Boolean  @default(true)
-  standardPaperAvailable  Boolean  @default(true)
+  bondPaperAvailable     Boolean @default(true)
+  premiumPaperAvailable  Boolean @default(true)
+  standardPaperAvailable Boolean @default(true)
 
-  envelopeSizes     Json     @default("[\"C4\",\"C5\",\"C6\"]")
+  envelopeSizes Json @default("[\"C4\",\"C5\",\"C6\"]")
 
-  foldingAvailable  Boolean  @default(true)
-  foldTypes         Json     @default("[\"Single fold\",\"Tri-fold\",\"No fold\"]")
+  foldingAvailable Boolean @default(true)
+  foldTypes        Json    @default("[\"Single fold\",\"Tri-fold\",\"No fold\"]")
 
-  updatedAt         DateTime @updatedAt
+  updatedAt DateTime @updatedAt
+}
+
+model CustomerOrder {
+  id       String @id @default(cuid())
+  publicId String @unique
+
+  module   String
+  status   String @default("PAYMENT_PENDING")
+  amount   Int
+  currency String @default("INR")
+
+  razorpayOrderId   String? @unique
+  razorpayPaymentId String?
+
+  customerName  String?
+  customerEmail String?
+  customerPhone String?
+
+  recipientName    String?
+  recipientAddress String?
+  recipientPin     String?
+  recipientCity    String?
+  recipientState   String?
+
+  instructions String?
+  selections   Json    @default("{}")
+  events       Json    @default("[]")
+
+  fileName     String?
+  fileMimeType String?
+  fileSize     Int?
+  fileData     Bytes?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  paidAt      DateTime?
+  fulfilledAt DateTime?
 }

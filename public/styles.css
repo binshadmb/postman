@@ -506,6 +506,20 @@ input[type="range"] {
   gap: 14px;
 }
 
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  padding: 20px 8px 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.site-footer a {
+  color: var(--muted);
+}
+
 /* ── Screen reader only ──────────────────────────────────────────────────── */
 .sr-only {
   position: absolute;

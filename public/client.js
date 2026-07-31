@@ -110,6 +110,9 @@ let liveConfig = null;
 const orderDraft = {
   "print-post": {},
   cards: {},
+  "registered-mail": {},
+  ads: {},
+  bulk: {},
 };
 
 function activeDraft() {
@@ -279,6 +282,31 @@ function textField(name, label, placeholder) {
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px"></label>`;
 }
 
+function textAreaField(name, label, placeholder, rows = 3) {
+  return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
+    <textarea name="${name}" rows="${rows}" placeholder="${esc(placeholder)}"
+      style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical">${esc(draftValue(name, ""))}</textarea></label>`;
+}
+
+function contactBlock() {
+  return `<div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+    <strong>Your Contact Details</strong>
+    ${textField("customerName", "Your Name", "Full name")}
+    ${textField("customerEmail", "Email", "name@example.com")}
+    ${textField("customerPhone", "Phone / WhatsApp", "+91 / +44")}
+  </div>`;
+}
+
+function uploadBlock(label, accept, note) {
+  const draft = activeDraft();
+  return `<label style="display:grid;gap:6px;color:var(--muted)">${label}
+      <input name="uploadFile" type="file" accept="${accept}"
+        style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
+    </label>
+    ${draft.uploadFile ? `<p style="margin:0;color:var(--green);font-size:0.9rem">Selected: ${esc(draft.uploadFile.name)}</p>` : ""}
+    ${note ? `<p style="margin:0;color:var(--muted);font-size:0.85rem">${note}</p>` : ""}`;
+}
+
 function currencyField() {
   return opt("currency", "Customer Currency", Object.keys(fx), state.currency);
 }
@@ -350,7 +378,7 @@ function cardsCalc() {
 }
 
 function registeredCalc() {
-  const d = { pages: 2, service: "Registered", legal: "No", ...currentFormData() };
+  const d = { pages: 2, service: "Registered", legal: "No", ...activeDraft(), ...currentFormData() };
   state.currency = d.currency || state.currency;
   const base = { Registered: 350, "Speed Post": 120, Courier: 260 }[d.service] || 350;
   const legalFee = d.legal === "Yes" ? 180 : 0;
@@ -369,7 +397,7 @@ function registeredCalc() {
 }
 
 function adsCalc() {
-  const d = { area: 10, color: "B&W", paper: "Malayala Manorama", proof: "E-paper", ...currentFormData() };
+  const d = { area: 10, color: "B&W", paper: "Malayala Manorama", proof: "E-paper", ...activeDraft(), ...currentFormData() };
   state.currency = d.currency || state.currency;
   const rate = d.color === "Color" ? 830 : 460;
   const paperFee = d.paper === "The Hindu" ? 800 : d.paper === "Times of India" ? 1200 : 0;
@@ -391,7 +419,7 @@ function adsCalc() {
 }
 
 function bulkCalc() {
-  const d = { qty: 50, unit: "A4 B&W Letter", data: "CSV Upload", ...currentFormData() };
+  const d = { qty: 50, unit: "A4 B&W Letter", data: "CSV Upload", ...activeDraft(), ...currentFormData() };
   state.currency = d.currency || state.currency;
   const unit = { "A4 B&W Letter": 100, "A4 Color Letter": 170, "Greeting Card": 300, "A5 B&W": 90, "A5 Color": 140 }[d.unit] || 100;
   const qty = Number(d.qty);
@@ -520,6 +548,7 @@ function postOptsPanel() {
 }
 
 function occasionPanel() {
+  const draft = activeDraft();
   const occasions = [
     ["🎂","Birthday"],["💍","Anniversary"],["💒","Wedding"],["🪔","Diwali"],
     ["🌺","Onam"],["☪️","Eid"],["🎄","Christmas"],["🎉","New Year"],
@@ -527,9 +556,25 @@ function occasionPanel() {
     ["🏖️","Retirement"],["🎓","Graduation"],["✏️","Custom Upload"]
   ];
   return `<h3 style="margin-top:0">Choose Occasion</h3>
+    <div style="display:grid;gap:14px;max-width:700px;margin-bottom:14px">
+      ${contactBlock()}
+      <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+        <strong>How should we get the greeting card?</strong>
+        ${opt("cardSource", "Card source", [
+          "Customer will order from Amazon / other platform and ship to Postman",
+          "Customer will share product link and Postman will buy it",
+          "Postman should design and print a new card",
+          "Customer will upload card/photo/design file",
+          "Postman should choose a suitable card"
+        ], draft.cardSource || "Customer will order from Amazon / other platform and ship to Postman")}
+        ${textField("cardProductLink", "Amazon / platform product link or order reference", "Paste product link, order ID, or tracking number")}
+        ${uploadBlock("Upload reference image/design/message file (optional)", ".pdf,.docx,.jpg,.jpeg,.png", "Optional. Use this for reference artwork, existing card image, or message draft.")}
+      </div>
+      ${textAreaField("instructions", "Overall card instructions", "Tell us whether to rewrite, redesign, buy, print, paste an insert page, or create a new design", 4)}
+    </div>
     <div style="display:grid;grid-template-columns:repeat(5,minmax(100px,1fr));gap:12px;max-width:700px">
       ${occasions.map(([icon, label]) => `
-        <button type="button" onclick="openModule('cards',1)"
+        <button type="button" onclick="activeDraft().occasion='${esc(label)}'; captureCurrentPanelData(); openModule('cards',1)"
           style="display:grid;gap:6px;align-items:center;justify-items:center;padding:14px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;color:var(--ink);transition:background 0.15s">
           <span style="font-size:1.8rem">${icon}</span>
           <small>${label}</small>
@@ -538,39 +583,57 @@ function occasionPanel() {
 }
 
 function cardFormatPanel() {
+  const draft = activeDraft();
   return `<h3 style="margin-top:0">Card Format</h3>
-    <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px;max-width:640px">
-      ${opt("size",  "Card Size",   ["Standard 5×7", "Large A5", "Square"],                     "Standard 5×7")}
-      ${opt("fold",  "Fold Style",  ["Single fold", "Tri-fold", "No fold (flat)"],               "Single fold")}
-      ${opt("stock", "Card Stock",  ["Matte", "Glossy", "Textured (cotton-feel)", "Embossed"],   "Matte")}
-      ${opt("color", "Print Color", ["Full color", "B&W sketch style"],                          "Full color")}
+    <div style="display:grid;gap:14px;max-width:640px">
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px">
+        ${opt("cardWorkType", "Work needed", [
+          "Print custom text on supplied card",
+          "Paste extra message page inside card",
+          "Rewrite message and print it",
+          "Redesign / improve card before printing",
+          "Buy and customize a card",
+          "Design a new card from scratch"
+        ], draft.cardWorkType || "Print custom text on supplied card")}
+        ${opt("messagePlacement", "Message placement", [
+          "Inside card",
+          "Front of card",
+          "Back of card",
+          "Separate insert page",
+          "Envelope insert"
+        ], draft.messagePlacement || "Inside card")}
+        ${opt("size",  "Card Size",   ["As supplied", "Standard 5×7", "Large A5", "Square", "Custom"], draft.size || "As supplied")}
+        ${opt("stock", "If we print/design",  ["Use supplied card", "Matte", "Glossy", "Textured", "Premium"], draft.stock || "Use supplied card")}
+      </div>
+      ${textAreaField("designInstructions", "Design / rewrite instructions", "Describe exact edits, colors, wording tone, placement, or redesign request", 4)}
     </div>
-    <button type="button" onclick="openModule('cards',2)"
+    <button type="button" onclick="captureCurrentPanelData(); openModule('cards',2)"
       style="margin-top:16px;background:var(--gold);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600">
       Add Personalization →
     </button>`;
 }
 
 function personalizationPanel() {
-  const d = { pin: "", city: "", ...currentFormData() };
+  const d = { pin: "", city: "", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Personalization</h3>
     <div style="display:grid;gap:14px;max-width:640px">
-      ${textField("name", "Recipient Name (for merge)", "e.g. Dear Amma,")}
+      ${textField("name", "Recipient Name", "Full name")}
       <label style="display:grid;gap:6px;color:var(--muted)">Your message
         <textarea name="message" rows="5" placeholder="Write your message here…"
-          style="border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--surface);color:var(--ink);resize:vertical"></textarea>
+          style="border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--surface);color:var(--ink);resize:vertical">${esc(draftValue("message", ""))}</textarea>
       </label>
-      ${opt("font", "Font Style", ["Classic Serif", "Handwritten Script", "Modern Sans", "Elegant Italic"], "Handwritten Script")}
-      <label style="display:grid;gap:6px;color:var(--muted)">Photo insert (optional — JPG/PNG, max 5 MB)
-        <input type="file" accept=".jpg,.jpeg,.png"
-          style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
-      </label>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
+        ${opt("font", "Font Style", ["Classic Serif", "Handwritten Script", "Modern Sans", "Elegant Italic", "Bold Display", "Simple Malayalam/English"], d.font || "Handwritten Script")}
+        ${opt("fontSize", "Font Size", ["Small", "Medium", "Large", "Extra large", "Admin decide"], d.fontSize || "Medium")}
+        ${opt("rewriteNeeded", "Rewrite/polish message?", ["No, print exactly as typed", "Yes, lightly polish", "Yes, rewrite beautifully", "Translate / bilingual support"], d.rewriteNeeded || "No, print exactly as typed")}
+        ${opt("printMethod", "Print method", ["Print directly on card", "Paste extra page inside card", "Print insert page", "Admin decide after seeing card"], d.printMethod || "Admin decide after seeing card")}
+      </div>
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
         <strong>Delivery Address</strong>
         ${textField("address", "Street Address", "House/flat, street")}
         ${pinCityStateBlock(d)}
       </div>
-      <button type="button" onclick="openModule('cards',3)"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('cards',3)"
         style="background:var(--gold);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         Add-ons →
       </button>
@@ -587,13 +650,13 @@ function addonsPanel() {
     <div style="display:grid;gap:12px;max-width:560px">
       ${addons.map(([name, price, desc]) => `
         <label style="display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--surface)">
-          <input type="checkbox" style="margin-top:3px;width:16px;height:16px">
+          <input name="addons" type="checkbox" value="${esc(name)}" style="margin-top:3px;width:16px;height:16px">
           <span style="display:grid;gap:2px">
             <strong>${name} <span style="color:var(--muted);font-weight:400">+${price}</span></strong>
             <small style="color:var(--muted)">${desc}</small>
           </span>
         </label>`).join("")}
-      <button type="button" onclick="openModule('cards',4)"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('cards',4)"
         style="margin-top:4px;background:var(--gold);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         See Price Estimate →
       </button>
@@ -601,9 +664,11 @@ function addonsPanel() {
 }
 
 function registeredPanel() {
-  const d = { pin: "", city: "", ...currentFormData() };
+  const d = { pin: "", city: "", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Registered Post</h3>
     <div style="display:grid;gap:14px;max-width:640px">
+      ${contactBlock()}
+      ${uploadBlock("Upload document to print and send (PDF, DOCX, JPG, PNG)", ".pdf,.docx,.jpg,.jpeg,.png", "This file is saved to the admin order queue after checkout.")}
       <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:8px">
         <strong>What is included</strong>
         <ul style="margin:0;padding-left:18px;line-height:1.9;color:var(--muted)">
@@ -615,16 +680,19 @@ function registeredPanel() {
         <p style="color:var(--red);font-size:0.85rem;margin:0">⚠ Disclaimer: We provide a posting service. This is not legal service or e-stamping.</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
-        ${numField("pages", "Number of pages", 2)}
-        ${opt("weight", "Estimated weight", ["Up to 50g", "51–100g", "101–250g", "251–500g"], "Up to 50g")}
+        ${numField("pages", "Number of pages", d.pages || 2)}
+        ${opt("service", "Service Type", ["Registered", "Speed Post", "Courier"], d.service || "Registered")}
+        ${opt("weight", "Estimated weight", ["Up to 50g", "51–100g", "101–250g", "251–500g"], d.weight || "Up to 50g")}
+        ${opt("legal", "Legal Format Check", ["No", "Yes"], d.legal || "No")}
       </div>
+      ${textAreaField("instructions", "Special instructions", "Anything the admin must know before printing/posting")}
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
         <strong>Recipient Address</strong>
         ${textField("name",    "Recipient Name",    "Full name")}
         ${textField("address", "Street Address",    "House/flat, street")}
         ${pinCityStateBlock(d)}
       </div>
-      <button type="button" onclick="openModule('registered-mail',3)"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('registered-mail',3)"
         style="background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         See Price →
       </button>
@@ -632,9 +700,11 @@ function registeredPanel() {
 }
 
 function speedPostPanel() {
-  const d = { zone: "National", pin: "", city: "", ...currentFormData() };
+  const d = { zone: "National", pin: "", city: "", service: "Speed Post", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Speed Post</h3>
     <div style="display:grid;gap:14px;max-width:640px">
+      ${contactBlock()}
+      ${uploadBlock("Upload document to print and send (PDF, DOCX, JPG, PNG)", ".pdf,.docx,.jpg,.jpeg,.png", "This file is saved to the admin order queue after checkout.")}
       <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px">
         <strong>Speed Post — fastest India Post tracked service</strong>
         <ul style="margin:8px 0 0;padding-left:18px;line-height:1.9;color:var(--muted)">
@@ -645,16 +715,18 @@ function speedPostPanel() {
         </ul>
       </div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
-        ${numField("pages", "Number of pages", 2)}
+        ${numField("pages", "Number of pages", d.pages || 2)}
+        ${opt("service", "Service Type", ["Speed Post", "Registered", "Courier"], d.service || "Speed Post")}
         ${opt("zone", "Delivery Zone", ["Local", "State", "National"], d.zone)}
       </div>
+      ${textAreaField("instructions", "Special instructions", "Anything the admin must know before printing/posting")}
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
         <strong>Recipient Address</strong>
         ${textField("name",    "Recipient Name",    "Full name")}
         ${textField("address", "Street Address",    "House/flat, street")}
         ${pinCityStateBlock(d)}
       </div>
-      <button type="button" onclick="openModule('registered-mail',3)"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('registered-mail',3)"
         style="background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         See Price →
       </button>
@@ -664,14 +736,17 @@ function speedPostPanel() {
 function legalCheckPanel() {
   return `<h3 style="margin-top:0">Legal Notice Format Check</h3>
     <div style="display:grid;gap:14px;max-width:640px">
+      ${contactBlock()}
       <p style="color:var(--muted);line-height:1.7;margin:0">
         Before posting, we can do a basic format review to ensure the notice includes required elements: sender/recipient details, date, subject line, and demand/cause of action.
         This is a document formatting check only — we are not legal advisors.
       </p>
       <label style="display:grid;gap:6px;color:var(--muted)">Upload your draft notice (PDF or DOCX)
-        <input type="file" accept=".pdf,.docx"
+        <input name="uploadFile" type="file" accept=".pdf,.docx"
           style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
       </label>
+      ${activeDraft().uploadFile ? `<p style="margin:0;color:var(--green);font-size:0.9rem">Selected: ${esc(activeDraft().uploadFile.name)}</p>` : ""}
+      ${textAreaField("instructions", "Format-check instructions", "Tell us what needs to be checked or posted after review")}
       <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px">
         <strong>Format check includes:</strong>
         <ul style="margin:6px 0 0;padding-left:18px;line-height:1.9;color:var(--muted)">
@@ -682,7 +757,7 @@ function legalCheckPanel() {
           <li>Signature block present</li>
         </ul>
       </div>
-      <button type="button"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('registered-mail',3)"
         style="background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:220px">
         Submit for Format Check — ₹180
       </button>
@@ -690,6 +765,7 @@ function legalCheckPanel() {
 }
 
 function adTypePanel() {
+  const draft = activeDraft();
   const types = [
     ["Obituary / Death Notice", "📰", "Posted within 24–48h of receiving details"],
     ["Matrimonial",             "💒", "Classified or display format available"],
@@ -699,9 +775,15 @@ function adTypePanel() {
     ["Tender / Public Notice",  "📢", "Gazette and vernacular papers"],
   ];
   return `<h3 style="margin-top:0">Select Ad Type</h3>
+    <div style="display:grid;gap:14px;max-width:680px;margin-bottom:14px">
+      ${contactBlock()}
+      ${uploadBlock("Upload ad matter / notice draft (PDF, DOCX, JPG, PNG)", ".pdf,.docx,.jpg,.jpeg,.png", "You can also paste the ad text below if there is no file.")}
+      ${textAreaField("adText", "Ad text / notice content", "Paste obituary, legal notice, classified text, or publication instruction", 5)}
+      ${textAreaField("instructions", "Special instructions", "Preferred deadline, wording notes, proof requirements, billing notes")}
+    </div>
     <div style="display:grid;grid-template-columns:repeat(3,minmax(160px,1fr));gap:12px;max-width:680px">
       ${types.map(([name, icon, note]) => `
-        <button type="button" onclick="openModule('ads',1)"
+        <button type="button" onclick="activeDraft().adtype='${esc(name)}'; captureCurrentPanelData(); openModule('ads',1)"
           style="display:grid;gap:6px;padding:16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;text-align:left;color:var(--ink)">
           <span style="font-size:1.6rem">${icon}</span>
           <strong style="font-size:0.9rem">${name}</strong>
@@ -711,19 +793,37 @@ function adTypePanel() {
 }
 
 function selectPaperPanel() {
+  const draft = activeDraft();
   return `<h3 style="margin-top:0">Select Publication</h3>
     <div style="display:grid;gap:14px;max-width:640px">
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
-        ${opt("language", "Language", ["Malayalam", "English", "Hindi", "Tamil", "Kannada"], "Malayalam")}
-        ${opt("paper",    "Publication", ["Malayala Manorama", "Mathrubhumi", "Mangalam", "Deepika", "The Hindu", "Times of India", "Deccan Herald"], "Malayala Manorama")}
-        ${opt("edition",  "Edition",   ["State", "Kochi", "Trivandrum", "Kozhikode", "Thrissur", "National"], "State")}
+        ${opt("language", "Language", ["Malayalam", "English", "Hindi", "Tamil", "Kannada"], draft.language || "Malayalam")}
+        ${opt("paper",    "Publication", ["Malayala Manorama", "Mathrubhumi", "Mangalam", "Deepika", "The Hindu", "Times of India", "Deccan Herald"], draft.paper || "Malayala Manorama")}
+        ${opt("edition",  "Edition",   ["State", "Kochi", "Trivandrum", "Kozhikode", "Thrissur", "National"], draft.edition || "State")}
       </div>
       <label style="display:grid;gap:6px;color:var(--muted)">Preferred publish date
-        <input type="date" style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px;max-width:220px">
+        <input name="publishDate" type="date" value="${esc(draftValue("publishDate", ""))}" style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px;max-width:220px">
       </label>
-      <button type="button" onclick="openModule('ads',2)"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('ads',2)"
         style="background:var(--green);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         Set Size & Color →
+      </button>
+    </div>`;
+}
+
+function adSizeColorPanel() {
+  const draft = activeDraft();
+  return `<h3 style="margin-top:0">Size & Color</h3>
+    <div style="display:grid;gap:14px;max-width:640px">
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
+        ${numField("area", "Column sq cm", draft.area || 10)}
+        ${opt("color", "Ad Color", ["B&W", "Color"], draft.color || "B&W")}
+        ${opt("proof", "Proof Delivery", ["E-paper clipping", "Physical Tearsheet"], draft.proof || "E-paper clipping")}
+      </div>
+      ${textAreaField("instructions", "Final ad instructions", "Any size, placement, date, proof, or language notes", 4)}
+      <button type="button" onclick="captureCurrentPanelData(); openModule('ads',4)"
+        style="background:var(--green);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:220px">
+        See Price Estimate →
       </button>
     </div>`;
 }
@@ -731,22 +831,42 @@ function selectPaperPanel() {
 function csvUploadPanel() {
   return `<h3 style="margin-top:0">CSV Upload — Bulk Recipient List</h3>
     <div style="display:grid;gap:14px;max-width:640px">
+      ${contactBlock()}
       <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px">
         <strong>Required CSV columns:</strong>
         <code style="display:block;margin-top:8px;font-size:0.85rem;color:var(--teal)">name, address_line1, address_line2, city, state, pincode</code>
         <p style="margin:8px 0 0;color:var(--muted);font-size:0.85rem">Optional: <code>custom_message</code>, <code>phone</code></p>
       </div>
       <label style="display:grid;gap:6px;color:var(--muted)">Upload CSV file (max 1000 rows)
-        <input type="file" accept=".csv"
+        <input name="uploadFile" type="file" accept=".csv"
           style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
       </label>
+      ${activeDraft().uploadFile ? `<p style="margin:0;color:var(--green);font-size:0.9rem">Selected: ${esc(activeDraft().uploadFile.name)}</p>` : ""}
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
-        ${opt("merge", "Data Merge Field", ["Name only", "Name + custom message", "Full variable merge"], "Name only")}
-        ${opt("validate", "Validate PINs", ["Yes — check against India Post database", "No — proceed as-is"], "Yes — check against India Post database")}
+        ${opt("merge", "Data Merge Field", ["Name only", "Name + custom message", "Full variable merge"], activeDraft().merge || "Name only")}
+        ${opt("validate", "Validate PINs", ["Yes — check against India Post database", "No — proceed as-is"], activeDraft().validate || "Yes — check against India Post database")}
       </div>
-      <button type="button" onclick="openModule('bulk',1)"
+      ${textAreaField("instructions", "Bulk mail instructions", "Template notes, sender details, postal method, or handling notes")}
+      <button type="button" onclick="captureCurrentPanelData(); openModule('bulk',1)"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:220px">
         Continue to Template →
+      </button>
+    </div>`;
+}
+
+function bulkTemplatePanel() {
+  const draft = activeDraft();
+  return `<h3 style="margin-top:0">Template Selection</h3>
+    <div style="display:grid;gap:14px;max-width:640px">
+      ${uploadBlock("Upload document/template to print for each recipient (PDF, DOCX, JPG, PNG)", ".pdf,.docx,.jpg,.jpeg,.png", "If this is different from the CSV, upload the print template here; the latest selected file is saved with the order.")}
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
+        ${opt("unit", "Per-unit Type", ["A4 B&W Letter", "A4 Color Letter", "A5 B&W", "A5 Color", "Greeting Card"], draft.unit || "A4 B&W Letter")}
+        ${numField("qty", "Recipients", draft.qty || 50)}
+      </div>
+      ${textAreaField("instructions", "Template / merge instructions", "Describe which fields to merge and any printing/posting instructions", 4)}
+      <button type="button" onclick="captureCurrentPanelData(); openModule('bulk',2)"
+        style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:220px">
+        Continue to Batch Options →
       </button>
     </div>`;
 }
@@ -928,14 +1048,14 @@ function renderPanel() {
   if (mid === "ads") {
     if (cid === "ad-type")    { panelEl.innerHTML = adTypePanel(); return; }
     if (cid === "paper")      { panelEl.innerHTML = selectPaperPanel(); return; }
-    if (cid === "size-color") { panelEl.innerHTML = emptyPanel("Size & Color", "Set column-cm dimensions and choose B&W or color for your ad."); return; }
+    if (cid === "size-color") { panelEl.innerHTML = adSizeColorPanel(); return; }
     if (cid === "proof")      { panelEl.innerHTML = emptyPanel("Proof Delivery", "Receive an e-paper clipping or physical tearsheet after publication."); return; }
     if (cid === "templates")  { panelEl.innerHTML = emptyPanel("Saved Ad Templates", "Reuse previous ad copy for recurring notices like annual obituaries."); return; }
   }
 
   if (mid === "bulk") {
     if (cid === "csv")        { panelEl.innerHTML = csvUploadPanel(); return; }
-    if (cid === "template")   { panelEl.innerHTML = emptyPanel("Template Selection", "Choose a document template — or upload your own — for the batch."); return; }
+    if (cid === "template")   { panelEl.innerHTML = bulkTemplatePanel(); return; }
     if (cid === "batch-opts") { panelEl.innerHTML = printOptsPanel(); return; }
     if (cid === "lists")      { panelEl.innerHTML = emptyPanel("Saved Recipient Lists", "Reuse uploaded CSV lists for recurring batch sends."); return; }
     if (cid === "templates")  { panelEl.innerHTML = emptyPanel("Saved Templates", "Saved document templates for bulk use, e.g. annual festival greetings."); return; }
@@ -1027,9 +1147,22 @@ async function proceedToCheckout(amountInInr, orderNotes) {
     const draft = activeDraft();
     const uploadFile = draft.uploadFile;
 
-    if (state.moduleId === "print-post" && !uploadFile) {
-      alert("Please upload the customer document first. This is needed so the admin can print and post the order.");
-      openModule("print-post", 0);
+    const fileRequiredModules = ["print-post", "registered-mail", "bulk"];
+    if (fileRequiredModules.includes(state.moduleId) && !uploadFile) {
+      alert("Please upload the customer file first. This is needed so the admin can fulfill the order.");
+      openModule(state.moduleId, 0);
+      return;
+    }
+
+    if (state.moduleId === "ads" && !uploadFile && !draft.adText) {
+      alert("Please upload the ad matter or paste the ad text before checkout.");
+      openModule("ads", 0);
+      return;
+    }
+
+    if (state.moduleId === "cards" && !uploadFile && !draft.cardProductLink && !draft.message && !draft.designInstructions) {
+      alert("Please add the card link/reference, message, upload, or design instructions before checkout.");
+      openModule("cards", 0);
       return;
     }
 
@@ -1038,9 +1171,16 @@ async function proceedToCheckout(amountInInr, orderNotes) {
       return;
     }
 
-    if (state.moduleId === "print-post" && (!draft.customerEmail || !draft.name || !draft.address || !draft.pin)) {
-      alert("Please complete customer email and recipient address before checkout.");
-      openModule("print-post", 2);
+    const operationalModules = ["print-post", "registered-mail", "ads", "bulk", "cards"];
+    if (operationalModules.includes(state.moduleId) && !draft.customerEmail) {
+      alert("Please enter the customer email before checkout.");
+      openModule(state.moduleId, state.moduleId === "print-post" ? 2 : 0);
+      return;
+    }
+
+    if (["print-post", "registered-mail", "cards"].includes(state.moduleId) && (!draft.name || !draft.address || !draft.pin)) {
+      alert("Please complete the recipient address before checkout.");
+      openModule(state.moduleId, state.moduleId === "print-post" ? 2 : 0);
       return;
     }
 

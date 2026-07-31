@@ -1,0 +1,69 @@
+{
+  "polyfillFiles": [
+    "static/chunks/polyfills-42372ed130431b0a.js"
+  ],
+  "devFiles": [],
+  "ampDevFiles": [],
+  "lowPriorityFiles": [
+    "static/Wv5wnwi9wUCXVRCeH_7Uz/_buildManifest.js",
+    "static/Wv5wnwi9wUCXVRCeH_7Uz/_ssgManifest.js"
+  ],
+  "rootMainFiles": [],
+  "pages": {
+    "/": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/index-5f7e4724f3668f41.js"
+    ],
+    "/_app": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/_app-5810f0a972a88d88.js"
+    ],
+    "/_error": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/_error-7a92967bea80186d.js"
+    ],
+    "/admin": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/admin-14465f7a4515be6d.js"
+    ],
+    "/admin/login": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/admin/login-73edaa8452dbaaf5.js"
+    ],
+    "/contact": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/contact-d5a0b56c7952ac2b.js"
+    ],
+    "/privacy": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/privacy-fcfbb6f370b19e49.js"
+    ],
+    "/refund": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/refund-e66448607bdfa5f4.js"
+    ],
+    "/terms": [
+      "static/chunks/webpack-8fa1640cc84ba8fe.js",
+      "static/chunks/framework-64ad27b21261a9ce.js",
+      "static/chunks/main-01bffbbc72a2bb1d.js",
+      "static/chunks/pages/terms-4a6b8be4cfbc1233.js"
+    ]
+  },
+  "ampFirstPages": []
+}
