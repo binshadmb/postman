@@ -348,7 +348,11 @@ function printPostCalc() {
     opt("sides", "Sides", ["Single-sided", "Double-sided"], d.sides),
     opt("post", "Post Type", ["Regular", "Speed Post", "Registered", "Courier"], d.post),
     currencyField()
-  ].join(""), total, []);
+  ].join(""), total, [
+    ["Includes", "GST, materials & handling"],
+    ["Preparation", "Print setup and service labor"],
+    ["Dispatch", "Packing and postal processing"],
+  ]);
 }
 
 function cardsCalc() {
@@ -366,7 +370,11 @@ function cardsCalc() {
     opt("design", "Design Type", ["Template", "Custom Photo"], d.design),
     opt("addon", "Add-on", ["None", "Note Card", "Ribbon/Seal", "Gift Voucher"], d.addon),
     currencyField()
-  ].join(""), total, []);
+  ].join(""), total, [
+    ["Includes", "GST, card handling & materials"],
+    ["Personalization", "Message setup and service labor"],
+    ["Dispatch", "Packing and postal processing"],
+  ]);
 }
 
 function registeredCalc() {
@@ -381,7 +389,11 @@ function registeredCalc() {
     opt("service", "Service Type", ["Registered", "Speed Post", "Courier"], d.service),
     opt("legal", "Legal Format Check", ["No", "Yes"], d.legal),
     currencyField()
-  ].join(""), total, []);
+  ].join(""), total, [
+    ["Includes", "GST, materials & handling"],
+    ["Preparation", "Document setup and service labor"],
+    ["Dispatch", "Booking and postal processing"],
+  ]);
 }
 
 function adsCalc() {
@@ -399,7 +411,11 @@ function adsCalc() {
     opt("adtype", "Ad Type", ["Obituary", "Matrimonial", "Legal Notice", "Classified", "Display"], d.adtype || "Obituary"),
     opt("proof", "Proof Delivery", ["E-paper clipping", "Physical Tearsheet"], d.proof),
     currencyField()
-  ].join(""), total, []);
+  ].join(""), total, [
+    ["Includes", "GST, coordination & handling"],
+    ["Preparation", "Ad setup and service labor"],
+    ["Proof", "Submission and follow-up support"],
+  ]);
 }
 
 function bulkCalc() {
@@ -414,7 +430,11 @@ function bulkCalc() {
     opt("unit", "Per-unit Type", ["A4 B&W Letter", "A4 Color Letter", "A5 B&W", "A5 Color", "Greeting Card"], d.unit),
     opt("data", "Data Source", ["CSV Upload", "Saved Recipient List"], d.data),
     currencyField()
-  ].join(""), total, []);
+  ].join(""), total, [
+    ["Includes", "GST, materials & handling"],
+    ["Preparation", "Batch setup and service labor"],
+    ["Dispatch", "Packing and postal processing"],
+  ]);
 }
 
 // ── Panel content for every child tab ─────────────────────────────────────
