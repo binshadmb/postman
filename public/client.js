@@ -107,6 +107,15 @@ const state = { moduleId: "print-post", childIndex: 3, currency: "INR" };
 // Live stock/config from the admin panel (Neon-backed). Starts null;
 // printOptsPanel() falls back to sensible defaults until this loads.
 let liveConfig = null;
+const orderDraft = {
+  "print-post": {},
+  cards: {},
+};
+
+function activeDraft() {
+  if (!orderDraft[state.moduleId]) orderDraft[state.moduleId] = {};
+  return orderDraft[state.moduleId];
+}
 
 async function loadLiveConfig() {
   try {
@@ -149,6 +158,44 @@ function activeModule() {
 function currentFormData() {
   const form = document.querySelector("#calcForm");
   return form ? Object.fromEntries(new FormData(form).entries()) : {};
+}
+
+function captureCurrentPanelData() {
+  const draft = activeDraft();
+  document.querySelectorAll("#panel input[name], #panel select[name], #panel textarea[name]").forEach((field) => {
+    if (field.type === "file") {
+      if (field.files && field.files[0]) draft[field.name] = field.files[0];
+      return;
+    }
+    if (field.type === "checkbox") {
+      draft[field.name] = field.checked;
+      return;
+    }
+    draft[field.name] = field.value;
+  });
+}
+
+function draftValue(name, fallback = "") {
+  const value = activeDraft()[name];
+  return value === undefined || value === null ? fallback : value;
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) return resolve(null);
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function esc(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 // Cache of the last pincode lookup — persists across renderPanel() re-renders,
@@ -216,19 +263,19 @@ function pinCityStateBlock(d) {
 function opt(name, label, values, selected) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
     <select name="${name}" style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px">
-      ${values.map((v) => `<option${v === selected ? " selected" : ""}>${v}</option>`).join("")}
+      ${values.map((v) => `<option${v === selected ? " selected" : ""}>${esc(v)}</option>`).join("")}
     </select></label>`;
 }
 
 function numField(name, label, value, min) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
-    <input name="${name}" type="number" min="${min || 1}" value="${value}"
+    <input name="${name}" type="number" min="${min || 1}" value="${esc(value)}"
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px"></label>`;
 }
 
 function textField(name, label, placeholder) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
-    <input name="${name}" type="text" placeholder="${placeholder}"
+    <input name="${name}" type="text" placeholder="${esc(placeholder)}" value="${esc(draftValue(name, ""))}"
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px"></label>`;
 }
 
@@ -262,7 +309,7 @@ function calcPrintPost(d) {
 }
 
 function printPostCalc() {
-  const d = { pages: 1, size: "A4", color: "B&W", paper: "Standard", sides: "Single-sided", post: "Speed Post", ...currentFormData() };
+  const d = { pages: 1, size: "A4", color: "B&W", paper: "Standard", sides: "Single-sided", post: "Speed Post", ...activeDraft(), ...currentFormData() };
   state.currency = d.currency || state.currency;
   const total = calcPrintPost(d);
   return calcShell("Estimated Print & Post Price", [
@@ -374,21 +421,23 @@ function infoBox(title, items) {
 }
 
 function uploadPanel() {
+  const draft = activeDraft();
   return `<h3 style="margin-top:0">Upload Your Document</h3>
     <div style="display:grid;gap:18px;max-width:640px">
       <label style="display:grid;gap:6px;color:var(--muted)">Select file (PDF, DOCX, JPG, PNG — max 20 MB)
-        <input type="file" accept=".pdf,.docx,.jpg,.jpeg,.png"
+        <input name="uploadFile" type="file" accept=".pdf,.docx,.jpg,.jpeg,.png"
           style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
       </label>
+      ${draft.uploadFile ? `<p style="margin:0;color:var(--green);font-size:0.9rem">Selected: ${esc(draft.uploadFile.name)}</p>` : ""}
       <label style="display:grid;gap:6px;color:var(--muted)">Number of copies
-        <input type="number" min="1" value="1"
+        <input name="uploadCopies" type="number" min="1" value="${esc(draftValue("uploadCopies", "1"))}"
           style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);max-width:120px;min-height:36px">
       </label>
       <label style="display:grid;gap:6px;color:var(--muted)">Special instructions (optional)
-        <textarea rows="3" placeholder="e.g. Print pages 1-3 only, use A4 landscape…"
-          style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical"></textarea>
+        <textarea name="instructions" rows="3" placeholder="e.g. Print pages 1-3 only, use A4 landscape…"
+          style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical">${esc(draftValue("instructions", ""))}</textarea>
       </label>
-      <button type="button" onclick="openModule('print-post',1)"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('print-post',1)"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         Continue to Print Options →
       </button>
@@ -396,6 +445,7 @@ function uploadPanel() {
 }
 
 function printOptsPanel() {
+  const draft = activeDraft();
   const cfg = liveConfig || {
     bondPaperAvailable: true, premiumPaperAvailable: true, standardPaperAvailable: true,
     envelopeSizes: ["C4", "C5", "C6"],
@@ -410,42 +460,48 @@ function printOptsPanel() {
   ].filter(Boolean);
 
   const paperField = paperOptions.length
-    ? opt("paper", "Paper Quality", paperOptions, paperOptions[0])
+    ? opt("paper", "Paper Quality", paperOptions, draft.paper || paperOptions[0])
     : `<label style="display:grid;gap:4px;color:var(--muted)">Paper Quality
         <span style="color:var(--red);font-size:0.9rem">Currently unavailable — check back soon</span>
       </label>`;
 
   const envelopeField = cfg.envelopeSizes.length
-    ? opt("envelope", "Envelope Size", cfg.envelopeSizes, cfg.envelopeSizes[0])
+    ? opt("envelope", "Envelope Size", cfg.envelopeSizes, draft.envelope || cfg.envelopeSizes[0])
     : `<label style="display:grid;gap:4px;color:var(--muted)">Envelope Size
         <span style="color:var(--red);font-size:0.9rem">No sizes currently available</span>
       </label>`;
 
   const foldField = cfg.foldingAvailable && cfg.foldTypes.length
-    ? opt("fold", "Folding", cfg.foldTypes, cfg.foldTypes[0])
+    ? opt("fold", "Folding", cfg.foldTypes, draft.fold || cfg.foldTypes[0])
     : opt("fold", "Folding", ["No fold"], "No fold");
 
   return `<h3 style="margin-top:0">Print Options</h3>
     <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px;max-width:640px">
-      ${opt("color",   "Print Color",    ["B&W", "Color"],                         "B&W")}
-      ${opt("sides",   "Sides",          ["Single-sided", "Double-sided"],          "Single-sided")}
-      ${opt("size",    "Paper Size",     ["A5", "A4", "A3", "Legal"],              "A4")}
+      ${opt("color",   "Print Color",    ["B&W", "Color"],                         draft.color || "B&W")}
+      ${opt("sides",   "Sides",          ["Single-sided", "Double-sided"],          draft.sides || "Single-sided")}
+      ${opt("size",    "Paper Size",     ["A5", "A4", "A3", "Legal"],              draft.size || "A4")}
       ${paperField}
-      ${opt("binding", "Binding",        ["None", "Stapled", "Spiral Bound"],       "None")}
-      ${opt("copies",  "Copies",         ["1", "2", "3", "5", "10", "Custom"],      "1")}
+      ${opt("binding", "Binding",        ["None", "Stapled", "Spiral Bound"],       draft.binding || "None")}
+      ${opt("copies",  "Copies",         ["1", "2", "3", "5", "10", "Custom"],      draft.copies || "1")}
       ${envelopeField}
       ${foldField}
     </div>
-    <button type="button" onclick="openModule('print-post',2)"
+    <button type="button" onclick="captureCurrentPanelData(); openModule('print-post',2)"
       style="margin-top:16px;background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600">
       Continue to Post Options →
     </button>`;
 }
 
 function postOptsPanel() {
-  const d = { post: "Speed Post (tracked)", zone: "Within Kerala", pin: "", city: "", ...currentFormData() };
+  const d = { post: "Speed Post (tracked)", zone: "Within Kerala", pin: "", city: "", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Post Options</h3>
     <div style="display:grid;gap:14px;max-width:640px">
+      <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+        <strong>Your Contact Details</strong>
+        ${textField("customerName", "Your Name", "Full name")}
+        ${textField("customerEmail", "Email", "name@example.com")}
+        ${textField("customerPhone", "Phone / WhatsApp", "+91 / +44")}
+      </div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
         ${opt("post", "Post Type", ["Regular Post", "Speed Post (tracked)", "Registered Post", "Courier"], d.post)}
         ${opt("zone", "Delivery Zone", ["Within Kerala", "Rest of India", "Metro city"], d.zone)}
@@ -456,7 +512,7 @@ function postOptsPanel() {
         ${textField("address", "Street Address",    "House/flat, street")}
         ${pinCityStateBlock(d)}
       </div>
-      <button type="button" onclick="openModule('print-post',3)"
+      <button type="button" onclick="captureCurrentPanelData(); openModule('print-post',3)"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         See Price Estimate →
       </button>
@@ -967,7 +1023,30 @@ function openModule(moduleId, childIndex) {
 
 async function proceedToCheckout(amountInInr, orderNotes) {
   try {
-    // 1. Ask our backend to create a Razorpay order
+    captureCurrentPanelData();
+    const draft = activeDraft();
+    const uploadFile = draft.uploadFile;
+
+    if (state.moduleId === "print-post" && !uploadFile) {
+      alert("Please upload the customer document first. This is needed so the admin can print and post the order.");
+      openModule("print-post", 0);
+      return;
+    }
+
+    if (uploadFile && uploadFile.size > 20 * 1024 * 1024) {
+      alert("The uploaded file is larger than 20 MB. Please upload a smaller PDF, DOCX, JPG, or PNG.");
+      return;
+    }
+
+    if (state.moduleId === "print-post" && (!draft.customerEmail || !draft.name || !draft.address || !draft.pin)) {
+      alert("Please complete customer email and recipient address before checkout.");
+      openModule("print-post", 2);
+      return;
+    }
+
+    const fileBase64 = await fileToBase64(uploadFile);
+
+    // 1. Save the order in Neon and ask our backend to create a Razorpay order.
     const res = await fetch("/api/razorpay/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -975,6 +1054,33 @@ async function proceedToCheckout(amountInInr, orderNotes) {
         amount: amountInInr,
         currency: "INR",
         notes: orderNotes || {},
+        customer: {
+          name: draft.customerName || "",
+          email: draft.customerEmail || "",
+          phone: draft.customerPhone || "",
+        },
+        recipient: {
+          name: draft.name || "",
+          address: draft.address || "",
+          pin: draft.pin || "",
+          city: draft.city || "",
+          state: draft.state || "",
+        },
+        instructions: draft.instructions || "",
+        selections: {
+          ...draft,
+          uploadFile: uploadFile ? {
+            name: uploadFile.name,
+            size: uploadFile.size,
+            type: uploadFile.type,
+          } : null,
+          module: state.moduleId,
+        },
+        file: uploadFile ? {
+          name: uploadFile.name,
+          type: uploadFile.type || "application/octet-stream",
+          base64: fileBase64,
+        } : null,
       }),
     });
     const data = await res.json();
@@ -1003,8 +1109,8 @@ async function proceedToCheckout(amountInInr, orderNotes) {
         const verifyData = await verifyRes.json();
 
         if (verifyRes.ok && verifyData.verified) {
-          alert("Payment successful! Order ID: " + verifyData.orderId);
-          // TODO: redirect to order confirmation / refresh order history
+          alert("Payment successful! Your Postman Order ID is " + verifyData.orderId + ". We have saved your uploaded document and instructions.");
+          openModule("track", 0);
         } else {
           alert("Payment verification failed. Please contact support with your payment ID.");
         }
@@ -1035,6 +1141,8 @@ document.addEventListener("click", (e) => {
 
   if (!(modBtn || childBtn || openBtn || homeBtn || accBtn)) return;
 
+  captureCurrentPanelData();
+
   // Re-rendering below replaces the clicked button's DOM node, which drops
   // focus back to <body> and makes the browser reset scroll to the top.
   // Snapshot the scroll position and restore it right after the DOM update.
@@ -1050,6 +1158,11 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("input", (e) => {
+  if (e.target.matches("input[type='file'][name]")) {
+    captureCurrentPanelData();
+    renderPanel();
+    return;
+  }
   if (e.target.matches("[data-pin-lookup]")) {
     const pin = e.target.value.trim();
     if (/^\d{6}$/.test(pin) && pincodeLookup.pin !== pin) {
@@ -1059,10 +1172,20 @@ document.addEventListener("input", (e) => {
     // rebuilding the DOM mid-type destroys the focused element.
     return;
   }
-  if (e.target.closest("#calcForm")) renderPanel();
+  if (e.target.closest("#calcForm")) {
+    captureCurrentPanelData();
+    renderPanel();
+  }
   if (e.target.id === "fontSize") {
     document.documentElement.style.setProperty("--base-font-size", `${e.target.value}px`);
     localStorage.setItem("postmanFontSize", e.target.value);
+  }
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target.matches("#panel input[name], #panel select[name], #panel textarea[name]")) {
+    captureCurrentPanelData();
+    if (e.target.matches("input[type='file'][name]")) renderPanel();
   }
 });
 
