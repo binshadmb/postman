@@ -177,7 +177,9 @@ async function lookupPincode(pin) {
 // Reusable address block: PIN Code drives a live City dropdown + auto-filled State.
 // Drop this into any panel that collects a delivery/recipient address.
 function pinCityStateBlock(d) {
-  const pin = d.pin || "";
+  // Prefer the live DOM value (persists across renderPanel re-renders triggered by lookup)
+  const livePinEl = document.querySelector("[data-pin-lookup]");
+  const pin = (livePinEl ? livePinEl.value.trim() : null) || d.pin || "";
   const haveLookup = pincodeLookup.pin === pin && pin.length === 6;
 
   const cityField = haveLookup && pincodeLookup.status === "success"
@@ -1033,6 +1035,9 @@ document.addEventListener("input", (e) => {
     if (/^\d{6}$/.test(pin) && pincodeLookup.pin !== pin) {
       lookupPincode(pin);
     }
+    // Don't fall through to renderPanel() for PIN input —
+    // rebuilding the DOM mid-type destroys the focused element.
+    return;
   }
   if (e.target.closest("#calcForm")) renderPanel();
   if (e.target.id === "fontSize") {
