@@ -104,6 +104,26 @@ const fx = {
 
 const state = { moduleId: "print-post", childIndex: 3, currency: "INR" };
 
+// Live stock/config from the admin panel (Neon-backed). Starts null;
+// printOptsPanel() falls back to sensible defaults until this loads.
+let liveConfig = null;
+
+async function loadLiveConfig() {
+  try {
+    const res = await fetch("/api/config");
+    if (!res.ok) return;
+    liveConfig = await res.json();
+    // If the customer is already looking at Print Options when this
+    // resolves, re-render so it reflects live stock instead of defaults.
+    const mod = activeModule();
+    if (mod.id === "print-post" && mod.children[state.childIndex]?.id === "print-opts") {
+      renderPanel();
+    }
+  } catch (err) {
+    console.error("Failed to load live config:", err);
+  }
+}
+
 const $ = (id) => document.getElementById(id);
 const motherTabsEl = $("motherTabs");
 const childTabsEl  = $("childTabs");
@@ -129,6 +149,66 @@ function activeModule() {
 function currentFormData() {
   const form = document.querySelector("#calcForm");
   return form ? Object.fromEntries(new FormData(form).entries()) : {};
+}
+
+// Cache of the last pincode lookup — persists across renderPanel() re-renders,
+// since those fully rebuild the form's HTML on every keystroke.
+let pincodeLookup = { pin: null, status: "idle", cities: [], state: null };
+
+async function lookupPincode(pin) {
+  pincodeLookup = { pin, status: "loading", cities: [], state: null };
+  try {
+    const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
+    const data = await res.json();
+    const record = data && data[0];
+    if (record && record.Status === "Success" && record.PostOffice?.length) {
+      const cities = [...new Set(record.PostOffice.map((po) => po.Name))];
+      pincodeLookup = { pin, status: "success", cities, state: record.PostOffice[0].State };
+    } else {
+      pincodeLookup = { pin, status: "notfound", cities: [], state: null };
+    }
+  } catch (err) {
+    console.error("Pincode lookup failed:", err);
+    pincodeLookup = { pin, status: "error", cities: [], state: null };
+  }
+  renderPanel();
+}
+
+// Reusable address block: PIN Code drives a live City dropdown + auto-filled State.
+// Drop this into any panel that collects a delivery/recipient address.
+function pinCityStateBlock(d) {
+  const pin = d.pin || "";
+  const haveLookup = pincodeLookup.pin === pin && pin.length === 6;
+
+  const cityField = haveLookup && pincodeLookup.status === "success"
+    ? opt("city", "City", pincodeLookup.cities, d.city || pincodeLookup.cities[0])
+    : `<label style="display:grid;gap:4px;color:var(--muted)">City
+        <select disabled style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface-2);color:var(--muted);min-height:36px">
+          <option>${
+            haveLookup && pincodeLookup.status === "loading"  ? "Looking up…" :
+            haveLookup && pincodeLookup.status === "notfound" ? "PIN not found — check it" :
+            haveLookup && pincodeLookup.status === "error"    ? "Lookup failed — try again" :
+            "Enter 6-digit PIN first"
+          }</option>
+        </select>
+      </label>`;
+
+  const stateValue = haveLookup && pincodeLookup.status === "success" ? pincodeLookup.state : "";
+
+  return `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <label style="display:grid;gap:4px;color:var(--muted)">PIN Code
+        <input name="pin" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}"
+          placeholder="6-digit PIN" value="${pin}" data-pin-lookup
+          style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px">
+      </label>
+      ${cityField}
+    </div>
+    <label style="display:grid;gap:4px;color:var(--muted)">State
+      <input name="state" type="text" value="${stateValue}" readonly
+        placeholder="Auto-filled from PIN"
+        style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface-2);color:var(--ink);min-height:36px">
+    </label>`;
 }
 
 function opt(name, label, values, selected) {
@@ -314,14 +394,45 @@ function uploadPanel() {
 }
 
 function printOptsPanel() {
+  const cfg = liveConfig || {
+    bondPaperAvailable: true, premiumPaperAvailable: true, standardPaperAvailable: true,
+    envelopeSizes: ["C4", "C5", "C6"],
+    foldingAvailable: true, foldTypes: ["No fold", "Single fold", "Tri-fold"],
+  };
+
+  const paperOptions = [
+    cfg.standardPaperAvailable && "Standard 70 GSM",
+    cfg.bondPaperAvailable && "Bond 80 GSM",
+    cfg.premiumPaperAvailable && "Premium 100 GSM",
+    "Photo Paper",
+  ].filter(Boolean);
+
+  const paperField = paperOptions.length
+    ? opt("paper", "Paper Quality", paperOptions, paperOptions[0])
+    : `<label style="display:grid;gap:4px;color:var(--muted)">Paper Quality
+        <span style="color:var(--red);font-size:0.9rem">Currently unavailable — check back soon</span>
+      </label>`;
+
+  const envelopeField = cfg.envelopeSizes.length
+    ? opt("envelope", "Envelope Size", cfg.envelopeSizes, cfg.envelopeSizes[0])
+    : `<label style="display:grid;gap:4px;color:var(--muted)">Envelope Size
+        <span style="color:var(--red);font-size:0.9rem">No sizes currently available</span>
+      </label>`;
+
+  const foldField = cfg.foldingAvailable && cfg.foldTypes.length
+    ? opt("fold", "Folding", cfg.foldTypes, cfg.foldTypes[0])
+    : opt("fold", "Folding", ["No fold"], "No fold");
+
   return `<h3 style="margin-top:0">Print Options</h3>
     <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px;max-width:640px">
       ${opt("color",   "Print Color",    ["B&W", "Color"],                         "B&W")}
       ${opt("sides",   "Sides",          ["Single-sided", "Double-sided"],          "Single-sided")}
       ${opt("size",    "Paper Size",     ["A5", "A4", "A3", "Legal"],              "A4")}
-      ${opt("paper",   "Paper Quality",  ["Standard 70 GSM", "Bond 80 GSM", "Premium 100 GSM", "Photo Paper"], "Standard 70 GSM")}
+      ${paperField}
       ${opt("binding", "Binding",        ["None", "Stapled", "Spiral Bound"],       "None")}
       ${opt("copies",  "Copies",         ["1", "2", "3", "5", "10", "Custom"],      "1")}
+      ${envelopeField}
+      ${foldField}
     </div>
     <button type="button" onclick="openModule('print-post',2)"
       style="margin-top:16px;background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600">
@@ -330,21 +441,18 @@ function printOptsPanel() {
 }
 
 function postOptsPanel() {
+  const d = { post: "Speed Post (tracked)", zone: "Within Kerala", pin: "", city: "", ...currentFormData() };
   return `<h3 style="margin-top:0">Post Options</h3>
     <div style="display:grid;gap:14px;max-width:640px">
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
-        ${opt("post", "Post Type", ["Regular Post", "Speed Post (tracked)", "Registered Post", "Courier"], "Speed Post (tracked)")}
-        ${opt("zone", "Delivery Zone", ["Within Kerala", "Rest of India", "Metro city"], "Within Kerala")}
+        ${opt("post", "Post Type", ["Regular Post", "Speed Post (tracked)", "Registered Post", "Courier"], d.post)}
+        ${opt("zone", "Delivery Zone", ["Within Kerala", "Rest of India", "Metro city"], d.zone)}
       </div>
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
         <strong>Delivery Address</strong>
         ${textField("name",    "Recipient Name",    "Full name")}
         ${textField("address", "Street Address",    "House/flat, street")}
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          ${textField("city", "City", "City")}
-          ${textField("pin",  "PIN Code", "6-digit PIN")}
-        </div>
-        ${opt("state", "State", ["Kerala", "Tamil Nadu", "Karnataka", "Maharashtra", "Delhi", "West Bengal", "Gujarat", "Other"], "Kerala")}
+        ${pinCityStateBlock(d)}
       </div>
       <button type="button" onclick="openModule('print-post',3)"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
@@ -920,6 +1028,12 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("input", (e) => {
+  if (e.target.matches("[data-pin-lookup]")) {
+    const pin = e.target.value.trim();
+    if (/^\d{6}$/.test(pin) && pincodeLookup.pin !== pin) {
+      lookupPincode(pin);
+    }
+  }
   if (e.target.closest("#calcForm")) renderPanel();
   if (e.target.id === "fontSize") {
     document.documentElement.style.setProperty("--base-font-size", `${e.target.value}px`);
@@ -944,3 +1058,4 @@ document.documentElement.style.setProperty("--base-font-size", `${savedFont}px`)
 
 renderMotherTabs();
 renderModuleCards();
+loadLiveConfig();
