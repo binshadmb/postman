@@ -496,6 +496,7 @@ function cardFormatPanel() {
 }
 
 function personalizationPanel() {
+  const d = { pin: "", city: "", ...currentFormData() };
   return `<h3 style="margin-top:0">Personalization</h3>
     <div style="display:grid;gap:14px;max-width:640px">
       ${textField("name", "Recipient Name (for merge)", "e.g. Dear Amma,")}
@@ -508,6 +509,11 @@ function personalizationPanel() {
         <input type="file" accept=".jpg,.jpeg,.png"
           style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
       </label>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+        <strong>Delivery Address</strong>
+        ${textField("address", "Street Address", "House/flat, street")}
+        ${pinCityStateBlock(d)}
+      </div>
       <button type="button" onclick="openModule('cards',3)"
         style="background:var(--gold);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         Add-ons →
@@ -539,6 +545,7 @@ function addonsPanel() {
 }
 
 function registeredPanel() {
+  const d = { pin: "", city: "", ...currentFormData() };
   return `<h3 style="margin-top:0">Registered Post</h3>
     <div style="display:grid;gap:14px;max-width:640px">
       <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:8px">
@@ -555,6 +562,12 @@ function registeredPanel() {
         ${numField("pages", "Number of pages", 2)}
         ${opt("weight", "Estimated weight", ["Up to 50g", "51–100g", "101–250g", "251–500g"], "Up to 50g")}
       </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+        <strong>Recipient Address</strong>
+        ${textField("name",    "Recipient Name",    "Full name")}
+        ${textField("address", "Street Address",    "House/flat, street")}
+        ${pinCityStateBlock(d)}
+      </div>
       <button type="button" onclick="openModule('registered-mail',3)"
         style="background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
         See Price →
@@ -563,6 +576,7 @@ function registeredPanel() {
 }
 
 function speedPostPanel() {
+  const d = { zone: "National", pin: "", city: "", ...currentFormData() };
   return `<h3 style="margin-top:0">Speed Post</h3>
     <div style="display:grid;gap:14px;max-width:640px">
       <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:14px">
@@ -576,7 +590,13 @@ function speedPostPanel() {
       </div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
         ${numField("pages", "Number of pages", 2)}
-        ${opt("zone", "Delivery Zone", ["Local", "State", "National"], "National")}
+        ${opt("zone", "Delivery Zone", ["Local", "State", "National"], d.zone)}
+      </div>
+      <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+        <strong>Recipient Address</strong>
+        ${textField("name",    "Recipient Name",    "Full name")}
+        ${textField("address", "Street Address",    "House/flat, street")}
+        ${pinCityStateBlock(d)}
       </div>
       <button type="button" onclick="openModule('registered-mail',3)"
         style="background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
