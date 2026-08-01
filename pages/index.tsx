@@ -138,6 +138,8 @@ export default function Home() {
               </div>
               <span id="moduleBadge" className="module-badge" />
             </div>
+            {/* Step progress bar */}
+            <div id="stepProgress" className="step-progress" />
             <div className="child-tabs-wrapper">
               <button className="scroll-arrow" id="childTabsLeft" type="button" aria-label="Scroll tabs left">&#8592;</button>
               <nav id="childTabs" className="child-tabs" aria-label="Child tabs" />

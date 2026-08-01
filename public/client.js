@@ -1084,6 +1084,37 @@ function renderPanel() {
   panelEl.innerHTML = emptyPanel(child.label, `${mod.title} — ${child.label}: Coming in Phase 2 build.`);
 }
 
+// ── Step progress bar ─────────────────────────────────────────────────────
+
+function renderStepProgress() {
+  const el = $("stepProgress");
+  if (!el) return;
+  const mod = activeModule();
+  el.style.setProperty("--accent-color", mod.color);
+  el.innerHTML = mod.children.map((c, i) => {
+    const isDone   = i < state.childIndex;
+    const isActive = i === state.childIndex;
+    const cls = isDone ? "done" : isActive ? "active" : "";
+    const connector = i < mod.children.length - 1
+      ? `<div class="step-connector${isDone ? " done" : ""}"></div>`
+      : "";
+    return `
+      <div class="step-progress-item">
+        <div class="step-dot ${cls}" data-child="${i}" title="${c.label}">
+          <div class="step-dot-circle">${isDone ? "✓" : i + 1}</div>
+          <span class="step-dot-label">${c.label}</span>
+        </div>
+        ${connector}
+      </div>`;
+  }).join("");
+}
+
+// ── Back button helper ────────────────────────────────────────────────────
+
+function backBtn(moduleId, childIndex, label) {
+  return `<button class="back-btn" type="button" onclick="openModule('${moduleId}',${childIndex})">← ${label || "Back"}</button>`;
+}
+
 // ── Render mother/child tabs ───────────────────────────────────────────────
 
 function renderMotherTabs() {
@@ -1130,7 +1161,9 @@ function render() {
   $("breadcrumb").textContent = `Home / ${mod.title} / ${mod.children[state.childIndex].label}`;
   renderMotherTabs();
   renderChildTabs();
+  renderStepProgress();
   renderPanel();
+  initChildTabsArrows();
 }
 
 function openModule(moduleId, childIndex) {
@@ -1334,6 +1367,25 @@ $("themeSelect").addEventListener("change", (e) => {
   document.documentElement.dataset.theme = t === "system" ? "" : t;
   localStorage.setItem("postmanTheme", t);
 });
+
+// ── Child tabs scroll arrows ───────────────────────────────────────────────
+
+function initChildTabsArrows() {
+  const tabs  = $("childTabs");
+  const left  = $("childTabsLeft");
+  const right = $("childTabsRight");
+  if (!tabs || !left || !right) return;
+
+  function updateArrows() {
+    left.disabled  = tabs.scrollLeft <= 4;
+    right.disabled = tabs.scrollLeft + tabs.clientWidth >= tabs.scrollWidth - 4;
+  }
+
+  left.addEventListener("click",  () => { tabs.scrollLeft -= 220; });
+  right.addEventListener("click", () => { tabs.scrollLeft += 220; });
+  tabs.addEventListener("scroll", updateArrows);
+  updateArrows();
+}
 
 // ── Init ───────────────────────────────────────────────────────────────────
 
