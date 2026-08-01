@@ -504,6 +504,7 @@ function printOptsPanel() {
     : opt("fold", "Folding", ["No fold"], "No fold");
 
   return `<h3 style="margin-top:0">Print Options</h3>
+    ${backBtn("print-post", 0, "Upload Document")}
     <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px;max-width:640px">
       ${opt("color",   "Print Color",    ["B&W", "Color"],                         draft.color || "B&W")}
       ${opt("sides",   "Sides",          ["Single-sided", "Double-sided"],          draft.sides || "Single-sided")}
@@ -523,6 +524,7 @@ function printOptsPanel() {
 function postOptsPanel() {
   const d = { post: "Speed Post (tracked)", zone: "Within Kerala", pin: "", city: "", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Post Options</h3>
+    ${backBtn("print-post", 1, "Print Options")}
     <div style="display:grid;gap:14px;max-width:640px">
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
         <strong>Your Contact Details</strong>
@@ -585,6 +587,7 @@ function occasionPanel() {
 function cardFormatPanel() {
   const draft = activeDraft();
   return `<h3 style="margin-top:0">Card Format</h3>
+    ${backBtn("cards", 0, "Choose Occasion")}
     <div style="display:grid;gap:14px;max-width:640px">
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px">
         ${opt("cardWorkType", "Work needed", [
@@ -616,6 +619,7 @@ function cardFormatPanel() {
 function personalizationPanel() {
   const d = { pin: "", city: "", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Personalization</h3>
+    ${backBtn("cards", 1, "Card Format")}
     <div style="display:grid;gap:14px;max-width:640px">
       ${textField("name", "Recipient Name", "Full name")}
       <label style="display:grid;gap:6px;color:var(--muted)">Your message
@@ -647,6 +651,7 @@ function addonsPanel() {
     ["Ribbon / Wax Seal",  "₹45", "Decorative ribbon tie or personalised wax seal on envelope"],
   ];
   return `<h3 style="margin-top:0">Add-ons</h3>
+    ${backBtn("cards", 2, "Personalization")}
     <div style="display:grid;gap:12px;max-width:560px">
       ${addons.map(([name, price, desc]) => `
         <label style="display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--surface)">
@@ -666,6 +671,7 @@ function addonsPanel() {
 function registeredPanel() {
   const d = { pin: "", city: "", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Registered Post</h3>
+    <button class="back-btn" type="button" onclick="homeView.hidden=false; moduleView.hidden=true; renderMotherTabs();">← Back to Home</button>
     <div style="display:grid;gap:14px;max-width:640px">
       ${contactBlock()}
       ${uploadBlock("Upload document to print and send (PDF, DOCX, JPG, PNG)", ".pdf,.docx,.jpg,.jpeg,.png", "This file is saved to the admin order queue after checkout.")}
@@ -702,6 +708,7 @@ function registeredPanel() {
 function speedPostPanel() {
   const d = { zone: "National", pin: "", city: "", service: "Speed Post", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Speed Post</h3>
+    ${backBtn("registered-mail", 0, "Registered Post")}
     <div style="display:grid;gap:14px;max-width:640px">
       ${contactBlock()}
       ${uploadBlock("Upload document to print and send (PDF, DOCX, JPG, PNG)", ".pdf,.docx,.jpg,.jpeg,.png", "This file is saved to the admin order queue after checkout.")}
