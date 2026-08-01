@@ -56,4 +56,32 @@
     <priority>0.5</priority>
   </url>
 
+  <!-- Terms -->
+  <url>
+    <loc>https://postman.khagatara.com/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Privacy -->
+  <url>
+    <loc>https://postman.khagatara.com/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Refund / Cancellation -->
+  <url>
+    <loc>https://postman.khagatara.com/refund</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://postman.khagatara.com/contact</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
 </urlset>
