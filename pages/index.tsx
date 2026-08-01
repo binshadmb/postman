@@ -8,8 +8,42 @@ export default function Home() {
       <Head>
         <title>Postman — Khagatara</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads and bulk mail — handled locally for overseas senders." />
+        <meta name="keywords" content="print and post India, document printing Kerala, registered mail India, speed post India, greeting cards India, newspaper ad placement India, postman khagatara" />
+        <meta property="og:title" content="Postman — Khagatara" />
+        <meta property="og:description" content="Print, post, track and prove delivery inside India. For overseas senders." />
+        <meta property="og:url" content="https://postman.khagatara.com/" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://postman.khagatara.com/" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="stylesheet" href="/styles.css" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "Postman — Khagatara",
+              "url": "https://postman.khagatara.com",
+              "description": "Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads and bulk mail handled locally for overseas senders.",
+              "areaServed": "IN",
+              "serviceType": [
+                "Document Print & Post",
+                "Greeting Cards",
+                "Registered Mail",
+                "Newspaper Ad Placement",
+                "Bulk Business Mail",
+                "Order Tracking"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "postman@khagatara.com",
+                "contactType": "customer service"
+              }
+            })
+          }}
+        />
       </Head>
 
       <div className="app-shell">
@@ -91,35 +125,6 @@ export default function Home() {
               <article><span>Phase</span><strong>1 → 2</strong></article>
             </div>
 
-            <section className="market-slider" aria-label="Market rate comparison">
-              <div className="market-track">
-                <article>
-                  <span>UK to India document send</span>
-                  <strong>Market: £42.95 / approx ₹5,565</strong>
-                  <b>Our rate: from ₹58</b>
-                  <small>Difference: approx ₹5,507 less when the customer uploads and we print/post inside India.</small>
-                </article>
-                <article>
-                  <span>India domestic tracked document</span>
-                  <strong>Market: ₹35 + 18% GST = approx ₹41 postage only</strong>
-                  <b>Our rate: from ₹58</b>
-                  <small>Difference: ₹17 for print setup, handling, packing, and service labor.</small>
-                </article>
-                <article>
-                  <span>Private international document courier</span>
-                  <strong>Market: from ₹3,739 for 1 kg</strong>
-                  <b>Our rate: from ₹366 for prepared print-and-post orders</b>
-                  <small>Difference: approx ₹3,373 less for suitable document jobs handled locally.</small>
-                </article>
-                <article>
-                  <span>Manual print + post handling</span>
-                  <strong>Market: customer pays postage plus printing plus travel/time</strong>
-                  <b>Our rate: shown upfront before checkout</b>
-                  <small>Difference: one order covers GST handling, materials, packing, and admin processing.</small>
-                </article>
-              </div>
-            </section>
-
             {/* Module cards on home */}
             <div id="moduleCards" className="module-cards" />
           </section>
@@ -133,7 +138,11 @@ export default function Home() {
               </div>
               <span id="moduleBadge" className="module-badge" />
             </div>
-            <nav id="childTabs" className="child-tabs" aria-label="Child tabs" />
+            <div class="child-tabs-wrapper">
+              <button class="scroll-arrow" id="childTabsLeft" type="button" aria-label="Scroll tabs left">&#8592;</button>
+              <nav id="childTabs" className="child-tabs" aria-label="Child tabs" />
+              <button class="scroll-arrow" id="childTabsRight" type="button" aria-label="Scroll tabs right">&#8594;</button>
+            </div>
             <div id="panel" className="panel" />
           </section>
 
