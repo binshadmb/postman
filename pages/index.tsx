@@ -138,10 +138,10 @@ export default function Home() {
               </div>
               <span id="moduleBadge" className="module-badge" />
             </div>
-            <div class="child-tabs-wrapper">
-              <button class="scroll-arrow" id="childTabsLeft" type="button" aria-label="Scroll tabs left">&#8592;</button>
+            <div className="child-tabs-wrapper">
+              <button className="scroll-arrow" id="childTabsLeft" type="button" aria-label="Scroll tabs left">&#8592;</button>
               <nav id="childTabs" className="child-tabs" aria-label="Child tabs" />
-              <button class="scroll-arrow" id="childTabsRight" type="button" aria-label="Scroll tabs right">&#8594;</button>
+              <button className="scroll-arrow" id="childTabsRight" type="button" aria-label="Scroll tabs right">&#8594;</button>
             </div>
             <div id="panel" className="panel" />
           </section>
