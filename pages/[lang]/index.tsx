@@ -1,22 +1,44 @@
 "use client";
 import Head from "next/head";
 import Script from "next/script";
+import { GetStaticPaths, GetStaticProps } from "next";
+import LangSwitcher from "../../components/LangSwitcher";
+import { SUPPORTED_LANGS, RTL_LANGS, hreflangTags, loadLocale } from "../../lib/i18n";
 
-export default function Home() {
+interface Props {
+  lang: string;
+  dir: string;
+  t: Record<string, any>;
+  hreflangs: { rel: string; hreflang: string; href: string }[];
+}
+
+export default function Home({ lang, dir, t, hreflangs }: Props) {
   return (
     <>
       <Head>
         <title>Postman — Khagatara</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads and bulk mail — handled locally for overseas senders." />
-        <meta name="keywords" content="print and post India, document printing Kerala, registered mail India, speed post India, greeting cards India, newspaper ad placement India, postman khagatara" />
+        <meta name="description" content={t.home?.subheadline} />
         <meta property="og:title" content="Postman — Khagatara" />
-        <meta property="og:description" content="Print, post, track and prove delivery inside India. For overseas senders." />
-        <meta property="og:url" content="https://postman.khagatara.com/" />
+        <meta property="og:description" content={t.home?.subheadline} />
+        <meta property="og:url" content={`https://postman.khagatara.com/${lang}/`} />
         <meta property="og:type" content="website" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://postman.khagatara.com/" />
+        <link rel="canonical" href={`https://postman.khagatara.com/${lang}/`} />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {dir === "rtl" && <link rel="stylesheet" href="/rtl.css" />}
+        {/* Per-language Google Fonts */}
+        {["zh"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC&display=swap" />}
+        {["ja"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" />}
+        {["ko"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" />}
+        {["hi"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" />}
+        {["bn"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" />}
+        {["th"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap" />}
+        {["ar"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic&display=swap" />}
+        {["ur"].includes(lang) && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" />}
+        {hreflangs.map((h) => (
+          <link key={h.hreflang} rel={h.rel} hrefLang={h.hreflang} href={h.href} />
+        ))}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -25,30 +47,16 @@ export default function Home() {
               "@type": "LocalBusiness",
               "name": "Postman — Khagatara",
               "url": "https://postman.khagatara.com",
-              "description": "Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads and bulk mail handled locally for overseas senders.",
+              "description": t.home?.subheadline,
               "areaServed": "IN",
-              "serviceType": [
-                "Document Print & Post",
-                "Greeting Cards",
-                "Registered Mail",
-                "Newspaper Ad Placement",
-                "Bulk Business Mail",
-                "Order Tracking"
-              ],
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "email": "postman@khagatara.com",
-                "contactType": "customer service"
-              }
-            })
+            }),
           }}
         />
       </Head>
 
-      <div className="app-shell">
-        {/* ── Sidebar ──────────────────────────────────────────── */}
+      <div className="app-shell" lang={lang} dir={dir}>
         <aside className="sidebar">
-          <a className="brand" href="#home" aria-label="Postman Khagatara home">
+          <a className="brand" href={`/${lang}`} aria-label="Postman Khagatara home">
             <span className="brand-mark">PK</span>
             <span>
               <strong>Postman</strong>
@@ -58,11 +66,9 @@ export default function Home() {
           <nav id="motherTabs" className="mother-tabs" aria-label="Main sections" />
         </aside>
 
-        {/* ── Main ─────────────────────────────────────────────── */}
         <main className="main">
-          {/* Top bar */}
           <header className="topbar">
-            <a className="icon-button" href="#home" title="Home" aria-label="Home">⌂</a>
+            <a className="icon-button" href={`/${lang}`} title={t.nav?.home} aria-label={t.nav?.home}>⌂</a>
             <label className="search">
               <span className="sr-only">Search</span>
               <input id="searchInput" type="search" placeholder="Order ID, AWB, module…" />
@@ -79,16 +85,16 @@ export default function Home() {
               Font
               <input id="fontSize" type="range" min="12.5" max="18" step="0.5" defaultValue="15" />
             </label>
-            <button className="account-button" type="button" id="accountBtn">Account</button>
+            <button className="account-button" type="button" id="accountBtn">{t.nav?.account}</button>
+            <LangSwitcher currentLang={lang} />
           </header>
 
-          {/* Home view */}
           <section id="homeView" className="home-view">
             {/* ── Hero ── */}
             <section className="hero-new" id="heroSlider">
               <div className="hero-badge" id="heroBadge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
-              <h1 id="heroTitle">Send Documents in India<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
-              <p className="hero-subtitle" id="heroSubtitle">Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.</p>
+              <h1 id="heroTitle">{t.home?.headline}<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
+              <p className="hero-subtitle" id="heroSubtitle">{t.home?.subheadline}</p>
               <div className="hero-dots" id="heroDots" aria-hidden="true" />
             </section>
 
@@ -97,29 +103,29 @@ export default function Home() {
               <div className="hero-step-card blue">
                 <div className="hero-badge-num">01</div>
                 <div className="hero-step-icon"><i className="fa-solid fa-file-arrow-up"></i></div>
-                <h2>Upload<br />your document</h2>
-                <span className="hero-tag">PDF, JPG, PNG</span>
+                <h2>{t.home?.step1_title}</h2>
+                <span className="hero-tag">{t.home?.step1_tag}</span>
               </div>
               <div className="hero-arrow blue"><i className="fa-solid fa-arrow-right"></i></div>
               <div className="hero-step-card green">
                 <div className="hero-badge-num">02</div>
                 <div className="hero-step-icon"><i className="fa-solid fa-sliders"></i></div>
-                <h2>Choose<br />print settings</h2>
-                <span className="hero-tag">Copies · Paper · Quality</span>
+                <h2>{t.home?.step2_title}</h2>
+                <span className="hero-tag">{t.home?.step2_tag}</span>
               </div>
               <div className="hero-arrow green"><i className="fa-solid fa-arrow-right"></i></div>
               <div className="hero-step-card orange">
                 <div className="hero-badge-num">03</div>
                 <div className="hero-step-icon"><i className="fa-solid fa-location-dot"></i></div>
-                <h2>Enter<br />delivery address</h2>
-                <span className="hero-tag">Across India</span>
+                <h2>{t.home?.step3_title}</h2>
+                <span className="hero-tag">{t.home?.step3_tag}</span>
               </div>
               <div className="hero-arrow orange"><i className="fa-solid fa-arrow-right"></i></div>
               <div className="hero-step-card purple">
                 <div className="hero-badge-num">04</div>
                 <div className="hero-step-icon"><i className="fa-solid fa-print"></i></div>
-                <h2>We print,<br />dispatch &amp; notify</h2>
-                <span className="hero-tag">SMS / Email update</span>
+                <h2>{t.home?.step4_title}</h2>
+                <span className="hero-tag">{t.home?.step4_tag}</span>
               </div>
             </section>
 
@@ -127,38 +133,35 @@ export default function Home() {
             <section className="hero-features">
               <div className="hero-feature">
                 <div className="hero-ficon blue"><i className="fa-solid fa-indian-rupee-sign"></i></div>
-                <div><span className="hero-ftitle blue">Economical</span><p>Best prices always</p></div>
+                <div><span className="hero-ftitle blue">{t.home?.feature_economical_title}</span><p>{t.home?.feature_economical_desc}</p></div>
               </div>
               <div className="hero-feature">
                 <div className="hero-ficon green"><i className="fa-solid fa-shield-halved"></i></div>
-                <div><span className="hero-ftitle green">Secure</span><p>Your documents are safe</p></div>
+                <div><span className="hero-ftitle green">{t.home?.feature_secure_title}</span><p>{t.home?.feature_secure_desc}</p></div>
               </div>
               <div className="hero-feature">
                 <div className="hero-ficon orange"><i className="fa-solid fa-clock"></i></div>
-                <div><span className="hero-ftitle orange">Fast service</span><p>Quick printing &amp; delivery</p></div>
+                <div><span className="hero-ftitle orange">{t.home?.feature_fast_title}</span><p>{t.home?.feature_fast_desc}</p></div>
               </div>
               <div className="hero-feature">
                 <div className="hero-ficon purple"><i className="fa-solid fa-location-dot"></i></div>
-                <div><span className="hero-ftitle purple">All India reach</span><p>Delivering to every pincode</p></div>
+                <div><span className="hero-ftitle purple">{t.home?.feature_reach_title}</span><p>{t.home?.feature_reach_desc}</p></div>
               </div>
             </section>
 
             {/* ── Closing ── */}
             <section className="hero-closing">
               <i className="fa-solid fa-file-lines"></i>
-              <p>Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.</p>
-              <p className="hero-closing-strong">Simple steps. Trusted service. Right to your doorstep.</p>
+              <p>{t.home?.closing_line}</p>
+              <p className="hero-closing-strong">{t.home?.closing_strong}</p>
               <div className="quick-actions" style={{marginTop: "18px", justifyContent: "center"}}>
-                <button className="primary-action" type="button" data-open="print-post">New print order</button>
-                <button className="secondary-action" type="button" data-open="track">Track order</button>
-                <button className="secondary-action" type="button" data-open="cards">Send a card</button>
+                <button className="primary-action" type="button" data-open="print-post">{t.home?.cta_upload}</button>
+                <button className="secondary-action" type="button" data-open="track">{t.home?.cta_track}</button>
+                <button className="secondary-action" type="button" data-open="cards">{t.home?.cta_cards}</button>
               </div>
             </section>
-
-            {/* Module cards removed */}
           </section>
 
-          {/* Module view */}
           <section id="moduleView" className="module-view" hidden>
             <div className="module-head">
               <div>
@@ -167,7 +170,6 @@ export default function Home() {
               </div>
               <span id="moduleBadge" className="module-badge" />
             </div>
-            {/* Step progress bar */}
             <div id="stepProgress" className="step-progress" />
             <div className="child-tabs-wrapper">
               <button className="scroll-arrow" id="childTabsLeft" type="button" aria-label="Scroll tabs left">&#8592;</button>
@@ -178,10 +180,10 @@ export default function Home() {
           </section>
 
           <footer className="site-footer">
-            <a href="/terms">Terms</a>
-            <a href="/privacy">Privacy</a>
-            <a href="/refund">Refund/Cancellation</a>
-            <a href="/contact">Contact</a>
+            <a href={`/${lang}/terms`}>{t.footer?.terms}</a>
+            <a href={`/${lang}/privacy`}>{t.footer?.privacy}</a>
+            <a href={`/${lang}/refund`}>{t.footer?.refund}</a>
+            <a href={`/${lang}/contact`}>{t.footer?.contact}</a>
           </footer>
         </main>
       </div>
@@ -191,3 +193,16 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: SUPPORTED_LANGS.map((lang) => ({ params: { lang } })),
+  fallback: false,
+});
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const lang = (params?.lang as string) || "en";
+  const t = await loadLocale(lang);
+  const dir = RTL_LANGS.includes(lang) ? "rtl" : "ltr";
+  const hreflangs = hreflangTags("/");
+  return { props: { lang, dir, t, hreflangs } };
+};

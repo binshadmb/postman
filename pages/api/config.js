@@ -1,12 +1,27 @@
 import { prisma } from "../../lib/prisma";
 import { getSessionFromReq } from "../../lib/auth";
 
+const DEFAULT_CONFIG = {
+  id: 1,
+  bondPaperAvailable: true,
+  premiumPaperAvailable: true,
+  standardPaperAvailable: true,
+  envelopeSizes: ["C4", "C5", "C6"],
+  foldingAvailable: true,
+  foldTypes: ["No fold", "Single fold", "Tri-fold"],
+};
+
 async function getOrCreateConfig() {
-  let config = await prisma.printConfig.findUnique({ where: { id: 1 } });
-  if (!config) {
-    config = await prisma.printConfig.create({ data: { id: 1 } });
+  try {
+    let config = await prisma.printConfig.findUnique({ where: { id: 1 } });
+    if (!config) {
+      config = await prisma.printConfig.create({ data: { id: 1 } });
+    }
+    return config;
+  } catch {
+    // DB unreachable — return safe defaults so the UI still works
+    return DEFAULT_CONFIG;
   }
-  return config;
 }
 
 export default async function handler(req, res) {
