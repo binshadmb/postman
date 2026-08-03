@@ -698,7 +698,12 @@ input[type="range"] {
   max-width: 900px;
   margin: 0 auto;
   text-align: center;
-  padding: 40px 24px 24px;
+  padding: 56px 24px 32px;
+  min-height: calc(100vh - 80px); /* fill viewport on first load */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-badge {
