@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "ہوم",
+    "pricing": "قیمتیں",
+    "track_order": "آرڈر ٹریک کریں",
+    "account": "اکاؤنٹ"
+  },
+  "home": {
+    "headline": "ہندوستان کے اندر پرنٹ، پوسٹ، ٹریک اور ڈیلیوری ثابت کریں۔",
+    "subheadline": "بیرون ملک بھیجنے والوں کے لیے ایک سروس ڈیسک جنہیں ہندوستانی دستاویزات، گریٹنگ کارڈز، رجسٹرڈ میل، میڈیا اشتہارات اور بلک میل مقامی طور پر سنبھالنے کی ضرورت ہے۔",
+    "cta_upload": "نیا پرنٹ آرڈر",
+    "cta_track": "آرڈر ٹریک کریں",
+    "cta_cards": "کارڈ بھیجیں",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "کاغذ کی قسم",
+    "bw_a4": "A4 سیاہ و سفید",
+    "color_a4": "A4 رنگین",
+    "premium": "پریمیم (100 GSM)",
+    "glossy": "چمکدار"
+  },
+  "form": {
+    "upload_label": "فائل منتخب کریں (PDF, DOCX, JPG, PNG — زیادہ سے زیادہ 20 MB)",
+    "page_count": "صفحات کی تعداد",
+    "delivery_speed": "ڈاک کی قسم",
+    "recipient_name": "وصول کنندہ کا نام",
+    "street_address": "سڑک کا پتہ",
+    "pin_code": "پن کوڈ",
+    "city": "شہر",
+    "state": "ریاست",
+    "continue": "جاری رکھیں",
+    "back": "واپس",
+    "see_price": "قیمت کا تخمینہ دیکھیں"
+  },
+  "footer": {
+    "contact": "رابطہ",
+    "gstin_label": "GSTIN",
+    "terms": "شرائط",
+    "privacy": "رازداری",
+    "refund": "واپسی / منسوخی"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "홈",
+    "pricing": "요금",
+    "track_order": "주문 추적",
+    "account": "계정"
+  },
+  "home": {
+    "headline": "인도 내에서 인쇄, 발송, 추적 및 배달 증명.",
+    "subheadline": "인도 문서, 인사 카드, 등기 우편, 미디어 광고 및 대량 우편을 현지에서 처리해야 하는 해외 발송자를 위한 서비스 데스크.",
+    "cta_upload": "새 인쇄 주문",
+    "cta_track": "주문 추적",
+    "cta_cards": "카드 보내기",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "용지 종류",
+    "bw_a4": "A4 흑백",
+    "color_a4": "A4 컬러",
+    "premium": "프리미엄 (100 GSM)",
+    "glossy": "광택"
+  },
+  "form": {
+    "upload_label": "파일 선택 (PDF, DOCX, JPG, PNG — 최대 20 MB)",
+    "page_count": "페이지 수",
+    "delivery_speed": "발송 유형",
+    "recipient_name": "수신자 이름",
+    "street_address": "도로명 주소",
+    "pin_code": "PIN 코드",
+    "city": "도시",
+    "state": "주",
+    "continue": "계속",
+    "back": "뒤로",
+    "see_price": "가격 견적 보기"
+  },
+  "footer": {
+    "contact": "문의",
+    "gstin_label": "GSTIN",
+    "terms": "이용약관",
+    "privacy": "개인정보 처리방침",
+    "refund": "환불 / 취소"
+  }
+}

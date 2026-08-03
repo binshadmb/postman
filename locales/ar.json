@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "pricing": "الأسعار",
+    "track_order": "تتبع الطلب",
+    "account": "الحساب"
+  },
+  "home": {
+    "headline": "اطبع وأرسل وتتبع وأثبت التسليم داخل الهند.",
+    "subheadline": "مكتب خدمات للمرسلين من الخارج يحتاجون إلى معالجة الوثائق الهندية والبطاقات التهنوية والبريد المسجل والإعلانات الإعلامية والبريد الجماعي محلياً.",
+    "cta_upload": "طلب طباعة جديد",
+    "cta_track": "تتبع الطلب",
+    "cta_cards": "إرسال بطاقة",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "نوع الورق",
+    "bw_a4": "A4 أبيض وأسود",
+    "color_a4": "A4 ملون",
+    "premium": "فاخر (100 جرام)",
+    "glossy": "لامع"
+  },
+  "form": {
+    "upload_label": "اختر ملفاً (PDF، DOCX، JPG، PNG — الحد الأقصى 20 ميجابايت)",
+    "page_count": "عدد الصفحات",
+    "delivery_speed": "نوع البريد",
+    "recipient_name": "اسم المستلم",
+    "street_address": "عنوان الشارع",
+    "pin_code": "الرمز البريدي",
+    "city": "المدينة",
+    "state": "الولاية",
+    "continue": "متابعة",
+    "back": "رجوع",
+    "see_price": "عرض تقدير السعر"
+  },
+  "footer": {
+    "contact": "اتصل بنا",
+    "gstin_label": "GSTIN",
+    "terms": "الشروط",
+    "privacy": "الخصوصية",
+    "refund": "الاسترداد / الإلغاء"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "pricing": "Precios",
+    "track_order": "Rastrear pedido",
+    "account": "Cuenta"
+  },
+  "home": {
+    "headline": "Imprime, envía, rastrea y comprueba la entrega dentro de India.",
+    "subheadline": "Un escritorio de servicio para remitentes en el extranjero que necesitan documentos indios, tarjetas de felicitación, correo certificado, anuncios en medios y correo masivo gestionado localmente.",
+    "cta_upload": "Nuevo pedido de impresión",
+    "cta_track": "Rastrear pedido",
+    "cta_cards": "Enviar una tarjeta",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "Tipo de papel",
+    "bw_a4": "A4 Blanco y negro",
+    "color_a4": "A4 Color",
+    "premium": "Premium (100 GSM)",
+    "glossy": "Brillante"
+  },
+  "form": {
+    "upload_label": "Seleccionar archivo (PDF, DOCX, JPG, PNG — máx. 20 MB)",
+    "page_count": "Número de páginas",
+    "delivery_speed": "Tipo de envío",
+    "recipient_name": "Nombre del destinatario",
+    "street_address": "Dirección",
+    "pin_code": "Código PIN",
+    "city": "Ciudad",
+    "state": "Estado",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "see_price": "Ver estimación de precio"
+  },
+  "footer": {
+    "contact": "Contacto",
+    "gstin_label": "GSTIN",
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "refund": "Reembolso / Cancelación"
+  }
+}

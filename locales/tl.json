@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Home",
+    "pricing": "Presyo",
+    "track_order": "Subaybayan ang Order",
+    "account": "Account"
+  },
+  "home": {
+    "headline": "Mag-print, magpadala, subaybayan, at patunayan ang paghahatid sa India.",
+    "subheadline": "Isang service desk para sa mga nagpapadala mula sa ibang bansa na nangangailangan ng mga dokumentong Indian, greeting cards, registered mail, media ads, at bulk mail na pinamamahalaan nang lokal.",
+    "cta_upload": "Bagong order sa pag-print",
+    "cta_track": "Subaybayan ang order",
+    "cta_cards": "Magpadala ng card",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "Uri ng papel",
+    "bw_a4": "A4 itim at puti",
+    "color_a4": "A4 kulay",
+    "premium": "Premium (100 GSM)",
+    "glossy": "Makintab"
+  },
+  "form": {
+    "upload_label": "Pumili ng file (PDF, DOCX, JPG, PNG — max 20 MB)",
+    "page_count": "Bilang ng pahina",
+    "delivery_speed": "Uri ng pagpapadala",
+    "recipient_name": "Pangalan ng tatanggap",
+    "street_address": "Address sa kalye",
+    "pin_code": "PIN code",
+    "city": "Lungsod",
+    "state": "Estado",
+    "continue": "Magpatuloy",
+    "back": "Bumalik",
+    "see_price": "Tingnan ang tinantyang presyo"
+  },
+  "footer": {
+    "contact": "Makipag-ugnayan",
+    "gstin_label": "GSTIN",
+    "terms": "Mga Tuntunin",
+    "privacy": "Pagkapribado",
+    "refund": "Refund / Pagkansela"
+  }
+}

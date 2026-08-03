@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Home",
+    "pricing": "Prijzen",
+    "track_order": "Bestelling volgen",
+    "account": "Account"
+  },
+  "home": {
+    "headline": "Afdrukken, verzenden, volgen en levering bewijzen in India.",
+    "subheadline": "Een servicedesk voor buitenlandse verzenders die Indiase documenten, wenskaarten, aangetekende post, mediaadvertenties en bulkpost lokaal laten verwerken.",
+    "cta_upload": "Nieuwe printopdracht",
+    "cta_track": "Bestelling volgen",
+    "cta_cards": "Kaart sturen",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "Papiertype",
+    "bw_a4": "A4 Zwart-wit",
+    "color_a4": "A4 Kleur",
+    "premium": "Premium (100 GSM)",
+    "glossy": "Glanzend"
+  },
+  "form": {
+    "upload_label": "Bestand selecteren (PDF, DOCX, JPG, PNG — max. 20 MB)",
+    "page_count": "Aantal pagina's",
+    "delivery_speed": "Verzendtype",
+    "recipient_name": "Naam ontvanger",
+    "street_address": "Straatadres",
+    "pin_code": "Pincode",
+    "city": "Stad",
+    "state": "Staat",
+    "continue": "Doorgaan",
+    "back": "Terug",
+    "see_price": "Prijsschatting bekijken"
+  },
+  "footer": {
+    "contact": "Contact",
+    "gstin_label": "GSTIN",
+    "terms": "Voorwaarden",
+    "privacy": "Privacy",
+    "refund": "Terugbetaling / Annulering"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "होम",
+    "pricing": "मूल्य",
+    "track_order": "ऑर्डर ट्रैक करें",
+    "account": "खाता"
+  },
+  "home": {
+    "headline": "भारत के भीतर प्रिंट करें, भेजें, ट्रैक करें और डिलीवरी साबित करें।",
+    "subheadline": "विदेशी भेजने वालों के लिए एक सेवा केंद्र जिन्हें भारतीय दस्तावेज़, ग्रीटिंग कार्ड, पंजीकृत मेल, मीडिया विज्ञापन और बल्क मेल स्थानीय रूप से संभाली जाती है।",
+    "cta_upload": "नया प्रिंट ऑर्डर",
+    "cta_track": "ऑर्डर ट्रैक करें",
+    "cta_cards": "कार्ड भेजें",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "कागज़ का प्रकार",
+    "bw_a4": "A4 श्याम-श्वेत",
+    "color_a4": "A4 रंगीन",
+    "premium": "प्रीमियम (100 GSM)",
+    "glossy": "चमकदार"
+  },
+  "form": {
+    "upload_label": "फ़ाइल चुनें (PDF, DOCX, JPG, PNG — अधिकतम 20 MB)",
+    "page_count": "पृष्ठों की संख्या",
+    "delivery_speed": "डाक प्रकार",
+    "recipient_name": "प्राप्तकर्ता का नाम",
+    "street_address": "सड़क का पता",
+    "pin_code": "पिन कोड",
+    "city": "शहर",
+    "state": "राज्य",
+    "continue": "जारी रखें",
+    "back": "वापस",
+    "see_price": "मूल्य अनुमान देखें"
+  },
+  "footer": {
+    "contact": "संपर्क",
+    "gstin_label": "GSTIN",
+    "terms": "नियम",
+    "privacy": "गोपनीयता",
+    "refund": "धनवापसी / रद्दीकरण"
+  }
+}

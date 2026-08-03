@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "pricing": "Preise",
+    "track_order": "Sendung verfolgen",
+    "account": "Konto"
+  },
+  "home": {
+    "headline": "Drucken, versenden, verfolgen und Zustellung in Indien nachweisen.",
+    "subheadline": "Ein Serviceschalter für Absender im Ausland, die indische Dokumente, Grußkarten, Einschreiben, Medienanzeigen und Massensendungen lokal erledigen lassen müssen.",
+    "cta_upload": "Neuer Druckauftrag",
+    "cta_track": "Sendung verfolgen",
+    "cta_cards": "Karte senden",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "Papiertyp",
+    "bw_a4": "A4 Schwarz-Weiß",
+    "color_a4": "A4 Farbe",
+    "premium": "Premium (100 GSM)",
+    "glossy": "Glänzend"
+  },
+  "form": {
+    "upload_label": "Datei auswählen (PDF, DOCX, JPG, PNG — max. 20 MB)",
+    "page_count": "Seitenanzahl",
+    "delivery_speed": "Versandart",
+    "recipient_name": "Empfängername",
+    "street_address": "Straße und Hausnummer",
+    "pin_code": "PIN-Code",
+    "city": "Stadt",
+    "state": "Bundesstaat",
+    "continue": "Weiter",
+    "back": "Zurück",
+    "see_price": "Preisschätzung anzeigen"
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "gstin_label": "GSTIN",
+    "terms": "AGB",
+    "privacy": "Datenschutz",
+    "refund": "Rückerstattung / Stornierung"
+  }
+}

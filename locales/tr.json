@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "pricing": "Fiyatlandırma",
+    "track_order": "Siparişi Takip Et",
+    "account": "Hesap"
+  },
+  "home": {
+    "headline": "Hindistan'da yazdır, gönder, takip et ve teslimatı kanıtla.",
+    "subheadline": "Yurt dışındaki göndericiler için Hint belgeleri, tebrik kartları, taahhütlü posta, medya ilanları ve toplu postaların yerel olarak işlendiği bir hizmet masası.",
+    "cta_upload": "Yeni baskı siparişi",
+    "cta_track": "Siparişi takip et",
+    "cta_cards": "Kart gönder",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "Kağıt türü",
+    "bw_a4": "A4 Siyah beyaz",
+    "color_a4": "A4 Renkli",
+    "premium": "Premium (100 GSM)",
+    "glossy": "Parlak"
+  },
+  "form": {
+    "upload_label": "Dosya seç (PDF, DOCX, JPG, PNG — maks. 20 MB)",
+    "page_count": "Sayfa sayısı",
+    "delivery_speed": "Posta türü",
+    "recipient_name": "Alıcı adı",
+    "street_address": "Sokak adresi",
+    "pin_code": "PIN kodu",
+    "city": "Şehir",
+    "state": "Eyalet",
+    "continue": "Devam et",
+    "back": "Geri",
+    "see_price": "Fiyat tahmini görüntüle"
+  },
+  "footer": {
+    "contact": "İletişim",
+    "gstin_label": "GSTIN",
+    "terms": "Koşullar",
+    "privacy": "Gizlilik",
+    "refund": "İade / İptal"
+  }
+}

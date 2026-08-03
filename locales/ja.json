@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "pricing": "料金",
+    "track_order": "注文追跡",
+    "account": "アカウント"
+  },
+  "home": {
+    "headline": "インド国内での印刷・郵送・追跡・配達証明。",
+    "subheadline": "インドの書類、グリーティングカード、書留郵便、メディア広告、一括郵便をローカルで処理する海外送付者向けサービスデスク。",
+    "cta_upload": "新しい印刷注文",
+    "cta_track": "注文を追跡",
+    "cta_cards": "カードを送る",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "用紙の種類",
+    "bw_a4": "A4 白黒",
+    "color_a4": "A4 カラー",
+    "premium": "プレミアム（100 GSM）",
+    "glossy": "光沢"
+  },
+  "form": {
+    "upload_label": "ファイルを選択（PDF、DOCX、JPG、PNG — 最大20MB）",
+    "page_count": "ページ数",
+    "delivery_speed": "郵送方法",
+    "recipient_name": "受取人名",
+    "street_address": "住所",
+    "pin_code": "郵便番号",
+    "city": "市区町村",
+    "state": "州",
+    "continue": "続ける",
+    "back": "戻る",
+    "see_price": "料金見積もりを表示"
+  },
+  "footer": {
+    "contact": "お問い合わせ",
+    "gstin_label": "GSTIN",
+    "terms": "利用規約",
+    "privacy": "プライバシー",
+    "refund": "返金・キャンセル"
+  }
+}

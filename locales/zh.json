@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "首页",
+    "pricing": "价格",
+    "track_order": "追踪订单",
+    "account": "账户"
+  },
+  "home": {
+    "headline": "在印度境内打印、邮寄、追踪并证明送达。",
+    "subheadline": "为海外寄件人提供服务，处理印度文件、贺卡、挂号信、媒体广告及批量邮件。",
+    "cta_upload": "新建打印订单",
+    "cta_track": "追踪订单",
+    "cta_cards": "发送贺卡",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "纸张类型",
+    "bw_a4": "A4 黑白",
+    "color_a4": "A4 彩色",
+    "premium": "优质纸（100克）",
+    "glossy": "光面纸"
+  },
+  "form": {
+    "upload_label": "选择文件（PDF、DOCX、JPG、PNG — 最大20MB）",
+    "page_count": "页数",
+    "delivery_speed": "邮寄类型",
+    "recipient_name": "收件人姓名",
+    "street_address": "街道地址",
+    "pin_code": "邮政编码",
+    "city": "城市",
+    "state": "州/省",
+    "continue": "继续",
+    "back": "返回",
+    "see_price": "查看报价"
+  },
+  "footer": {
+    "contact": "联系我们",
+    "gstin_label": "GSTIN",
+    "terms": "条款",
+    "privacy": "隐私政策",
+    "refund": "退款 / 取消"
+  }
+}

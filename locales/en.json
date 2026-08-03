@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "track_order": "Track Order",
+    "account": "Account"
+  },
+  "home": {
+    "headline": "Print, post, track, and prove delivery inside India.",
+    "subheadline": "A service desk for overseas senders who need Indian documents, greeting cards, registered mail, media ads, and bulk mail handled locally.",
+    "cta_upload": "New print order",
+    "cta_track": "Track order",
+    "cta_cards": "Send a card",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "Paper Type",
+    "bw_a4": "A4 Black & White",
+    "color_a4": "A4 Color",
+    "premium": "Premium (100 GSM)",
+    "glossy": "Glossy"
+  },
+  "form": {
+    "upload_label": "Select file (PDF, DOCX, JPG, PNG — max 20 MB)",
+    "page_count": "Number of pages",
+    "delivery_speed": "Post Type",
+    "recipient_name": "Recipient Name",
+    "street_address": "Street Address",
+    "pin_code": "PIN Code",
+    "city": "City",
+    "state": "State",
+    "continue": "Continue",
+    "back": "Back",
+    "see_price": "See Price Estimate"
+  },
+  "footer": {
+    "contact": "Contact",
+    "gstin_label": "GSTIN",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "refund": "Refund / Cancellation"
+  }
+}

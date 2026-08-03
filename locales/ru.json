@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Главная",
+    "pricing": "Цены",
+    "track_order": "Отслеживание заказа",
+    "account": "Аккаунт"
+  },
+  "home": {
+    "headline": "Печать, отправка, отслеживание и подтверждение доставки в Индии.",
+    "subheadline": "Сервисный центр для зарубежных отправителей, которым нужна обработка индийских документов, открыток, заказных писем, рекламы в СМИ и массовых рассылок на месте.",
+    "cta_upload": "Новый заказ печати",
+    "cta_track": "Отследить заказ",
+    "cta_cards": "Отправить открытку",
+    "step1_title": "Upload your document",
+    "step1_tag": "PDF, JPG, PNG",
+    "step2_title": "Choose print settings",
+    "step2_tag": "Copies · Paper · Quality",
+    "step3_title": "Enter delivery address",
+    "step3_tag": "Across India",
+    "step4_title": "We print, dispatch & notify",
+    "step4_tag": "SMS / Email update",
+    "feature_economical_title": "Economical",
+    "feature_economical_desc": "Best prices always",
+    "feature_secure_title": "Secure",
+    "feature_secure_desc": "Your documents are safe",
+    "feature_fast_title": "Fast service",
+    "feature_fast_desc": "Quick printing & delivery",
+    "feature_reach_title": "All India reach",
+    "feature_reach_desc": "Delivering to every pincode",
+    "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
+    "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
+  },
+  "pricing": {
+    "paper_type": "Тип бумаги",
+    "bw_a4": "A4 Чёрно-белый",
+    "color_a4": "A4 Цветной",
+    "premium": "Премиум (100 г/м²)",
+    "glossy": "Глянцевый"
+  },
+  "form": {
+    "upload_label": "Выберите файл (PDF, DOCX, JPG, PNG — макс. 20 МБ)",
+    "page_count": "Количество страниц",
+    "delivery_speed": "Тип отправки",
+    "recipient_name": "Имя получателя",
+    "street_address": "Адрес",
+    "pin_code": "Почтовый индекс",
+    "city": "Город",
+    "state": "Штат",
+    "continue": "Продолжить",
+    "back": "Назад",
+    "see_price": "Посмотреть оценку стоимости"
+  },
+  "footer": {
+    "contact": "Контакты",
+    "gstin_label": "GSTIN",
+    "terms": "Условия",
+    "privacy": "Конфиденциальность",
+    "refund": "Возврат / Отмена"
+  }
+}
