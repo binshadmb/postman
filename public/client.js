@@ -104,6 +104,89 @@ const fx = {
 
 const state = { moduleId: "print-post", childIndex: 3, currency: "INR" };
 
+// ── Hero slider content ────────────────────────────────────────────────────
+const heroSlides = [
+  {
+    badge: '<i class="fa-solid fa-file-lines"></i> Document Service',
+    title: "Send documents in India",
+    accent: "— Economically",
+    subtitle: 'Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.',
+  },
+  {
+    badge: '<i class="fa-solid fa-location-dot"></i> Quick Local Post',
+    title: "Need a quick post inside India?",
+    accent: "— We'll drop it today",
+    subtitle: "Give us the file and address — we print, pack and post it, tracked door to door.",
+  },
+  {
+    badge: '<i class="fa-solid fa-envelope"></i> Greeting Cards',
+    title: "Sending a card to someone in India?",
+    accent: "— Printed & delivered for you",
+    subtitle: "Pick a design, add your message, we print and hand-deliver it locally.",
+  },
+  {
+    badge: '<i class="fa-solid fa-shield-halved"></i> Registered / Certified Mail',
+    title: "Need proof it was delivered?",
+    accent: "— Fully trackable",
+    subtitle: "Registered and certified mail with receipts, so you know it arrived.",
+  },
+];
+let heroIndex = 0;
+let heroTimer = null;
+
+function renderHeroSlide(i) {
+  const s = heroSlides[i];
+  const badgeEl   = $("heroBadge");
+  const titleEl   = $("heroTitle");
+  const accentEl  = $("heroAccent");
+  const subtitleEl = $("heroSubtitle");
+  if (!badgeEl || !titleEl || !accentEl || !subtitleEl) return;
+
+  badgeEl.innerHTML = s.badge;
+  titleEl.firstChild.textContent = s.title;
+  accentEl.textContent = s.accent;
+  subtitleEl.innerHTML = s.subtitle;
+
+  document.querySelectorAll("#heroDots .hero-dot").forEach((d, idx) => {
+    d.classList.toggle("active", idx === i);
+  });
+}
+
+function goToHeroSlide(i) {
+  heroIndex = i;
+  const heroEl = $("heroSlider");
+  if (!heroEl) return;
+  heroEl.classList.add("hero-fade");
+  setTimeout(() => {
+    renderHeroSlide(heroIndex);
+    heroEl.classList.remove("hero-fade");
+  }, 250);
+}
+
+function initHeroSlider() {
+  const dotsEl = $("heroDots");
+  const heroEl = $("heroSlider");
+  if (!dotsEl || !heroEl) return;
+
+  dotsEl.innerHTML = "";
+  heroSlides.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.className = "hero-dot" + (i === 0 ? " active" : "");
+    dot.addEventListener("click", () => {
+      clearInterval(heroTimer);
+      goToHeroSlide(i);
+      heroTimer = setInterval(() => goToHeroSlide((heroIndex + 1) % heroSlides.length), 4500);
+    });
+    dotsEl.appendChild(dot);
+  });
+
+  heroTimer = setInterval(() => goToHeroSlide((heroIndex + 1) % heroSlides.length), 4500);
+  heroEl.addEventListener("mouseenter", () => clearInterval(heroTimer));
+  heroEl.addEventListener("mouseleave", () => {
+    heroTimer = setInterval(() => goToHeroSlide((heroIndex + 1) % heroSlides.length), 4500);
+  });
+}
+
 // Live stock/config from the admin panel (Neon-backed). Starts null;
 // printOptsPanel() falls back to sensible defaults until this loads.
 let liveConfig = null;
@@ -1405,3 +1488,4 @@ document.documentElement.style.setProperty("--base-font-size", `${savedFont}px`)
 
 renderMotherTabs();
 loadLiveConfig();
+initHeroSlider();

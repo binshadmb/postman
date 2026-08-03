@@ -87,10 +87,11 @@ export default function Home() {
           {/* Home view */}
           <section id="homeView" className="home-view">
             {/* ── Hero ── */}
-            <section className="hero-new">
-              <div className="hero-badge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
-              <h1>Send Documents in India<br /><span className="hero-accent">— Economically</span></h1>
-              <p className="hero-subtitle">Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.</p>
+            <section className="hero-new" id="heroSlider">
+              <div className="hero-badge" id="heroBadge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
+              <h1 id="heroTitle">Send Documents in India<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
+              <p className="hero-subtitle" id="heroSubtitle">Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.</p>
+              <div className="hero-dots" id="heroDots" aria-hidden="true" />
             </section>
 
             {/* ── Steps ── */}
