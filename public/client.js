@@ -111,24 +111,28 @@ const heroSlides = [
     title: "Send documents in India",
     accent: "— Economically",
     subtitle: 'Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.',
+    blobs: ["rgba(37, 99, 235, 0.20)", "rgba(37, 99, 235, 0.10)", "rgba(234, 88, 12, 0.10)", "rgba(124, 58, 237, 0.10)"],
   },
   {
     badge: '<i class="fa-solid fa-location-dot"></i> Quick Local Post',
     title: "Need a quick post inside India?",
     accent: "— We'll drop it today",
     subtitle: "Give us the file and address — we print, pack and post it, tracked door to door.",
+    blobs: ["rgba(234, 88, 12, 0.20)", "rgba(234, 88, 12, 0.10)", "rgba(37, 99, 235, 0.10)", "rgba(22, 163, 74, 0.10)"],
   },
   {
     badge: '<i class="fa-solid fa-envelope"></i> Greeting Cards',
     title: "Sending a card to someone in India?",
     accent: "— Printed & delivered for you",
     subtitle: "Pick a design, add your message, we print and hand-deliver it locally.",
+    blobs: ["rgba(22, 163, 74, 0.20)", "rgba(22, 163, 74, 0.10)", "rgba(124, 58, 237, 0.10)", "rgba(37, 99, 235, 0.10)"],
   },
   {
     badge: '<i class="fa-solid fa-shield-halved"></i> Registered / Certified Mail',
     title: "Need proof it was delivered?",
     accent: "— Fully trackable",
     subtitle: "Registered and certified mail with receipts, so you know it arrived.",
+    blobs: ["rgba(124, 58, 237, 0.20)", "rgba(124, 58, 237, 0.10)", "rgba(22, 163, 74, 0.10)", "rgba(234, 88, 12, 0.10)"],
   },
 ];
 let heroIndex = 0;
@@ -140,12 +144,19 @@ function renderHeroSlide(i) {
   const titleEl = $("heroTitle");
   const accentEl = $("heroAccent");
   const subtitleEl = $("heroSubtitle");
-  if (!badgeEl || !titleEl || !accentEl || !subtitleEl) return;
+  const heroEl = $("heroSlider");
+  if (!badgeEl || !titleEl || !accentEl || !subtitleEl || !heroEl) return;
 
   badgeEl.innerHTML = s.badge;
   titleEl.firstChild.textContent = s.title;
   accentEl.textContent = s.accent;
   subtitleEl.innerHTML = s.subtitle;
+
+  if (Array.isArray(s.blobs)) {
+    s.blobs.forEach((color, idx) => {
+      heroEl.style.setProperty(`--blob-${idx + 1}`, color);
+    });
+  }
 
   document.querySelectorAll("#heroDots .hero-dot").forEach((d, idx) => {
     d.classList.toggle("active", idx === i);
