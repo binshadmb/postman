@@ -167,6 +167,7 @@ export default function Home() {
                 <p id="breadcrumb" className="breadcrumb" />
                 <h2 id="moduleTitle" />
               </div>
+              <span id="moduleBadge" className="module-badge" />
             </div>
             {/* Step progress bar */}
             <div id="stepProgress" className="step-progress" />
