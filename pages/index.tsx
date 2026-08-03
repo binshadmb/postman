@@ -156,8 +156,7 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Module cards on home */}
-            <div id="moduleCards" className="module-cards" />
+            {/* Module cards removed */}
           </section>
 
           {/* Module view */}

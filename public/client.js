@@ -1404,5 +1404,4 @@ document.documentElement.dataset.theme = savedTheme === "system" ? "" : savedThe
 document.documentElement.style.setProperty("--base-font-size", `${savedFont}px`);
 
 renderMotherTabs();
-renderModuleCards();
 loadLiveConfig();
