@@ -18,6 +18,7 @@ export default function Home() {
         <link rel="canonical" href="https://postman.khagatara.com/" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="stylesheet" href="/styles.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -85,45 +86,75 @@ export default function Home() {
 
           {/* Home view */}
           <section id="homeView" className="home-view">
-            <div className="hero">
-              <div className="hero-copy">
-                <p className="eyebrow">postman.khagatara.com</p>
-                <h1>Print, post, track,&nbsp;and prove delivery inside India.</h1>
-                <p className="hero-text">
-                  A service desk for overseas senders who need Indian documents,
-                  greeting cards, registered mail, media ads, and bulk mail handled locally.
-                </p>
-                <div className="quick-actions">
-                  <button className="primary-action" type="button" data-open="print-post">New print order</button>
-                  <button className="secondary-action" type="button" data-open="track">Track order</button>
-                  <button className="secondary-action" type="button" data-open="cards">Send a card</button>
-                </div>
-              </div>
-              <div className="workflow-visual" aria-hidden="true">
-                <div className="desk-card document">
-                  <span className="line strong" />
-                  <span className="line" />
-                  <span className="line short" />
-                </div>
-                <div className="desk-card envelope">
-                  <span className="stamp" />
-                  <span className="address-line" />
-                  <span className="address-line short" />
-                </div>
-                <div className="desk-card receipt">
-                  <span className="barcode" />
-                  <strong>AWB</strong>
-                  <span>Tracking ready</span>
-                </div>
-              </div>
-            </div>
+            {/* ── Hero ── */}
+            <section className="hero-new">
+              <div className="hero-badge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
+              <h1>Send Documents in India<br /><span className="hero-accent">— Economically</span></h1>
+              <p className="hero-subtitle">Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.</p>
+            </section>
 
-            <div className="metrics-grid">
-              <article><span>Service modules</span><strong>7</strong></article>
-              <article><span>Options per module</span><strong>7</strong></article>
-              <article><span>Live calculators</span><strong>5</strong></article>
-              <article><span>Phase</span><strong>1 → 2</strong></article>
-            </div>
+            {/* ── Steps ── */}
+            <section className="hero-steps">
+              <div className="hero-step-card blue">
+                <div className="hero-badge-num">01</div>
+                <div className="hero-step-icon"><i className="fa-solid fa-file-arrow-up"></i></div>
+                <h2>Upload<br />your document</h2>
+                <span className="hero-tag">PDF, JPG, PNG</span>
+              </div>
+              <div className="hero-arrow blue"><i className="fa-solid fa-arrow-right"></i></div>
+              <div className="hero-step-card green">
+                <div className="hero-badge-num">02</div>
+                <div className="hero-step-icon"><i className="fa-solid fa-sliders"></i></div>
+                <h2>Choose<br />print settings</h2>
+                <span className="hero-tag">Copies · Paper · Quality</span>
+              </div>
+              <div className="hero-arrow green"><i className="fa-solid fa-arrow-right"></i></div>
+              <div className="hero-step-card orange">
+                <div className="hero-badge-num">03</div>
+                <div className="hero-step-icon"><i className="fa-solid fa-location-dot"></i></div>
+                <h2>Enter<br />delivery address</h2>
+                <span className="hero-tag">Across India</span>
+              </div>
+              <div className="hero-arrow orange"><i className="fa-solid fa-arrow-right"></i></div>
+              <div className="hero-step-card purple">
+                <div className="hero-badge-num">04</div>
+                <div className="hero-step-icon"><i className="fa-solid fa-print"></i></div>
+                <h2>We print,<br />dispatch &amp; notify</h2>
+                <span className="hero-tag">SMS / Email update</span>
+              </div>
+            </section>
+
+            {/* ── Feature strip ── */}
+            <section className="hero-features">
+              <div className="hero-feature">
+                <div className="hero-ficon blue"><i className="fa-solid fa-indian-rupee-sign"></i></div>
+                <div><span className="hero-ftitle blue">Economical</span><p>Best prices always</p></div>
+              </div>
+              <div className="hero-feature">
+                <div className="hero-ficon green"><i className="fa-solid fa-shield-halved"></i></div>
+                <div><span className="hero-ftitle green">Secure</span><p>Your documents are safe</p></div>
+              </div>
+              <div className="hero-feature">
+                <div className="hero-ficon orange"><i className="fa-solid fa-clock"></i></div>
+                <div><span className="hero-ftitle orange">Fast service</span><p>Quick printing &amp; delivery</p></div>
+              </div>
+              <div className="hero-feature">
+                <div className="hero-ficon purple"><i className="fa-solid fa-location-dot"></i></div>
+                <div><span className="hero-ftitle purple">All India reach</span><p>Delivering to every pincode</p></div>
+              </div>
+            </section>
+
+            {/* ── Closing ── */}
+            <section className="hero-closing">
+              <i className="fa-solid fa-file-lines"></i>
+              <p>Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.</p>
+              <p className="hero-closing-strong">Simple steps. Trusted service. Right to your doorstep.</p>
+              <div className="quick-actions" style={{marginTop: "18px", justifyContent: "center"}}>
+                <button className="primary-action" type="button" data-open="print-post">New print order</button>
+                <button className="secondary-action" type="button" data-open="track">Track order</button>
+                <button className="secondary-action" type="button" data-open="cards">Send a card</button>
+              </div>
+            </section>
 
             {/* Module cards on home */}
             <div id="moduleCards" className="module-cards" />
