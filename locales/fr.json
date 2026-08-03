@@ -30,6 +30,33 @@
     "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
     "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
   },
+  "sidebar": {
+    "print_post": "Impression et envoi de documents",
+    "cards": "Cartes de vœux",
+    "registered_mail": "Courrier recommandé / certifié",
+    "newspaper_ads": "Publicité presse / médias",
+    "bulk_mail": "Courrier en masse / professionnel",
+    "track_order": "Suivi de commande",
+    "account": "Compte"
+  },
+  "hero_slider": {
+    "slide1_badge": "Service de documents",
+    "slide1_title": "Envoyez des documents en Inde",
+    "slide1_accent": "— Économiquement",
+    "slide1_subtitle": "Des étapes simples pour imprimer et envoyer vos documents importants partout en Inde au meilleur prix.",
+    "slide2_badge": "Envoi local rapide",
+    "slide2_title": "Besoin d'un envoi rapide en Inde ?",
+    "slide2_accent": "— Nous livrons aujourd'hui",
+    "slide2_subtitle": "Donnez-nous le fichier et l'adresse — nous imprimons, emballons et envoyons avec suivi de porte à porte.",
+    "slide3_badge": "Cartes de vœux",
+    "slide3_title": "Vous envoyez une carte en Inde ?",
+    "slide3_accent": "— Imprimée et livrée pour vous",
+    "slide3_subtitle": "Choisissez un design, ajoutez votre message, nous imprimons et livrons localement.",
+    "slide4_badge": "Courrier recommandé / certifié",
+    "slide4_title": "Besoin d'une preuve de livraison ?",
+    "slide4_accent": "— Entièrement traçable",
+    "slide4_subtitle": "Courrier recommandé et certifié avec accusés de réception, pour savoir qu'il est arrivé."
+  },
   "pricing": {
     "paper_type": "Type de papier",
     "bw_a4": "A4 Noir et blanc",

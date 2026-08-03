@@ -30,6 +30,33 @@
     "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
     "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
   },
+  "sidebar": {
+    "print_post": "Impresión y envío de documentos",
+    "cards": "Tarjetas de felicitación",
+    "registered_mail": "Correo certificado / registrado",
+    "newspaper_ads": "Publicidad en periódicos / medios",
+    "bulk_mail": "Correo masivo / empresarial",
+    "track_order": "Rastrear pedido",
+    "account": "Cuenta"
+  },
+  "hero_slider": {
+    "slide1_badge": "Servicio de documentos",
+    "slide1_title": "Envía documentos a India",
+    "slide1_accent": "— De forma económica",
+    "slide1_subtitle": "Pasos simples para imprimir y enviar tus documentos importantes por toda India al menor costo.",
+    "slide2_badge": "Envío local rápido",
+    "slide2_title": "¿Necesitas un envío rápido dentro de India?",
+    "slide2_accent": "— Lo entregamos hoy",
+    "slide2_subtitle": "Danos el archivo y la dirección — imprimimos, empacamos y enviamos con seguimiento puerta a puerta.",
+    "slide3_badge": "Tarjetas de felicitación",
+    "slide3_title": "¿Enviando una tarjeta a alguien en India?",
+    "slide3_accent": "— Impresa y entregada por ti",
+    "slide3_subtitle": "Elige un diseño, añade tu mensaje, nosotros imprimimos y entregamos localmente.",
+    "slide4_badge": "Correo certificado / registrado",
+    "slide4_title": "¿Necesitas prueba de entrega?",
+    "slide4_accent": "— Totalmente rastreable",
+    "slide4_subtitle": "Correo registrado y certificado con recibos, para que sepas que llegó."
+  },
   "pricing": {
     "paper_type": "Tipo de papel",
     "bw_a4": "A4 Blanco y negro",

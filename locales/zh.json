@@ -30,6 +30,33 @@
     "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
     "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
   },
+  "sidebar": {
+    "print_post": "文件打印与邮寄",
+    "cards": "贺卡",
+    "registered_mail": "挂号 / 认证邮件",
+    "newspaper_ads": "报纸 / 媒体广告投放",
+    "bulk_mail": "批量 / 商业邮件",
+    "track_order": "追踪订单",
+    "account": "账户"
+  },
+  "hero_slider": {
+    "slide1_badge": "文件服务",
+    "slide1_title": "在印度发送文件",
+    "slide1_accent": "— 经济实惠",
+    "slide1_subtitle": "简单步骤，以最经济的价格在印度各地打印并发送您的重要文件。",
+    "slide2_badge": "快速本地邮寄",
+    "slide2_title": "需要在印度快速邮寄？",
+    "slide2_accent": "— 今天送达",
+    "slide2_subtitle": "提供文件和地址——我们打印、包装并追踪投递至门口。",
+    "slide3_badge": "贺卡",
+    "slide3_title": "向印度的人寄贺卡？",
+    "slide3_accent": "— 为您打印并投递",
+    "slide3_subtitle": "选择设计，添加留言，我们打印并在本地投递。",
+    "slide4_badge": "挂号 / 认证邮件",
+    "slide4_title": "需要送达证明？",
+    "slide4_accent": "— 完全可追踪",
+    "slide4_subtitle": "带有回执的挂号和认证邮件，让您知道已送达。"
+  },
   "pricing": {
     "paper_type": "纸张类型",
     "bw_a4": "A4 黑白",

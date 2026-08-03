@@ -30,6 +30,33 @@
     "closing_line": "Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.",
     "closing_strong": "Simple steps. Trusted service. Right to your doorstep."
   },
+  "sidebar": {
+    "print_post": "طباعة وإرسال المستندات",
+    "cards": "بطاقات المعايدة",
+    "registered_mail": "البريد المسجل / المعتمد",
+    "newspaper_ads": "الإعلانات الصحفية / الإعلامية",
+    "bulk_mail": "البريد الجماعي / التجاري",
+    "track_order": "تتبع الطلب",
+    "account": "الحساب"
+  },
+  "hero_slider": {
+    "slide1_badge": "خدمة المستندات",
+    "slide1_title": "إرسال المستندات داخل الهند",
+    "slide1_accent": "— باقتصادية",
+    "slide1_subtitle": "خطوات بسيطة لطباعة وإرسال مستنداتك المهمة عبر الهند بأقل التكاليف.",
+    "slide2_badge": "بريد محلي سريع",
+    "slide2_title": "تحتاج إلى إرسال سريع داخل الهند؟",
+    "slide2_accent": "— سنوصله اليوم",
+    "slide2_subtitle": "أعطنا الملف والعنوان — نطبع ونرسل مع التتبع من الباب إلى الباب.",
+    "slide3_badge": "بطاقات المعايدة",
+    "slide3_title": "ترسل بطاقة لشخص في الهند؟",
+    "slide3_accent": "— مطبوعة ومُسلَّمة لك",
+    "slide3_subtitle": "اختر التصميم، أضف رسالتك، نطبع ونوصل محلياً.",
+    "slide4_badge": "البريد المسجل / المعتمد",
+    "slide4_title": "تحتاج دليلاً على التسليم؟",
+    "slide4_accent": "— قابل للتتبع بالكامل",
+    "slide4_subtitle": "بريد مسجل ومعتمد مع إيصالات، لتعلم أنه وصل."
+  },
   "pricing": {
     "paper_type": "نوع الورق",
     "bw_a4": "A4 أبيض وأسود",
