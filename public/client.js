@@ -104,7 +104,7 @@ const fx = {
 
 const state = { moduleId: "print-post", childIndex: 3, currency: "INR" };
 
-// ── Hero slider content ────────────────────────────────────────────────────
+// ── Hero slider content ──────────────────────────────────────────────────
 const heroSlides = [
   {
     badge: '<i class="fa-solid fa-file-lines"></i> Document Service',
@@ -136,9 +136,9 @@ let heroTimer = null;
 
 function renderHeroSlide(i) {
   const s = heroSlides[i];
-  const badgeEl   = $("heroBadge");
-  const titleEl   = $("heroTitle");
-  const accentEl  = $("heroAccent");
+  const badgeEl = $("heroBadge");
+  const titleEl = $("heroTitle");
+  const accentEl = $("heroAccent");
   const subtitleEl = $("heroSubtitle");
   if (!badgeEl || !titleEl || !accentEl || !subtitleEl) return;
 
@@ -1209,7 +1209,7 @@ function backBtn(moduleId, childIndex, label) {
 
 function renderMotherTabs() {
   motherTabsEl.innerHTML = modules.map((m, i) => {
-    const isActive = m.id === state.moduleId && !homeView.hidden;
+    const isActive = m.id === state.moduleId;
     return `
     <button class="tab-button${isActive ? " active" : ""}"
       type="button" data-module="${m.id}"
