@@ -1,96 +1,113 @@
 // client.js — Postman Khagatara full interactive shell
 // Tab registry mirrored from lib/tabRegistry.ts (plain JS for browser)
 
+// ── Locale reader ─────────────────────────────────────────────────────────
+// Reads the #locale-data JSON injected by [lang]/index.tsx.
+// Falls back silently to the key itself if no translation found.
+const _loc = (() => {
+  try {
+    const el = document.getElementById("locale-data");
+    return el ? JSON.parse(el.textContent || "{}") : {};
+  } catch(e) { return {}; }
+})();
+
+function tr(key, fallback) {
+  const parts = key.split(".");
+  let v = _loc;
+  for (const p of parts) { v = v?.[p]; if (v === undefined) break; }
+  return (typeof v === "string" && v.trim() !== "") ? v : (fallback || key.split(".").pop());
+}
+
 const modules = [
   {
-    id: "print-post", title: "Document Print & Post",
+    id: "print-post", title: tr("sidebar.print_post", "Document Print & Post"),
     badge: "High-margin volume line", icon: "🖨️", color: "#b72d32",
     children: [
-      { id: "upload",     label: "Upload Document" },
-      { id: "print-opts", label: "Print Options" },
-      { id: "post-opts",  label: "Post Options" },
-      { id: "calculator", label: "Price Calculator" },
-      { id: "history",    label: "Order History" },
-      { id: "addresses",  label: "Saved Addresses" },
-      { id: "reorder",    label: "Reorder / Templates" },
+      { id: "upload",     label: tr("print_post.tab_upload",     "Upload Document") },
+      { id: "print-opts", label: tr("print_post.tab_print_opts", "Print Options") },
+      { id: "post-opts",  label: tr("print_post.tab_post_opts",  "Post Options") },
+      { id: "calculator", label: tr("print_post.tab_calculator", "Price Calculator") },
+      { id: "history",    label: tr("print_post.tab_history",    "Order History") },
+      { id: "addresses",  label: tr("print_post.tab_addresses",  "Saved Addresses") },
+      { id: "reorder",    label: tr("print_post.tab_reorder",    "Reorder / Templates") },
     ]
   },
   {
-    id: "cards", title: "Greeting Cards",
+    id: "cards", title: tr("sidebar.cards", "Greeting Cards"),
     badge: "Personalized card service", icon: "💌", color: "#ae7f2b",
     children: [
-      { id: "occasion",   label: "Choose Occasion" },
-      { id: "format",     label: "Card Format" },
-      { id: "personal",   label: "Personalization" },
-      { id: "addons",     label: "Add-ons" },
-      { id: "calculator", label: "Price Calculator" },
-      { id: "history",    label: "Order History" },
-      { id: "designs",    label: "Saved Designs" },
+      { id: "occasion",   label: tr("cards.tab_occasion",   "Choose Occasion") },
+      { id: "format",     label: tr("cards.tab_format",     "Card Format") },
+      { id: "personal",   label: tr("cards.tab_personal",   "Personalization") },
+      { id: "addons",     label: tr("cards.tab_addons",     "Add-ons") },
+      { id: "calculator", label: tr("cards.tab_calculator", "Price Calculator") },
+      { id: "history",    label: tr("cards.tab_history",    "Order History") },
+      { id: "designs",    label: tr("cards.tab_designs",    "Saved Designs") },
     ]
   },
   {
-    id: "registered-mail", title: "Registered / Certified Mail",
+    id: "registered-mail", title: tr("sidebar.registered_mail", "Registered / Certified Mail"),
     badge: "Receipts and legal-post workflow", icon: "📮", color: "#186b70",
     children: [
-      { id: "registered", label: "Registered Post" },
-      { id: "speed",      label: "Speed Post" },
-      { id: "legal",      label: "Legal Notice Format Check" },
-      { id: "calculator", label: "Price Calculator" },
-      { id: "history",    label: "Order History" },
-      { id: "recipients", label: "Saved Recipients" },
-      { id: "archive",    label: "Proof / Receipt Archive" },
+      { id: "registered", label: tr("registered_mail.tab_registered", "Registered Post") },
+      { id: "speed",      label: tr("registered_mail.tab_speed",      "Speed Post") },
+      { id: "legal",      label: tr("registered_mail.tab_legal",      "Legal Notice Format Check") },
+      { id: "calculator", label: tr("registered_mail.tab_calculator", "Price Calculator") },
+      { id: "history",    label: tr("registered_mail.tab_history",    "Order History") },
+      { id: "recipients", label: tr("registered_mail.tab_recipients", "Saved Recipients") },
+      { id: "archive",    label: tr("registered_mail.tab_archive",    "Proof / Receipt Archive") },
     ]
   },
   {
-    id: "ads", title: "Newspaper / Media Ad Placement",
+    id: "ads", title: tr("sidebar.newspaper_ads", "Newspaper / Media Ad Placement"),
     badge: "Cost-plus convenience line", icon: "📰", color: "#3d7354",
     children: [
-      { id: "ad-type",    label: "Ad Type Selection" },
-      { id: "paper",      label: "Select Paper" },
-      { id: "size-color", label: "Size & Color" },
-      { id: "proof",      label: "Proof Delivery" },
-      { id: "calculator", label: "Price Calculator" },
-      { id: "history",    label: "Order History" },
-      { id: "templates",  label: "Saved Ad Templates" },
+      { id: "ad-type",    label: tr("ads.tab_ad_type",    "Ad Type Selection") },
+      { id: "paper",      label: tr("ads.tab_paper",      "Select Paper") },
+      { id: "size-color", label: tr("ads.tab_size_color", "Size & Color") },
+      { id: "proof",      label: tr("ads.tab_proof",      "Proof Delivery") },
+      { id: "calculator", label: tr("ads.tab_calculator", "Price Calculator") },
+      { id: "history",    label: tr("ads.tab_history",    "Order History") },
+      { id: "templates",  label: tr("ads.tab_templates",  "Saved Ad Templates") },
     ]
   },
   {
-    id: "bulk", title: "Bulk / Business Mail",
+    id: "bulk", title: tr("sidebar.bulk_mail", "Bulk / Business Mail"),
     badge: "CSV and repeat sender workflow", icon: "📦", color: "#6b5ea8",
     children: [
-      { id: "csv",        label: "CSV Upload" },
-      { id: "template",   label: "Template Selection" },
-      { id: "batch-opts", label: "Batch Print Options" },
-      { id: "calculator", label: "Price Calculator" },
-      { id: "history",    label: "Order History" },
-      { id: "lists",      label: "Saved Recipient Lists" },
-      { id: "templates",  label: "Saved Templates" },
+      { id: "csv",        label: tr("bulk.tab_csv",        "CSV Upload") },
+      { id: "template",   label: tr("bulk.tab_template",   "Template Selection") },
+      { id: "batch-opts", label: tr("bulk.tab_batch_opts", "Batch Print Options") },
+      { id: "calculator", label: tr("bulk.tab_calculator", "Price Calculator") },
+      { id: "history",    label: tr("bulk.tab_history",    "Order History") },
+      { id: "lists",      label: tr("bulk.tab_lists",      "Saved Recipient Lists") },
+      { id: "templates",  label: tr("bulk.tab_templates",  "Saved Templates") },
     ]
   },
   {
-    id: "track", title: "Track Order",
+    id: "track", title: tr("sidebar.track_order", "Track Order"),
     badge: "Timeline, proof, and support", icon: "📍", color: "#c05c00",
     children: [
-      { id: "timeline",   label: "Order Status Timeline" },
-      { id: "slip",       label: "Payment Slip Download" },
-      { id: "awb",        label: "India Post / AWB Tracking" },
-      { id: "proof-view", label: "Proof / Tearsheet Viewer" },
-      { id: "confirm",    label: "Delivery Confirmation" },
-      { id: "support",    label: "Support / Raise Issue" },
-      { id: "rate",       label: "Rate This Order" },
+      { id: "timeline",   label: tr("track.tab_timeline",   "Order Status Timeline") },
+      { id: "slip",       label: tr("track.tab_slip",       "Payment Slip Download") },
+      { id: "awb",        label: tr("track.tab_awb",        "India Post / AWB Tracking") },
+      { id: "proof-view", label: tr("track.tab_proof_view", "Proof / Tearsheet Viewer") },
+      { id: "confirm",    label: tr("track.tab_confirm",    "Delivery Confirmation") },
+      { id: "support",    label: tr("track.tab_support",    "Support / Raise Issue") },
+      { id: "rate",       label: tr("track.tab_rate",       "Rate This Order") },
     ]
   },
   {
-    id: "account", title: "Account",
+    id: "account", title: tr("sidebar.account", "Account"),
     badge: "Customer identity and preferences", icon: "👤", color: "#555",
     children: [
-      { id: "signup",    label: "Account Creation / Sign-up" },
-      { id: "login",     label: "Login" },
-      { id: "kyc",       label: "Profile & KYC" },
-      { id: "payment",   label: "Payment Methods" },
-      { id: "addresses", label: "Address Book" },
-      { id: "history",   label: "Order History" },
-      { id: "prefs",     label: "Notifications / Preferences" },
+      { id: "signup",    label: tr("account.tab_signup",    "Account Creation / Sign-up") },
+      { id: "login",     label: tr("account.tab_login",     "Login") },
+      { id: "kyc",       label: tr("account.tab_kyc",       "Profile & KYC") },
+      { id: "payment",   label: tr("account.tab_payment",   "Payment Methods") },
+      { id: "addresses", label: tr("account.tab_addresses", "Address Book") },
+      { id: "history",   label: tr("account.tab_history",   "Order History") },
+      { id: "prefs",     label: tr("account.tab_prefs",     "Notifications / Preferences") },
     ]
   }
 ];
@@ -544,24 +561,24 @@ function infoBox(title, items) {
 
 function uploadPanel() {
   const draft = activeDraft();
-  return `<h3 style="margin-top:0">Upload Your Document</h3>
+  return `<h3 style="margin-top:0">${tr("print_post.upload_heading","Upload Your Document")}</h3>
     <div style="display:grid;gap:18px;max-width:640px">
-      <label style="display:grid;gap:6px;color:var(--muted)">Select file (PDF, DOCX, JPG, PNG — max 20 MB)
+      <label style="display:grid;gap:6px;color:var(--muted)">${tr("print_post.upload_file_label","Select file (PDF, DOCX, JPG, PNG — max 20 MB)")}
         <input name="uploadFile" type="file" accept=".pdf,.docx,.jpg,.jpeg,.png"
           style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
       </label>
       ${draft.uploadFile ? `<p style="margin:0;color:var(--green);font-size:0.9rem">Selected: ${esc(draft.uploadFile.name)}</p>` : ""}
-      <label style="display:grid;gap:6px;color:var(--muted)">Number of copies
+      <label style="display:grid;gap:6px;color:var(--muted)">${tr("print_post.upload_copies_label","Number of copies")}
         <input name="uploadCopies" type="number" min="1" value="${esc(draftValue("uploadCopies", "1"))}"
           style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);max-width:120px;min-height:36px">
       </label>
-      <label style="display:grid;gap:6px;color:var(--muted)">Special instructions (optional)
-        <textarea name="instructions" rows="3" placeholder="e.g. Print pages 1-3 only, use A4 landscape…"
+      <label style="display:grid;gap:6px;color:var(--muted)">${tr("print_post.upload_instructions_label","Special instructions (optional)")}
+        <textarea name="instructions" rows="3" placeholder="${tr("print_post.upload_instructions_placeholder","e.g. Print pages 1-3 only, use A4 landscape…")}"
           style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical">${esc(draftValue("instructions", ""))}</textarea>
       </label>
       <button type="button" onclick="captureCurrentPanelData(); openModule('print-post',1)"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
-        Continue to Print Options →
+        ${tr("print_post.upload_next_btn","Continue to Print Options →")}
       </button>
     </div>`;
 }
@@ -597,48 +614,48 @@ function printOptsPanel() {
     ? opt("fold", "Folding", cfg.foldTypes, draft.fold || cfg.foldTypes[0])
     : opt("fold", "Folding", ["No fold"], "No fold");
 
-  return `<h3 style="margin-top:0">Print Options</h3>
-    ${backBtn("print-post", 0, "Upload Document")}
+  return `<h3 style="margin-top:0">${tr("print_post.print_opts_heading","Print Options")}</h3>
+    ${backBtn("print-post", 0, tr("print_post.tab_upload","Upload Document"))}
     <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px;max-width:640px">
-      ${opt("color",   "Print Color",    ["B&W", "Color"],                         draft.color || "B&W")}
-      ${opt("sides",   "Sides",          ["Single-sided", "Double-sided"],          draft.sides || "Single-sided")}
-      ${opt("size",    "Paper Size",     ["A5", "A4", "A3", "Legal"],              draft.size || "A4")}
+      ${opt("color",   tr("print_post.print_color_label","Print Color"),    ["B&W", "Color"],                         draft.color || "B&W")}
+      ${opt("sides",   tr("print_post.print_sides_label","Sides"),          ["Single-sided", "Double-sided"],          draft.sides || "Single-sided")}
+      ${opt("size",    tr("print_post.print_size_label","Paper Size"),     ["A5", "A4", "A3", "Legal"],              draft.size || "A4")}
       ${paperField}
-      ${opt("binding", "Binding",        ["None", "Stapled", "Spiral Bound"],       draft.binding || "None")}
-      ${opt("copies",  "Copies",         ["1", "2", "3", "5", "10", "Custom"],      draft.copies || "1")}
+      ${opt("binding", tr("print_post.print_binding_label","Binding"),        ["None", "Stapled", "Spiral Bound"],       draft.binding || "None")}
+      ${opt("copies",  tr("print_post.print_copies_label","Copies"),         ["1", "2", "3", "5", "10", "Custom"],      draft.copies || "1")}
       ${envelopeField}
       ${foldField}
     </div>
     <button type="button" onclick="captureCurrentPanelData(); openModule('print-post',2)"
       style="margin-top:16px;background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600">
-      Continue to Post Options →
+      ${tr("print_post.print_next_btn","Continue to Post Options →")}
     </button>`;
 }
 
 function postOptsPanel() {
   const d = { post: "Speed Post (tracked)", zone: "Within Kerala", pin: "", city: "", ...activeDraft(), ...currentFormData() };
-  return `<h3 style="margin-top:0">Post Options</h3>
-    ${backBtn("print-post", 1, "Print Options")}
+  return `<h3 style="margin-top:0">${tr("print_post.post_opts_heading","Post Options")}</h3>
+    ${backBtn("print-post", 1, tr("print_post.tab_print_opts","Print Options"))}
     <div style="display:grid;gap:14px;max-width:640px">
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
-        <strong>Your Contact Details</strong>
-        ${textField("customerName", "Your Name", "Full name")}
-        ${textField("customerEmail", "Email", "name@example.com")}
-        ${textField("customerPhone", "Phone / WhatsApp", "+91 / +44")}
+        <strong>${tr("account.signup_heading","Your Contact Details")}</strong>
+        ${textField("customerName", tr("account.signup_first_name","Your Name"), "Full name")}
+        ${textField("customerEmail", tr("account.signup_email","Email"), "name@example.com")}
+        ${textField("customerPhone", tr("account.signup_phone","Phone / WhatsApp"), "+91 / +44")}
       </div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
-        ${opt("post", "Post Type", ["Regular Post", "Speed Post (tracked)", "Registered Post", "Courier"], d.post)}
-        ${opt("zone", "Delivery Zone", ["Within Kerala", "Rest of India", "Metro city"], d.zone)}
+        ${opt("post", tr("print_post.post_type_label","Post Type"), ["Regular Post", "Speed Post (tracked)", "Registered Post", "Courier"], d.post)}
+        ${opt("zone", tr("print_post.post_zone_label","Delivery Zone"), ["Within Kerala", "Rest of India", "Metro city"], d.zone)}
       </div>
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
-        <strong>Delivery Address</strong>
-        ${textField("name",    "Recipient Name",    "Full name")}
-        ${textField("address", "Street Address",    "House/flat, street")}
+        <strong>${tr("print_post.post_address_heading","Delivery Address")}</strong>
+        ${textField("name",    tr("common.recipient_name","Recipient Name"),    "Full name")}
+        ${textField("address", tr("common.street_address","Street Address"),    "House/flat, street")}
         ${pinCityStateBlock(d)}
       </div>
       <button type="button" onclick="captureCurrentPanelData(); openModule('print-post',3)"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:200px">
-        See Price Estimate →
+        ${tr("print_post.post_next_btn","See Price Estimate →")}
       </button>
     </div>`;
 }

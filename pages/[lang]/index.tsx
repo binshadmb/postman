@@ -52,6 +52,12 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
             }),
           }}
         />
+        {/* Locale data for client.js */}
+        <script
+          id="locale-data"
+          type="application/json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(t) }}
+        />
       </Head>
 
       <div className="app-shell" lang={lang} dir={dir}>
