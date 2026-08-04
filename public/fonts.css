@@ -1,0 +1,43 @@
+/* fonts.css — Non-Latin script fonts via Google Fonts CDN
+   Load this in <head> alongside styles.css for non-Latin languages.
+   Each font is loaded only when the page lang matches. */
+
+/* Chinese Simplified */
+:lang(zh) body {
+  font-family: "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Japanese */
+:lang(ja) body {
+  font-family: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Korean */
+:lang(ko) body {
+  font-family: "Noto Sans KR", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Hindi (Devanagari) */
+:lang(hi) body {
+  font-family: "Noto Sans Devanagari", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Bengali */
+:lang(bn) body {
+  font-family: "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Thai */
+:lang(th) body {
+  font-family: "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Arabic */
+:lang(ar) body {
+  font-family: "Noto Naskh Arabic", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Urdu (Nastaliq) */
+:lang(ur) body {
+  font-family: "Noto Nastaliq Urdu", ui-sans-serif, system-ui, sans-serif;
+}

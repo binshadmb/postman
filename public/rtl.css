@@ -1,0 +1,67 @@
+/* rtl.css — applied when lang = ar or ur via <html dir="rtl"> */
+
+/* Flip the sidebar to the right */
+[dir="rtl"] .app-shell {
+  grid-template-columns: minmax(0, 1fr) 280px;
+}
+
+[dir="rtl"] .sidebar {
+  border-right: none;
+  border-left: 1px solid var(--line);
+  order: 2;
+}
+
+[dir="rtl"] .main {
+  order: 1;
+}
+
+/* Flip tab borders */
+[dir="rtl"] .tab-button {
+  border-left: none;
+  border-right: 3px solid transparent;
+  text-align: right;
+}
+
+[dir="rtl"] .tab-button.active {
+  border-right-color: var(--red);
+}
+
+/* Breadcrumb direction */
+[dir="rtl"] .breadcrumb,
+[dir="rtl"] .module-head,
+[dir="rtl"] .topbar {
+  direction: rtl;
+}
+
+/* Form fields */
+[dir="rtl"] input,
+[dir="rtl"] select,
+[dir="rtl"] textarea {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Step progress — reverse order */
+[dir="rtl"] .step-progress {
+  flex-direction: row-reverse;
+}
+
+/* Back button flip */
+[dir="rtl"] .back-btn {
+  flex-direction: row-reverse;
+}
+
+/* Child tabs */
+[dir="rtl"] .child-tabs {
+  flex-direction: row-reverse;
+}
+
+/* Brand */
+[dir="rtl"] .brand {
+  flex-direction: row-reverse;
+}
+
+/* Arabic / Urdu font */
+[dir="rtl"] body {
+  font-family: "Noto Naskh Arabic", "Noto Nastaliq Urdu", ui-sans-serif, system-ui, sans-serif;
+}
