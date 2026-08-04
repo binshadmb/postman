@@ -202,7 +202,7 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const lang = (params?.lang as string) || "en";
   const t = await loadLocale(lang);
-  const dir = RTL_LANGS.includes(lang) ? "rtl" : "ltr";
+  const dir = (RTL_LANGS as string[]).includes(lang) ? "rtl" : "ltr";
   const hreflangs = hreflangTags("/");
   return { props: { lang, dir, t, hreflangs } };
 };
