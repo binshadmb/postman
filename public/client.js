@@ -1392,18 +1392,34 @@ async function proceedToCheckout(amountInInr, orderNotes) {
       order_id: data.orderId,
       handler: async function (response) {
         // 3. Verify payment signature on the backend
-        const verifyRes = await fetch("/api/razorpay/verify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(response),
-        });
-        const verifyData = await verifyRes.json();
+        try {
+          const verifyRes = await fetch("/api/razorpay/verify", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response),
+          });
+          const verifyData = await verifyRes.json();
 
-        if (verifyRes.ok && verifyData.verified) {
-          alert("Payment successful! Your Postman Order ID is " + verifyData.orderId + ". We have saved your uploaded document and instructions.");
-          openModule("track", 0);
-        } else {
-          alert("Payment verification failed. Please contact support with your payment ID.");
+          if (verifyRes.ok && verifyData.verified) {
+            // Success — show confirmation and go to track
+            panelEl.innerHTML = `
+              <div style="display:grid;gap:16px;max-width:560px;text-align:center;padding:32px 0">
+                <div style="font-size:2.5rem">✅</div>
+                <h3 style="margin:0;color:var(--green)">Payment Successful</h3>
+                <p style="color:var(--muted);margin:0">Your Order ID: <strong>${verifyData.orderId}</strong></p>
+                <p style="color:var(--muted);margin:0;font-size:0.9rem">We will print and post your document. A confirmation email will be sent shortly.</p>
+                <button type="button" onclick="openModule('track',0)"
+                  style="margin:8px auto 0;background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px 24px;cursor:pointer;font-weight:600">
+                  Track Your Order →
+                </button>
+              </div>`;
+          } else {
+            alert("Payment received but verification failed. Please email postman@khagatara.com with payment ID: " + response.razorpay_payment_id);
+            console.error("Verify response:", verifyData);
+          }
+        } catch (verifyErr) {
+          console.error("Verify fetch error:", verifyErr);
+          alert("Payment received but we could not confirm. Please email postman@khagatara.com with payment ID: " + response.razorpay_payment_id);
         }
       },
       modal: {
