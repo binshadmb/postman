@@ -1292,97 +1292,113 @@ function openModule(moduleId, childIndex) {
   render();
 }
 
-async function proceedToCheckout(amountInInr, orderNotes) {
+async function buildOrderPayload(amountInInr, orderNotes) {
+  captureCurrentPanelData();
+  const draft = activeDraft();
+  const uploadFile = draft.uploadFile;
+
+  const fileRequiredModules = ["print-post", "registered-mail", "bulk"];
+  if (fileRequiredModules.includes(state.moduleId) && !uploadFile) {
+    alert("Please upload the customer file first. This is needed so the admin can fulfill the order.");
+    openModule(state.moduleId, 0);
+    return null;
+  }
+
+  if (state.moduleId === "ads" && !uploadFile && !draft.adText) {
+    alert("Please upload the ad matter or paste the ad text before checkout.");
+    openModule("ads", 0);
+    return null;
+  }
+
+  if (state.moduleId === "cards" && !uploadFile && !draft.cardProductLink && !draft.message && !draft.designInstructions) {
+    alert("Please add the card link/reference, message, upload, or design instructions before checkout.");
+    openModule("cards", 0);
+    return null;
+  }
+
+  if (uploadFile && uploadFile.size > 20 * 1024 * 1024) {
+    alert("The uploaded file is larger than 20 MB. Please upload a smaller PDF, DOCX, JPG, or PNG.");
+    return null;
+  }
+
+  const operationalModules = ["print-post", "registered-mail", "ads", "bulk", "cards"];
+  if (operationalModules.includes(state.moduleId) && !draft.customerEmail) {
+    alert("Please enter the customer email before checkout.");
+    openModule(state.moduleId, state.moduleId === "print-post" ? 2 : 0);
+    return null;
+  }
+
+  if (["print-post", "registered-mail", "cards"].includes(state.moduleId) && (!draft.name || !draft.address || !draft.pin)) {
+    alert("Please complete the recipient address before checkout.");
+    openModule(state.moduleId, state.moduleId === "print-post" ? 2 : 0);
+    return null;
+  }
+
+  const fileBase64 = await fileToBase64(uploadFile);
+
+  return {
+    amount: amountInInr,
+    currency: "INR",
+    notes: orderNotes || {},
+    customer: {
+      name: draft.customerName || "",
+      email: draft.customerEmail || "",
+      phone: draft.customerPhone || "",
+    },
+    recipient: {
+      name: draft.name || "",
+      address: draft.address || "",
+      pin: draft.pin || "",
+      city: draft.city || "",
+      state: draft.state || "",
+    },
+    instructions: draft.instructions || "",
+    selections: {
+      ...draft,
+      uploadFile: uploadFile ? {
+        name: uploadFile.name,
+        size: uploadFile.size,
+        type: uploadFile.type,
+      } : null,
+      module: state.moduleId,
+    },
+    file: uploadFile ? {
+      name: uploadFile.name,
+      type: uploadFile.type || "application/octet-stream",
+      base64: fileBase64,
+    } : null,
+  };
+}
+
+function showPaymentSuccess(orderId, note) {
+  panelEl.innerHTML = `
+    <div style="display:grid;gap:16px;max-width:560px;text-align:center;padding:32px 0">
+      <div style="font-size:2.5rem">✅</div>
+      <h3 style="margin:0;color:var(--green)">Payment Successful</h3>
+      <p style="color:var(--muted);margin:0">Your Order ID: <strong>${orderId}</strong></p>
+      <p style="color:var(--muted);margin:0;font-size:0.9rem">${note || "We will print and post your document. A confirmation email will be sent shortly."}</p>
+      <button type="button" onclick="openModule('track',0)"
+        style="margin:8px auto 0;background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px 24px;cursor:pointer;font-weight:600">
+        Track Your Order →
+      </button>
+    </div>`;
+}
+
+async function payWithRazorpay(payload) {
   try {
-    captureCurrentPanelData();
-    const draft = activeDraft();
-    const uploadFile = draft.uploadFile;
-
-    const fileRequiredModules = ["print-post", "registered-mail", "bulk"];
-    if (fileRequiredModules.includes(state.moduleId) && !uploadFile) {
-      alert("Please upload the customer file first. This is needed so the admin can fulfill the order.");
-      openModule(state.moduleId, 0);
-      return;
-    }
-
-    if (state.moduleId === "ads" && !uploadFile && !draft.adText) {
-      alert("Please upload the ad matter or paste the ad text before checkout.");
-      openModule("ads", 0);
-      return;
-    }
-
-    if (state.moduleId === "cards" && !uploadFile && !draft.cardProductLink && !draft.message && !draft.designInstructions) {
-      alert("Please add the card link/reference, message, upload, or design instructions before checkout.");
-      openModule("cards", 0);
-      return;
-    }
-
-    if (uploadFile && uploadFile.size > 20 * 1024 * 1024) {
-      alert("The uploaded file is larger than 20 MB. Please upload a smaller PDF, DOCX, JPG, or PNG.");
-      return;
-    }
-
-    const operationalModules = ["print-post", "registered-mail", "ads", "bulk", "cards"];
-    if (operationalModules.includes(state.moduleId) && !draft.customerEmail) {
-      alert("Please enter the customer email before checkout.");
-      openModule(state.moduleId, state.moduleId === "print-post" ? 2 : 0);
-      return;
-    }
-
-    if (["print-post", "registered-mail", "cards"].includes(state.moduleId) && (!draft.name || !draft.address || !draft.pin)) {
-      alert("Please complete the recipient address before checkout.");
-      openModule(state.moduleId, state.moduleId === "print-post" ? 2 : 0);
-      return;
-    }
-
-    const fileBase64 = await fileToBase64(uploadFile);
-
-    // 1. Save the order in Neon and ask our backend to create a Razorpay order.
     const res = await fetch("/api/razorpay/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: amountInInr,
-        currency: "INR",
-        notes: orderNotes || {},
-        customer: {
-          name: draft.customerName || "",
-          email: draft.customerEmail || "",
-          phone: draft.customerPhone || "",
-        },
-        recipient: {
-          name: draft.name || "",
-          address: draft.address || "",
-          pin: draft.pin || "",
-          city: draft.city || "",
-          state: draft.state || "",
-        },
-        instructions: draft.instructions || "",
-        selections: {
-          ...draft,
-          uploadFile: uploadFile ? {
-            name: uploadFile.name,
-            size: uploadFile.size,
-            type: uploadFile.type,
-          } : null,
-          module: state.moduleId,
-        },
-        file: uploadFile ? {
-          name: uploadFile.name,
-          type: uploadFile.type || "application/octet-stream",
-          base64: fileBase64,
-        } : null,
-      }),
+      body: JSON.stringify(payload),
     });
     const data = await res.json();
 
     if (!res.ok) {
-      alert("Could not start payment. Please try again or email postman@khagatara.com.");
+      alert(data.error || "Could not start payment. Please try again or email postman@khagatara.com.");
       console.error("create-order failed:", data);
       return;
     }
 
-    // 2. Open Razorpay Checkout modal (razorpay checkout.js must be loaded on the page)
     const rzp = new Razorpay({
       key: data.keyId,
       amount: data.amount,
@@ -1391,7 +1407,6 @@ async function proceedToCheckout(amountInInr, orderNotes) {
       description: "Order payment",
       order_id: data.orderId,
       handler: async function (response) {
-        // 3. Verify payment signature on the backend
         try {
           const verifyRes = await fetch("/api/razorpay/verify", {
             method: "POST",
@@ -1401,18 +1416,7 @@ async function proceedToCheckout(amountInInr, orderNotes) {
           const verifyData = await verifyRes.json();
 
           if (verifyRes.ok && verifyData.verified) {
-            // Success — show confirmation and go to track
-            panelEl.innerHTML = `
-              <div style="display:grid;gap:16px;max-width:560px;text-align:center;padding:32px 0">
-                <div style="font-size:2.5rem">✅</div>
-                <h3 style="margin:0;color:var(--green)">Payment Successful</h3>
-                <p style="color:var(--muted);margin:0">Your Order ID: <strong>${verifyData.orderId}</strong></p>
-                <p style="color:var(--muted);margin:0;font-size:0.9rem">We will print and post your document. A confirmation email will be sent shortly.</p>
-                <button type="button" onclick="openModule('track',0)"
-                  style="margin:8px auto 0;background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px 24px;cursor:pointer;font-weight:600">
-                  Track Your Order →
-                </button>
-              </div>`;
+            showPaymentSuccess(verifyData.orderId);
           } else {
             alert("Payment received but verification failed. Please email postman@khagatara.com with payment ID: " + response.razorpay_payment_id);
             console.error("Verify response:", verifyData);
@@ -1432,9 +1436,107 @@ async function proceedToCheckout(amountInInr, orderNotes) {
 
     rzp.open();
   } catch (err) {
-    console.error("Checkout error:", err);
+    console.error("Razorpay checkout error:", err);
     alert("Something went wrong starting payment. Please try again.");
   }
+}
+
+let paypalSdkPromise = null;
+function loadPaypalSdk(clientId) {
+  if (window.paypal) return Promise.resolve();
+  if (paypalSdkPromise) return paypalSdkPromise;
+  paypalSdkPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD&intent=capture&components=buttons&disable-funding=venmo`;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("Failed to load PayPal SDK"));
+    document.head.appendChild(script);
+  });
+  return paypalSdkPromise;
+}
+
+async function payWithPayPal(payload) {
+  try {
+    const res = await fetch("/api/paypal/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Could not start PayPal payment. Please try again or email postman@khagatara.com.");
+      console.error("PayPal create-order failed:", data);
+      return;
+    }
+
+    panelEl.innerHTML = `
+      <div style="display:grid;gap:16px;max-width:420px;margin:0 auto;padding:24px 0;text-align:center">
+        <p style="color:var(--muted);margin:0">Approximate charge: <strong>$${data.usdAmount} USD</strong></p>
+        <div id="paypal-checkout-container"></div>
+        <button type="button" onclick="proceedToCheckout(${payload.amount}, ${JSON.stringify(payload.notes)})"
+          style="background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:0.85rem">
+          ← Choose a different payment method
+        </button>
+      </div>`;
+
+    await loadPaypalSdk(data.clientId);
+
+    window.paypal.Buttons({
+      createOrder: () => Promise.resolve(data.paypalOrderId),
+      onApprove: async () => {
+        try {
+          const captureRes = await fetch("/api/paypal/capture-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ paypalOrderId: data.paypalOrderId }),
+          });
+          const captureData = await captureRes.json();
+
+          if (captureRes.ok && captureData.verified) {
+            showPaymentSuccess(captureData.orderId);
+          } else {
+            alert("Payment received but verification failed. Please email postman@khagatara.com with order ID: " + data.publicOrderId);
+            console.error("Capture response:", captureData);
+          }
+        } catch (captureErr) {
+          console.error("Capture fetch error:", captureErr);
+          alert("Payment received but we could not confirm. Please email postman@khagatara.com with order ID: " + data.publicOrderId);
+        }
+      },
+      onError: (err) => {
+        console.error("PayPal button error:", err);
+        alert("Something went wrong with PayPal. Please try again or use Razorpay instead.");
+      },
+    }).render("#paypal-checkout-container");
+  } catch (err) {
+    console.error("PayPal checkout error:", err);
+    alert("Something went wrong starting PayPal payment. Please try again.");
+  }
+}
+
+async function proceedToCheckout(amountInInr, orderNotes) {
+  const payload = await buildOrderPayload(amountInInr, orderNotes);
+  if (!payload) return;
+
+  panelEl.innerHTML = `
+    <div style="display:grid;gap:16px;max-width:420px;margin:0 auto;padding:32px 0;text-align:center">
+      <h3 style="margin:0">Choose payment method</h3>
+      <p style="color:var(--muted);margin:0;font-size:0.9rem">Amount: ₹${amountInInr}</p>
+      <div style="display:grid;gap:10px">
+        <button type="button" id="payWithRazorpayBtn"
+          style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:12px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">
+          Pay with Razorpay (India — UPI, cards, netbanking)
+        </button>
+        <button type="button" id="payWithPaypalBtn"
+          style="background:#003087;color:#fff;border:none;border-radius:7px;padding:12px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">
+          Pay with PayPal (International)
+        </button>
+      </div>
+    </div>`;
+
+  document.getElementById("payWithRazorpayBtn").addEventListener("click", () => payWithRazorpay(payload));
+  document.getElementById("payWithPaypalBtn").addEventListener("click", () => payWithPayPal(payload));
 }
 
 // ── Event listeners ────────────────────────────────────────────────────────

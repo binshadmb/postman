@@ -34,6 +34,10 @@ model CustomerOrder {
   razorpayOrderId   String? @unique
   razorpayPaymentId String?
 
+  paymentProvider String? // "razorpay" | "paypal"
+  paypalOrderId   String? @unique
+  paypalCaptureId String?
+
   customerName  String?
   customerEmail String?
   customerPhone String?
