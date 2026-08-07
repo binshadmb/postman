@@ -1,5 +1,7 @@
 import Head from "next/head";
-import Script from "next/script";
+import dynamic from "next/dynamic";
+
+const PaymentOptions = dynamic(() => import("../components/PaymentOptions"), { ssr: false });
 
 export default function PayPage() {
   return (
@@ -8,11 +10,6 @@ export default function PayPage() {
         <title>Pay — Postman Khagatara</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="robots" content="noindex" />
-        {/* PayPal SDK — Part 1 */}
-        <script
-          src="https://www.paypal.com/sdk/js?client-id=BAAFrmPlXkIwra22A3pdJp5vc0Z5Ni-79i-DlmVAAPzJfunKWHP-1l_1T1Z85WJji6sGO1UXiuxcay6DYM&components=hosted-buttons&disable-funding=venmo&currency=USD"
-          data-paypal-sdk
-        />
       </Head>
 
       <div style={{
@@ -26,7 +23,7 @@ export default function PayPage() {
       }}>
         <div style={{
           width: "100%",
-          maxWidth: "480px",
+          maxWidth: "520px",
           background: "#fff",
           borderRadius: "12px",
           border: "1px solid #d8d3c6",
@@ -34,17 +31,12 @@ export default function PayPage() {
           overflow: "hidden",
         }}>
           {/* Header */}
-          <div style={{
-            background: "#b72d32",
-            padding: "24px 28px",
-            color: "#fff",
-          }}>
+          <div style={{ background: "#b72d32", padding: "24px 28px", color: "#fff" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
               <div style={{
                 width: "40px", height: "40px", borderRadius: "8px",
                 background: "rgba(255,255,255,0.2)",
-                display: "grid", placeItems: "center",
-                fontWeight: 800, fontSize: "0.85rem",
+                display: "grid", placeItems: "center", fontWeight: 800, fontSize: "0.85rem",
               }}>PK</div>
               <div>
                 <div style={{ fontWeight: 700, fontSize: "1.05rem" }}>Postman</div>
@@ -60,60 +52,57 @@ export default function PayPage() {
           {/* Body */}
           <div style={{ padding: "28px" }}>
             <div style={{
-              background: "#fff9e5",
-              border: "1px solid #f0d87a",
-              borderRadius: "8px",
-              padding: "12px 16px",
-              marginBottom: "24px",
-              fontSize: "0.875rem",
-              color: "#5a4500",
-              lineHeight: 1.6,
+              background: "#fff9e5", border: "1px solid #f0d87a",
+              borderRadius: "8px", padding: "12px 16px", marginBottom: "24px",
+              fontSize: "0.875rem", color: "#5a4500", lineHeight: 1.6,
             }}>
               📋 <strong>Enter the amount from your quotation.</strong><br />
-              Use the amount exactly as shown in your invoice or quote from Postman Khagatara.
+              Use the exact amount shown on your invoice or quote from Postman Khagatara.
             </div>
 
-            {/* PayPal Button — Part 2 */}
-            <div id="paypal-container-A9CU5B4AKJT8G" />
-            <Script
-              id="paypal-postman-button"
-              strategy="lazyOnload"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  function renderPostmanPayPal() {
-                    if (typeof paypal !== 'undefined' && paypal.HostedButtons) {
-                      paypal.HostedButtons({ hostedButtonId: "A9CU5B4AKJT8G" })
-                        .render("#paypal-container-A9CU5B4AKJT8G");
-                    } else {
-                      setTimeout(renderPostmanPayPal, 500);
-                    }
-                  }
-                  renderPostmanPayPal();
-                `,
-              }}
+            <style>{`
+              .payment-options { display: grid; gap: 16px; }
+              .payment-tabs { display: flex; gap: 8px; }
+              .payment-tabs button {
+                flex: 1; padding: 9px 14px; border: 1px solid #d8d3c6;
+                border-radius: 7px; background: #f6f5f1; cursor: pointer;
+                font-size: 0.85rem; font-weight: 600; color: #66706a;
+                transition: all 0.15s;
+              }
+              .payment-tabs button.active {
+                background: #b72d32; border-color: #b72d32; color: #fff;
+              }
+              .payment-panel { padding-top: 8px; }
+              .razorpay-btn {
+                width: 100%; padding: 12px; border: none; border-radius: 7px;
+                background: #b72d32; color: #fff; font-size: 1rem;
+                font-weight: 700; cursor: pointer; transition: opacity 0.15s;
+              }
+              .razorpay-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+              .razorpay-btn:hover:not(:disabled) { opacity: 0.9; }
+            `}</style>
+
+            <PaymentOptions
+              hostedButtonId="A9CU5B4AKJT8G"
+              razorpayAmount={100}
+              description="Postman Khagatara — invoice payment"
+              defaultMethod="paypal"
             />
 
             <p style={{
-              marginTop: "20px",
-              textAlign: "center",
-              fontSize: "0.78rem",
-              color: "#66706a",
-              lineHeight: 1.6,
+              marginTop: "20px", textAlign: "center",
+              fontSize: "0.78rem", color: "#66706a", lineHeight: 1.6,
             }}>
-              Payments accepted via PayPal, Apple Pay, and Debit/Credit cards.<br />
-              All transactions are secured by PayPal.
+              PayPal for international · Razorpay for India (UPI, cards, netbanking)<br />
+              All transactions are secured.
             </p>
           </div>
 
           {/* Footer */}
           <div style={{
-            borderTop: "1px solid #d8d3c6",
-            padding: "14px 28px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            fontSize: "0.78rem",
-            color: "#66706a",
+            borderTop: "1px solid #d8d3c6", padding: "14px 28px",
+            display: "flex", justifyContent: "space-between",
+            alignItems: "center", fontSize: "0.78rem", color: "#66706a",
           }}>
             <a href="/" style={{ color: "#66706a", textDecoration: "none" }}>← Back to Postman</a>
             <span>postman.khagatara.com</span>
