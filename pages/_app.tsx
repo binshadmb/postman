@@ -6,9 +6,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Component {...pageProps} />
       <DonateChip
-        label="Pay with PayPal"
-        cta="International payments"
+        label="Support Postman"
+        cta="Powered by PayPal"
         href="/pay"
+        hostedButtonId={process.env.NEXT_PUBLIC_PAYPAL_DONATE_BUTTON_ID}
         bgColor="#003087"
         hoverColor="#001c5c"
       />
