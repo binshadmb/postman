@@ -1197,6 +1197,12 @@ function proformaPanel() {
               ${numField(`item${i}_qty`, i === 1 ? "Qty" : "", draftValue(`item${i}_qty`, ""), 0)}
               ${numField(`item${i}_rate`, i === 1 ? "Rate" : "", draftValue(`item${i}_rate`, ""), 0)}
             </div>
+            ${i === 1 ? `
+              <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px;margin-top:-4px">
+                <span style="color:var(--muted);font-size:0.72rem">What this item/service is — shown to the customer as-is</span>
+                <span style="color:var(--muted);font-size:0.72rem">Number of units (e.g. pages, copies, envelopes) — leave as 1 if not applicable</span>
+                <span style="color:var(--muted);font-size:0.72rem">Price per unit, in the currency selected below — not the row total</span>
+              </div>` : ""}
           </div>`).join("")}
       </div>
 
@@ -1204,8 +1210,13 @@ function proformaPanel() {
         ${opt("currency", "Currency", Object.keys(fx), d.currency)}
         ${textField("validUntil", "Valid Until", "e.g. 15 days from issue")}
       </div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px;margin-top:-6px">
+        <span style="color:var(--muted);font-size:0.72rem">All rates and totals on the PDF are converted to this currency</span>
+        <span style="color:var(--muted);font-size:0.72rem">How long this proposal remains valid — free text, e.g. "15 days" or a date</span>
+      </div>
 
       ${textAreaField("notes", "Notes (optional)", "Payment terms, delivery timeline, etc.", 3)}
+      <p style="margin:-6px 0 0;color:var(--muted);font-size:0.72rem">Anything extra to print at the bottom — e.g. advance payment terms, delivery timeline, or special conditions</p>
 
       <button type="button" onclick="generateProforma()"
         style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px 20px;cursor:pointer;font-weight:600;max-width:240px">
