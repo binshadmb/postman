@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     const module = notes?.module || selections?.module || "print-post";
     const fileBuffer = decodeBase64File(file);
 
-    if (["print-post", "registered-mail", "bulk"].includes(module) && !fileBuffer) {
+    if (["print-post", "registered-mail", "bulk", "flyer-distribution"].includes(module) && !fileBuffer) {
       return res.status(400).json({ error: "Please upload the required customer file before checkout." });
     }
 
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Please add the card link, message, upload, or design instructions before checkout." });
     }
 
-    if (["print-post", "registered-mail", "ads", "bulk", "cards"].includes(module) && !customer?.email) {
+    if (["print-post", "registered-mail", "ads", "bulk", "cards", "flyer-distribution"].includes(module) && !customer?.email) {
       return res.status(400).json({ error: "Customer email is required before checkout." });
     }
 

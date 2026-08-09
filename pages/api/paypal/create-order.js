@@ -14,7 +14,9 @@ export const config = {
 // INR cross-border settlement isn't supported. This is a fixed fallback
 // conversion rate; swap for a live FX API (e.g. exchangerate.host) if precise
 // pricing matters. Update this constant periodically in the meantime.
-const INR_TO_USD_RATE = 0.0115; // ~ ₹87 = $1, adjust as needed
+// Aligned with public/client.js's fx.USD.rate (0.012) so a price shown on
+// the site and the amount actually captured via PayPal always match exactly.
+const INR_TO_USD_RATE = 0.012;
 
 function makePublicId() {
   const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -52,7 +54,7 @@ export default async function handler(req, res) {
     const fileBuffer = decodeBase64File(file);
 
     // Same validation rules as the Razorpay route — kept identical on purpose.
-    if (["print-post", "registered-mail", "bulk"].includes(module) && !fileBuffer) {
+    if (["print-post", "registered-mail", "bulk", "flyer-distribution"].includes(module) && !fileBuffer) {
       return res.status(400).json({ error: "Please upload the required customer file before checkout." });
     }
     if (module === "ads" && !fileBuffer && !selections?.adText) {
@@ -61,7 +63,7 @@ export default async function handler(req, res) {
     if (module === "cards" && !fileBuffer && !selections?.cardProductLink && !selections?.message && !selections?.designInstructions) {
       return res.status(400).json({ error: "Please add the card link, message, upload, or design instructions before checkout." });
     }
-    if (["print-post", "registered-mail", "ads", "bulk", "cards"].includes(module) && !customer?.email) {
+    if (["print-post", "registered-mail", "ads", "bulk", "cards", "flyer-distribution"].includes(module) && !customer?.email) {
       return res.status(400).json({ error: "Customer email is required before checkout." });
     }
     if (["print-post", "registered-mail", "cards"].includes(module) && (!recipient?.name || !recipient?.address || !recipient?.pin)) {

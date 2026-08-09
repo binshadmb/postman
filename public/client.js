@@ -85,6 +85,25 @@ const modules = [
     ]
   },
   {
+    id: "flyer-distribution", title: tr("sidebar.flyer_distribution", "Flyer / Leaflet Distribution"),
+    badge: "Print & distribute inside India", icon: "📄", color: "#8a4b2e",
+    children: [
+      { id: "upload",       label: tr("flyer.tab_upload",       "Upload Artwork") },
+      { id: "print-opts",   label: tr("flyer.tab_print_opts",   "Print Options") },
+      { id: "distribution", label: tr("flyer.tab_distribution", "Distribution") },
+      { id: "calculator",   label: tr("flyer.tab_calculator",   "Price Calculator") },
+      { id: "history",      label: tr("flyer.tab_history",      "Order History") },
+    ]
+  },
+  {
+    id: "inspection", title: tr("sidebar.inspection", "Business Inspection / Discussion"),
+    badge: "Request only — needs approval", icon: "🧭", color: "#4a4a4a",
+    children: [
+      { id: "details", label: tr("inspection.tab_details", "Request Details") },
+      { id: "history", label: tr("inspection.tab_history", "Request History") },
+    ]
+  },
+  {
     id: "track", title: tr("sidebar.track_order", "Track Order"),
     badge: "Timeline, proof, and support", icon: "📍", color: "#c05c00",
     children: [
@@ -946,6 +965,176 @@ function adSizeColorPanel() {
     </div>`;
 }
 
+// ── Flyer / Leaflet Distribution ────────────────────────────────────────────
+
+const FLYER_DISCLAIMER = "Printed and distributed by Postman — Khagatara as a paid printing & distribution service only. Postman has no ownership, affiliation, or endorsement relationship with the content, claims, or any third party represented in this material.";
+
+function flyerDisclaimerNote() {
+  return `<p style="margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);color:var(--muted);font-size:0.78rem;line-height:1.5">${esc(FLYER_DISCLAIMER)}</p>`;
+}
+
+function flyerUploadPanel() {
+  const draft = activeDraft();
+  return `<h3 style="margin-top:0">Upload Flyer / Leaflet Artwork</h3>
+    <div style="display:grid;gap:18px;max-width:640px">
+      ${flyerDisclaimerNote()}
+      <label style="display:grid;gap:6px;color:var(--muted)">Select artwork file (PDF, JPG, PNG — max 20 MB)
+        <input name="uploadFile" type="file" accept=".pdf,.jpg,.jpeg,.png"
+          style="border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink)">
+      </label>
+      ${draft.uploadFile ? `<p style="margin:0;color:var(--green);font-size:0.9rem">Selected: ${esc(draft.uploadFile.name)}</p>` : ""}
+      <label style="display:grid;gap:6px;color:var(--muted)">What is this material for? (required — website launch, product launch, event, education, business notice, etc.)
+        <textarea name="purposeStatement" rows="2" placeholder="Briefly state the purpose of this flyer"
+          style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical">${esc(draftValue("purposeStatement", ""))}</textarea>
+      </label>
+      <button type="button" onclick="captureCurrentPanelData(); openModule('flyer-distribution',1)"
+        style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:220px">
+        Continue to Print Options →
+      </button>
+    </div>`;
+}
+
+function flyerPrintOptsPanel() {
+  const d = { size: "A4", color: "B&W", sides: "Single-sided", ...activeDraft(), ...currentFormData() };
+  return `<h3 style="margin-top:0">Print Options</h3>
+    ${backBtn("flyer-distribution", 0, "Upload Artwork")}
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:14px;max-width:640px">
+      ${opt("size",  "Paper Size", ["A4", "A5"], d.size)}
+      ${opt("color", "Print Color", ["B&W", "Color"], d.color)}
+      ${opt("sides", "Sides", ["Single-sided", "Double-sided"], d.sides)}
+    </div>
+    <button type="button" onclick="captureCurrentPanelData(); openModule('flyer-distribution',2)"
+      style="margin-top:16px;background:var(--teal);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600">
+      Continue to Distribution →
+    </button>`;
+}
+
+function flyerDistributionPanel() {
+  const d = { distType: "Given Address", mailType: "Registered", envelopes: 1, qty: 1000, area: "", ...activeDraft(), ...currentFormData() };
+  const isGiven = d.distType === "Given Address";
+  return `<h3 style="margin-top:0">Distribution</h3>
+    ${backBtn("flyer-distribution", 1, "Print Options")}
+    <div style="display:grid;gap:16px;max-width:640px">
+      ${opt("distType", "Distribution Type", ["Given Address", "No Address — Bulk / Random"], d.distType)}
+      ${isGiven ? `
+        <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:12px">
+          <strong>Given Address — mailed 4–5 sheets per envelope, one address per envelope</strong>
+          ${opt("mailType", "Mailing Type", ["Registered ($3 / envelope)", "Non-registered ($1.5 / envelope, not trackable)"], d.mailType)}
+          ${numField("envelopes", "Number of envelopes / addresses", d.envelopes)}
+          ${textAreaField("addressList", "Recipient addresses (one per line)", "Name, address, city, PIN — one recipient per line", 5)}
+        </div>
+      ` : `
+        <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:12px">
+          <strong>No Address — Bulk / Random Distribution</strong>
+          <p style="margin:0;color:var(--muted);font-size:0.85rem">Distributed to public spots — apartment/flat entrances, IT park entrances, college gates, bus stops, etc. Minimum order: 1,000 copies.</p>
+          ${numField("qty", "Quantity (minimum 1,000)", d.qty, 1000)}
+          ${textField("area", "City / Area for distribution", "e.g. Kochi, Trivandrum")}
+          <p style="margin:0;color:var(--muted);font-size:0.8rem">Distribution continues in that area until the ordered quantity is exhausted.</p>
+          <p style="margin:0;color:var(--muted);font-size:0.8rem"><strong>Proof provided:</strong> a WhatsApp video of the printed stock, and a short site video during distribution. No individual delivery tracking is available for this option.</p>
+        </div>
+      `}
+      ${flyerDisclaimerNote()}
+    </div>
+    <button type="button" onclick="captureCurrentPanelData(); openModule('flyer-distribution',3)"
+      style="margin-top:16px;background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600">
+      See Price Estimate →
+    </button>`;
+}
+
+// Bundled, all-inclusive USD customer prices (setup + printing + distribution).
+const FLYER_BULK_PRICES = {
+  "A5-B&W":   { setup: 79,  side1: 0.49, side2: 0.69 },
+  "A4-B&W":   { setup: 89,  side1: 0.59, side2: 0.89 },
+  "A5-Color": { setup: 99,  side1: 0.49, side2: 0.89 },
+  "A4-Color": { setup: 109, side1: 0.69, side2: 1.09 },
+};
+
+function flyerCalc() {
+  const d = { size: "A4", color: "B&W", sides: "Single-sided", distType: "Given Address", mailType: "Registered", envelopes: 1, qty: 1000, ...activeDraft(), ...currentFormData() };
+  const isGiven = d.distType === "Given Address";
+  const isDouble = d.sides === "Double-sided";
+
+  let totalUSD, breakdownRows;
+
+  if (isGiven) {
+    const perEnvelope = d.mailType.startsWith("Registered") ? 3 : 1.5;
+    const envelopes = Math.max(1, Number(d.envelopes) || 1);
+    totalUSD = perEnvelope * envelopes;
+    breakdownRows = [
+      ["Mailing type", d.mailType.startsWith("Registered") ? "Registered (trackable)" : "Non-registered (not trackable)"],
+      ["Per envelope", `$${perEnvelope.toFixed(2)} (4–5 sheets, one address)`],
+      ["Envelopes", String(envelopes)],
+    ];
+  } else {
+    const key = `${d.size}-${d.color}`;
+    const price = FLYER_BULK_PRICES[key] || FLYER_BULK_PRICES["A4-B&W"];
+    const qty = Math.max(1000, Number(d.qty) || 1000);
+    const perCopy = isDouble ? price.side2 : price.side1;
+    totalUSD = price.setup + perCopy * qty;
+    breakdownRows = [
+      ["Setup fee (once)", `$${price.setup}`],
+      ["Per copy", `$${perCopy.toFixed(2)} × ${qty}`],
+      ["Proof", "WhatsApp + site video, no individual tracking"],
+    ];
+  }
+
+  // Reverse-converted to the site's INR base so money()/checkout stay in
+  // sync with fx.USD.rate — displays and charges exactly totalUSD when the
+  // customer's currency is USD.
+  const totalINR = Math.round(totalUSD / fx.USD.rate);
+
+  return calcShell("Estimated Flyer Distribution Price", [
+    `<p style="grid-column:1 / -1;margin:0;color:var(--muted);font-size:0.85rem">${esc(FLYER_DISCLAIMER)}</p>`,
+  ].join(""), totalINR, breakdownRows);
+}
+
+function inspectionRequestPanel() {
+  const d = { location: "", purpose: "", preferredDates: "", ...activeDraft(), ...currentFormData() };
+  return `<h3 style="margin-top:0">Business Inspection / Discussion Request</h3>
+    <p style="margin:0 0 12px;color:var(--muted);font-size:0.85rem">A representative physically visits a location to inspect, discuss, or raise queries on your behalf. Flat fee $150–$500 (scope-dependent) + actual travel ticket cost, billed in USD. <strong>Requires prior approval — this is a request, not instant checkout.</strong> We'll review and send you a quote before anything is charged.</p>
+    <div style="display:grid;gap:14px;max-width:640px">
+      ${contactBlock()}
+      ${textField("location", "Location to be inspected", "City, address, or landmark")}
+      ${textAreaField("purpose", "What should we inspect / discuss / ask?", "Describe the query or scope of the visit", 4)}
+      ${textField("preferredDates", "Preferred dates (optional)", "e.g. any time next 2 weeks")}
+      <button type="button" onclick="submitInspectionRequest()"
+        style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600;max-width:220px">
+        Submit Request →
+      </button>
+    </div>`;
+}
+
+async function submitInspectionRequest() {
+  captureCurrentPanelData();
+  const d = activeDraft();
+  if (!d.location || !d.purpose || !d.customerEmail) {
+    alert("Please fill in the location, query details, and your email before submitting.");
+    return;
+  }
+  try {
+    const res = await fetch("/api/inspection-request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer: { name: d.customerName || "", email: d.customerEmail || "", phone: d.customerPhone || "" },
+        location: d.location, purpose: d.purpose, preferredDates: d.preferredDates || "",
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to submit request");
+    panelEl.innerHTML = `
+      <div style="display:grid;gap:16px;max-width:560px;text-align:center;padding:32px 0">
+        <div style="font-size:2.5rem">📩</div>
+        <h3 style="margin:0">Request Submitted</h3>
+        <p style="color:var(--muted);margin:0">Your Request ID: <strong>${esc(data.publicOrderId)}</strong></p>
+        <p style="color:var(--muted);margin:0;font-size:0.9rem">We'll review your request and send a quote to your email before any charge is made.</p>
+      </div>`;
+  } catch (err) {
+    console.error("Inspection request error:", err);
+    alert("Something went wrong submitting your request. Please try again or email postman@khagatara.com.");
+  }
+}
+
 function csvUploadPanel() {
   return `<h3 style="margin-top:0">CSV Upload — Bulk Recipient List</h3>
     <div style="display:grid;gap:14px;max-width:640px">
@@ -1130,6 +1319,7 @@ function renderPanel() {
       "registered-mail": registeredCalc,
       "ads": adsCalc,
       "bulk": bulkCalc,
+      "flyer-distribution": flyerCalc,
     };
     panelEl.innerHTML = `<h3 style="margin-top:0">Price Calculator</h3>${(calcs[mid] || (() => `<p style="color:var(--muted)">Calculator not yet available for this module.</p>`))()}`;
     return;
@@ -1177,6 +1367,16 @@ function renderPanel() {
     if (cid === "batch-opts") { panelEl.innerHTML = printOptsPanel(); return; }
     if (cid === "lists")      { panelEl.innerHTML = emptyPanel("Saved Recipient Lists", "Reuse uploaded CSV lists for recurring batch sends."); return; }
     if (cid === "templates")  { panelEl.innerHTML = emptyPanel("Saved Templates", "Saved document templates for bulk use, e.g. annual festival greetings."); return; }
+  }
+
+  if (mid === "flyer-distribution") {
+    if (cid === "upload")       { panelEl.innerHTML = flyerUploadPanel(); return; }
+    if (cid === "print-opts")   { panelEl.innerHTML = flyerPrintOptsPanel(); return; }
+    if (cid === "distribution") { panelEl.innerHTML = flyerDistributionPanel(); return; }
+  }
+
+  if (mid === "inspection") {
+    if (cid === "details") { panelEl.innerHTML = inspectionRequestPanel(); return; }
   }
 
   if (mid === "track") {
