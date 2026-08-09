@@ -1148,6 +1148,29 @@ async function submitInspectionRequest() {
 
 // ── Bills — Proforma / Service Proposal ─────────────────────────────────────
 
+// Common service items — quick-select presets for Proforma line items.
+// value format: "label|rate" (rate in INR base, editable after selection).
+const PROFORMA_ITEM_PRESETS = [
+  ["— Select a common item, or type your own below —", ""],
+  ["Print & Post — A4 B&W, Speed Post|180"],
+  ["Print & Post — A4 Color, Speed Post|220"],
+  ["Registered Mail — up to 2 pages|350"],
+  ["Greeting Card — Standard, with delivery|420"],
+  ["Newspaper Ad — Obituary, B&W (per booking)|2500"],
+  ["Bulk Mail — per recipient (CSV batch)|60"],
+  ["Flyer Distribution — Given Address, Registered (USD, per envelope)|3"],
+  ["Flyer Distribution — Given Address, Non-registered (USD, per envelope)|1.5"],
+  ["Flyer Distribution — Bulk/Random, 1000 copies B&W A4 (USD, setup)|89"],
+  ["Business Inspection / Discussion — flat fee (USD, from)|150"],
+].map(row => Array.isArray(row) && row.length === 1 ? row[0].split("|") : row);
+
+function proformaItemPreset(i) {
+  return `<select onchange="applyProformaPreset(${i}, this)"
+      style="border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--surface);color:var(--muted);font-size:0.78rem;min-height:32px">
+      ${PROFORMA_ITEM_PRESETS.map(([label, rate]) => `<option value="${esc(rate)}" data-label="${esc(label)}">${esc(label)}</option>`).join("")}
+    </select>`;
+}
+
 function proformaPanel() {
   const d = { currency: "INR", ...activeDraft(), ...currentFormData() };
   return `<h3 style="margin-top:0">Proforma / Service Proposal</h3>
@@ -1166,10 +1189,14 @@ function proformaPanel() {
         <strong>Line Items</strong>
         <p style="margin:0;color:var(--muted);font-size:0.8rem">Fill as many rows as needed, leave the rest blank.</p>
         ${[1, 2, 3, 4, 5].map(i => `
-          <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px">
-            ${textField(`item${i}_desc`, i === 1 ? "Description" : "", "Item / service description")}
-            ${numField(`item${i}_qty`, i === 1 ? "Qty" : "", draftValue(`item${i}_qty`, ""), 0)}
-            ${numField(`item${i}_rate`, i === 1 ? "Rate" : "", draftValue(`item${i}_rate`, ""), 0)}
+          <div style="display:grid;gap:6px;padding-bottom:10px;border-bottom:1px dashed var(--line)">
+            ${i === 1 ? `<span style="color:var(--muted);font-size:0.78rem">Quick-select (auto-fills rate, still editable)</span>` : ""}
+            ${proformaItemPreset(i)}
+            <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px">
+              ${textField(`item${i}_desc`, i === 1 ? "Description" : "", "Item / service description")}
+              ${numField(`item${i}_qty`, i === 1 ? "Qty" : "", draftValue(`item${i}_qty`, ""), 0)}
+              ${numField(`item${i}_rate`, i === 1 ? "Rate" : "", draftValue(`item${i}_rate`, ""), 0)}
+            </div>
           </div>`).join("")}
       </div>
 
@@ -1185,6 +1212,17 @@ function proformaPanel() {
         Generate Proforma PDF →
       </button>
     </div>`;
+}
+
+function applyProformaPreset(i, selectEl) {
+  const label = selectEl.selectedOptions[0]?.dataset.label || "";
+  const rate = selectEl.value;
+  if (!label) return;
+  const form = selectEl.closest("form") || document;
+  const descField = form.querySelector(`[name="item${i}_desc"]`);
+  const rateField = form.querySelector(`[name="item${i}_rate"]`);
+  if (descField) descField.value = label;
+  if (rateField && rate) rateField.value = rate;
 }
 
 async function generateProforma() {
