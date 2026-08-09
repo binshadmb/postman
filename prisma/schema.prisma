@@ -57,8 +57,33 @@ model CustomerOrder {
   fileSize     Int?
   fileData     Bytes?
 
+  documents GeneratedDocument[]
+
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   paidAt      DateTime?
   fulfilledAt DateTime?
+}
+
+model GeneratedDocument {
+  id       String @id @default(cuid())
+  publicId String @unique
+
+  docType String // "proforma" | "invoice" | "agreement" | "deliveryReport" | "receipt"
+
+  orderId String? // null for Proforma — generated before any order/payment exists
+  order   CustomerOrder? @relation(fields: [orderId], references: [id])
+
+  customerName  String?
+  customerEmail String?
+
+  fields Json @default("{}") // form data used to render this document
+
+  pdfData     Bytes
+  pdfMimeType String @default("application/pdf")
+
+  sentAt DateTime?
+  sentTo String?
+
+  createdAt DateTime @default(now())
 }

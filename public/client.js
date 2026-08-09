@@ -104,6 +104,17 @@ const modules = [
     ]
   },
   {
+    id: "bills", title: tr("sidebar.bills", "Bills"),
+    badge: "Proposals, invoices & receipts", icon: "🧾", color: "#2e6b4f",
+    children: [
+      { id: "proforma",   label: tr("bills.tab_proforma",   "Proforma / Service Proposal") },
+      { id: "invoice",    label: tr("bills.tab_invoice",    "Invoice") },
+      { id: "agreement",  label: tr("bills.tab_agreement",  "Service Agreement / Order Confirmation") },
+      { id: "delivery",   label: tr("bills.tab_delivery",   "Service / Delivery Report") },
+      { id: "receipt",    label: tr("bills.tab_receipt",    "Payment Receipt") },
+    ]
+  },
+  {
     id: "track", title: tr("sidebar.track_order", "Track Order"),
     badge: "Timeline, proof, and support", icon: "📍", color: "#c05c00",
     children: [
@@ -1135,6 +1146,113 @@ async function submitInspectionRequest() {
   }
 }
 
+// ── Bills — Proforma / Service Proposal ─────────────────────────────────────
+
+function proformaPanel() {
+  const d = { currency: "INR", ...activeDraft(), ...currentFormData() };
+  return `<h3 style="margin-top:0">Proforma / Service Proposal</h3>
+    <p style="margin:0 0 14px;color:var(--muted);font-size:0.85rem">Generated before payment — a proposal only, not a tax invoice.</p>
+    <div style="display:grid;gap:16px;max-width:720px">
+      <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+        <strong>Customer Details</strong>
+        ${textField("customerName", "Customer Name", "Full name or business name")}
+        ${textField("customerEmail", "Email", "name@example.com")}
+        ${textAreaField("customerAddress", "Address (optional)", "Street, city, country", 2)}
+      </div>
+
+      ${textAreaField("serviceDescription", "Service Description", "What is this proposal for?", 3)}
+
+      <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
+        <strong>Line Items</strong>
+        <p style="margin:0;color:var(--muted);font-size:0.8rem">Fill as many rows as needed, leave the rest blank.</p>
+        ${[1, 2, 3, 4, 5].map(i => `
+          <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px">
+            ${textField(`item${i}_desc`, i === 1 ? "Description" : "", "Item / service description")}
+            ${numField(`item${i}_qty`, i === 1 ? "Qty" : "", draftValue(`item${i}_qty`, ""), 0)}
+            ${numField(`item${i}_rate`, i === 1 ? "Rate" : "", draftValue(`item${i}_rate`, ""), 0)}
+          </div>`).join("")}
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px">
+        ${opt("currency", "Currency", Object.keys(fx), d.currency)}
+        ${textField("validUntil", "Valid Until", "e.g. 15 days from issue")}
+      </div>
+
+      ${textAreaField("notes", "Notes (optional)", "Payment terms, delivery timeline, etc.", 3)}
+
+      <button type="button" onclick="generateProforma()"
+        style="background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px 20px;cursor:pointer;font-weight:600;max-width:240px">
+        Generate Proforma PDF →
+      </button>
+    </div>`;
+}
+
+async function generateProforma() {
+  captureCurrentPanelData();
+  const d = activeDraft();
+
+  if (!d.customerName || !d.serviceDescription) {
+    alert("Please fill in the customer name and service description before generating.");
+    return;
+  }
+
+  const items = [1, 2, 3, 4, 5]
+    .map(i => ({ description: d[`item${i}_desc`], qty: d[`item${i}_qty`], rate: d[`item${i}_rate`] }))
+    .filter(it => it.description && it.description.trim());
+
+  if (!items.length) {
+    alert("Please add at least one line item.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/bills/proforma", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerName: d.customerName,
+        customerEmail: d.customerEmail || "",
+        customerAddress: d.customerAddress || "",
+        serviceDescription: d.serviceDescription,
+        items,
+        currency: d.currency || "INR",
+        validUntil: d.validUntil || "",
+        notes: d.notes || "",
+      }),
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      alert(errData.error || "Failed to generate proforma.");
+      return;
+    }
+
+    const docId = res.headers.get("X-Document-Id");
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+
+    panelEl.innerHTML = `
+      <h3 style="margin-top:0">Proforma Generated</h3>
+      <p style="color:var(--muted);margin:0 0 14px">Reference: <strong>${esc(docId || "")}</strong> — saved and ready to print or send.</p>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+        <a href="${url}" download="${esc(docId || "proforma")}.pdf"
+          style="background:var(--red);color:#fff;text-decoration:none;border-radius:7px;padding:10px 18px;font-weight:600">Download PDF</a>
+        <a href="${url}" target="_blank"
+          style="background:var(--teal);color:#fff;text-decoration:none;border-radius:7px;padding:10px 18px;font-weight:600">Open / Print</a>
+        <button type="button" onclick="openModule('bills',0)"
+          style="background:var(--surface-2);border:1px solid var(--line);color:var(--ink);border-radius:7px;padding:10px 18px;cursor:pointer;font-weight:600">New Proforma</button>
+      </div>
+      <iframe src="${url}" style="width:100%;height:70vh;border:1px solid var(--line);border-radius:8px"></iframe>`;
+  } catch (err) {
+    console.error("Proforma generation error:", err);
+    alert("Something went wrong generating the proforma. Please try again.");
+  }
+}
+
+function billsComingSoonPanel(title) {
+  return emptyPanel(title, "This Bills document type is coming soon.");
+}
+
 function csvUploadPanel() {
   return `<h3 style="margin-top:0">CSV Upload — Bulk Recipient List</h3>
     <div style="display:grid;gap:14px;max-width:640px">
@@ -1367,6 +1485,14 @@ function renderPanel() {
     if (cid === "batch-opts") { panelEl.innerHTML = printOptsPanel(); return; }
     if (cid === "lists")      { panelEl.innerHTML = emptyPanel("Saved Recipient Lists", "Reuse uploaded CSV lists for recurring batch sends."); return; }
     if (cid === "templates")  { panelEl.innerHTML = emptyPanel("Saved Templates", "Saved document templates for bulk use, e.g. annual festival greetings."); return; }
+  }
+
+  if (mid === "bills") {
+    if (cid === "proforma")  { panelEl.innerHTML = proformaPanel(); return; }
+    if (cid === "invoice")   { panelEl.innerHTML = billsComingSoonPanel("Invoice"); return; }
+    if (cid === "agreement") { panelEl.innerHTML = billsComingSoonPanel("Service Agreement / Order Confirmation"); return; }
+    if (cid === "delivery")  { panelEl.innerHTML = billsComingSoonPanel("Service / Delivery Report"); return; }
+    if (cid === "receipt")   { panelEl.innerHTML = billsComingSoonPanel("Payment Receipt"); return; }
   }
 
   if (mid === "flyer-distribution") {
