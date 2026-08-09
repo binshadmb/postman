@@ -1188,21 +1188,18 @@ function proformaPanel() {
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
         <strong>Line Items</strong>
         <p style="margin:0;color:var(--muted);font-size:0.8rem">Fill as many rows as needed, leave the rest blank.</p>
+        <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px;color:var(--muted);font-size:0.72rem">
+          <span>What is this for</span><span>How many</span><span>Price each</span>
+        </div>
         ${[1, 2, 3, 4, 5].map(i => `
           <div style="display:grid;gap:6px;padding-bottom:10px;border-bottom:1px dashed var(--line)">
-            ${i === 1 ? `<span style="color:var(--muted);font-size:0.78rem">Quick-select (auto-fills rate, still editable)</span>` : ""}
+            <span style="color:var(--muted);font-size:0.72rem">Quick-select — fills the row below, still editable</span>
             ${proformaItemPreset(i)}
             <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px">
-              ${textField(`item${i}_desc`, i === 1 ? "Description" : "", "Item / service description")}
-              ${numField(`item${i}_qty`, i === 1 ? "Qty" : "", draftValue(`item${i}_qty`, ""), 0)}
-              ${numField(`item${i}_rate`, i === 1 ? "Rate" : "", draftValue(`item${i}_rate`, ""), 0)}
+              ${textField(`item${i}_desc`, "", "Item / service description")}
+              ${numField(`item${i}_qty`, "", draftValue(`item${i}_qty`, ""), 0)}
+              ${numField(`item${i}_rate`, "", draftValue(`item${i}_rate`, ""), 0)}
             </div>
-            ${i === 1 ? `
-              <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px;margin-top:-4px">
-                <span style="color:var(--muted);font-size:0.72rem">What this item/service is — shown to the customer as-is</span>
-                <span style="color:var(--muted);font-size:0.72rem">Number of units (e.g. pages, copies, envelopes) — leave as 1 if not applicable</span>
-                <span style="color:var(--muted);font-size:0.72rem">Price per unit, in the currency selected below — not the row total</span>
-              </div>` : ""}
           </div>`).join("")}
       </div>
 
