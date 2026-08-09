@@ -2,6 +2,7 @@
 import { prisma } from "../../../lib/prisma";
 import { renderHtmlToPdf } from "../../../lib/renderPdf";
 import { escapeHtml, money, documentShell } from "../../../lib/billsTemplate";
+import { getFxRates } from "../../../lib/fxRates";
 
 function makePublicId() {
   const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -32,7 +33,25 @@ export default async function handler(req, res) {
     const publicId = makePublicId();
     const dateStr = new Date().toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" });
 
-    const subtotal = items.reduce((sum, it) => sum + (Number(it.qty) || 1) * (Number(it.rate) || 0), 0);
+    const fxRates = await getFxRates();
+    function convert(amount, fromCur, toCur) {
+      const rates = fxRates || {};
+      const fromRate = rates[fromCur]?.rate ?? 1;
+      const toRate = rates[toCur]?.rate ?? 1;
+      const inrAmount = amount / fromRate; // amount → INR base
+      return inrAmount * toRate;           // INR base → target currency
+    }
+
+    const itemsConverted = items.map(it => {
+      const itemCurrency = it.currency || "INR";
+      const rate = Number(it.rate) || 0;
+      const qty = Number(it.qty) || 1;
+      const rowTotalOriginal = rate * qty;
+      const rowTotalConverted = convert(rowTotalOriginal, itemCurrency, currency);
+      return { ...it, itemCurrency, rate, qty, rowTotalOriginal, rowTotalConverted };
+    });
+
+    const subtotal = itemsConverted.reduce((sum, it) => sum + it.rowTotalConverted, 0);
 
     const bodyHtml = `
       <div class="two-col section">
@@ -56,16 +75,17 @@ export default async function handler(req, res) {
       <table class="items">
         <thead><tr><th>Item</th><th class="num">Qty</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead>
         <tbody>
-          ${items.map(it => `
+          ${itemsConverted.map(it => `
             <tr>
               <td>${escapeHtml(it.description)}</td>
-              <td class="num">${escapeHtml(it.qty || 1)}</td>
-              <td class="num">${money(it.rate || 0, currency)}</td>
-              <td class="num">${money((Number(it.qty) || 1) * (Number(it.rate) || 0), currency)}</td>
+              <td class="num">${escapeHtml(it.qty)}</td>
+              <td class="num">${money(it.rate, it.itemCurrency)}${it.itemCurrency !== currency ? `<br><span style="font-size:0.72rem;color:#999">= ${money(convert(it.rate, it.itemCurrency, currency), currency)}</span>` : ""}</td>
+              <td class="num">${money(it.rowTotalConverted, currency)}</td>
             </tr>`).join("")}
           <tr class="total-row"><td colspan="3">Estimated Total</td><td class="num">${money(subtotal, currency)}</td></tr>
         </tbody>
       </table>
+      <p style="font-size:0.72rem;color:#999;margin-top:-6px">Amounts entered in a different currency are converted using live exchange rates at the time this document was generated.</p>
 
       ${notes ? `<div class="section"><div class="section-label">Notes</div><p>${escapeHtml(notes).replace(/\n/g, "<br>")}</p></div>` : ""}
 

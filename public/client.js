@@ -149,6 +149,23 @@ const fx = {
   USD: { symbol: "$", rate: 0.012 }
 };
 
+// Replaced with live rates shortly after load — see loadLiveFxRates() below.
+// The static values above remain as an immediate-render fallback.
+async function loadLiveFxRates() {
+  try {
+    const res = await fetch("/api/fx-rates");
+    if (!res.ok) return;
+    const live = await res.json();
+    Object.keys(live).forEach((cur) => { fx[cur] = live[cur]; });
+    if (typeof renderPanel === "function" && panelEl) renderPanel();
+  } catch (err) {
+    console.warn("Live FX rates unavailable, using built-in fallback:", err);
+  }
+}
+if (typeof window !== "undefined") {
+  window.addEventListener("DOMContentLoaded", loadLiveFxRates);
+}
+
 const state = { moduleId: "print-post", childIndex: 3, currency: "INR" };
 
 // ── Hero slider content ──────────────────────────────────────────────────
@@ -419,13 +436,13 @@ function numField(name, label, value, min) {
 
 function textField(name, label, placeholder) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
-    <input name="${name}" type="text" placeholder="${esc(placeholder)}" value="${esc(draftValue(name, ""))}"
+    <input name="${name}" type="text" dir="auto" placeholder="${esc(placeholder)}" value="${esc(draftValue(name, ""))}"
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px"></label>`;
 }
 
 function textAreaField(name, label, placeholder, rows = 3) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
-    <textarea name="${name}" rows="${rows}" placeholder="${esc(placeholder)}"
+    <textarea name="${name}" rows="${rows}" dir="auto" placeholder="${esc(placeholder)}"
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical">${esc(draftValue(name, ""))}</textarea></label>`;
 }
 
@@ -453,14 +470,14 @@ function currencyField() {
 }
 
 function calcShell(title, fields, total, rows) {
-  return `<div style="display:grid;grid-template-columns:minmax(260px,1fr) minmax(240px,0.8fr);gap:18px">
-    <form id="calcForm" style="display:grid;grid-template-columns:repeat(2,minmax(160px,1fr));gap:14px">
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:18px;max-width:100%">
+    <form id="calcForm" style="display:grid;grid-template-columns:repeat(2,minmax(140px,1fr));gap:14px;min-width:0">
       ${fields}
     </form>
-    <aside style="align-self:start;display:grid;gap:14px;padding:18px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line)">
+    <aside style="align-self:start;display:grid;gap:14px;padding:18px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);min-width:0;overflow-wrap:break-word">
       <span style="color:var(--muted);font-size:0.85rem">${title}</span>
       <strong style="font-size:2.6rem;font-weight:800">${money(total)}</strong>
-      ${(rows || []).map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--line)"><span>${k}</span><strong>${v}</strong></div>`).join("")}
+      ${(rows || []).map(([k, v]) => `<div style="display:flex;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid var(--line)"><span>${k}</span><strong style="text-align:right">${v}</strong></div>`).join("")}
       <button type="button" onclick="proceedToCheckout(${total}, { module: state.moduleId })" style="margin-top:8px;background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">Proceed to checkout →</button>
     </aside>
   </div>`;
@@ -1089,6 +1106,8 @@ function flyerCalc() {
     ];
   }
 
+  breakdownRows = [["Exact price (USD)", `$${totalUSD.toFixed(2)}`], ...breakdownRows];
+
   // Reverse-converted to the site's INR base so money()/checkout stay in
   // sync with fx.USD.rate — displays and charges exactly totalUSD when the
   // customer's currency is USD.
@@ -1149,25 +1168,32 @@ async function submitInspectionRequest() {
 // ── Bills — Proforma / Service Proposal ─────────────────────────────────────
 
 // Common service items — quick-select presets for Proforma line items.
-// value format: "label|rate" (rate in INR base, editable after selection).
+// value format: "label|rate|currency" (rate is in that item's own currency).
 const PROFORMA_ITEM_PRESETS = [
-  ["— Select a common item, or type your own below —", ""],
-  ["Print & Post — A4 B&W, Speed Post|180"],
-  ["Print & Post — A4 Color, Speed Post|220"],
-  ["Registered Mail — up to 2 pages|350"],
-  ["Greeting Card — Standard, with delivery|420"],
-  ["Newspaper Ad — Obituary, B&W (per booking)|2500"],
-  ["Bulk Mail — per recipient (CSV batch)|60"],
-  ["Flyer Distribution — Given Address, Registered (USD, per envelope)|3"],
-  ["Flyer Distribution — Given Address, Non-registered (USD, per envelope)|1.5"],
-  ["Flyer Distribution — Bulk/Random, 1000 copies B&W A4 (USD, setup)|89"],
-  ["Business Inspection / Discussion — flat fee (USD, from)|150"],
-].map(row => Array.isArray(row) && row.length === 1 ? row[0].split("|") : row);
+  ["— Select a common item, or type your own below —", "", "INR"],
+  ["Print & Post — A4 B&W, Speed Post", "180", "INR"],
+  ["Print & Post — A4 Color, Speed Post", "220", "INR"],
+  ["Registered Mail — up to 2 pages", "350", "INR"],
+  ["Greeting Card — Standard, with delivery", "420", "INR"],
+  ["Newspaper Ad — Obituary, B&W (per booking)", "2500", "INR"],
+  ["Bulk Mail — per recipient (CSV batch)", "60", "INR"],
+  ["Flyer Distribution — Given Address, Registered (per envelope)", "3", "USD"],
+  ["Flyer Distribution — Given Address, Non-registered (per envelope)", "1.5", "USD"],
+  ["Flyer Distribution — Bulk/Random, 1000 copies B&W A4 (setup)", "89", "USD"],
+  ["Business Inspection / Discussion — flat fee (from)", "150", "USD"],
+];
 
 function proformaItemPreset(i) {
   return `<select onchange="applyProformaPreset(${i}, this)"
       style="border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--surface);color:var(--muted);font-size:0.78rem;min-height:32px">
-      ${PROFORMA_ITEM_PRESETS.map(([label, rate]) => `<option value="${esc(rate)}" data-label="${esc(label)}">${esc(label)}</option>`).join("")}
+      ${PROFORMA_ITEM_PRESETS.map(([label, rate, cur]) => `<option value="${esc(rate)}" data-label="${esc(label)}" data-currency="${esc(cur)}">${esc(label)}</option>`).join("")}
+    </select>`;
+}
+
+function proformaCurrencyMini(name, selected = "INR") {
+  return `<select name="${name}"
+      style="border:1px solid var(--line);border-radius:6px;padding:7px 6px;background:var(--surface);color:var(--ink);min-height:36px;font-size:0.8rem">
+      ${Object.keys(fx).map(c => `<option${c === selected ? " selected" : ""}>${esc(c)}</option>`).join("")}
     </select>`;
 }
 
@@ -1188,17 +1214,18 @@ function proformaPanel() {
       <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:10px">
         <strong>Line Items</strong>
         <p style="margin:0;color:var(--muted);font-size:0.8rem">Fill as many rows as needed, leave the rest blank.</p>
-        <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px;color:var(--muted);font-size:0.72rem">
-          <span>What is this for</span><span>How many</span><span>Price each</span>
+        <div style="display:grid;grid-template-columns:2fr 0.5fr 0.6fr 0.5fr;gap:8px;color:var(--muted);font-size:0.72rem">
+          <span>What is this for</span><span>How many</span><span>Price each</span><span>Currency</span>
         </div>
         ${[1, 2, 3, 4, 5].map(i => `
           <div style="display:grid;gap:6px;padding-bottom:10px;border-bottom:1px dashed var(--line)">
             <span style="color:var(--muted);font-size:0.72rem">Quick-select — fills the row below, still editable</span>
             ${proformaItemPreset(i)}
-            <div style="display:grid;grid-template-columns:2fr 0.6fr 0.8fr;gap:8px">
+            <div style="display:grid;grid-template-columns:2fr 0.5fr 0.6fr 0.5fr;gap:8px">
               ${textField(`item${i}_desc`, "", "Item / service description")}
               ${numField(`item${i}_qty`, "", draftValue(`item${i}_qty`, ""), 0)}
               ${numField(`item${i}_rate`, "", draftValue(`item${i}_rate`, ""), 0)}
+              ${proformaCurrencyMini(`item${i}_currency`, draftValue(`item${i}_currency`, "INR"))}
             </div>
           </div>`).join("")}
       </div>
@@ -1208,7 +1235,7 @@ function proformaPanel() {
         ${textField("validUntil", "Valid Until", "e.g. 15 days from issue")}
       </div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:12px;margin-top:-6px">
-        <span style="color:var(--muted);font-size:0.72rem">All rates and totals on the PDF are converted to this currency</span>
+        <span style="color:var(--muted);font-size:0.72rem">Final total is converted to this currency using live exchange rates — line items can each be in a different currency above</span>
         <span style="color:var(--muted);font-size:0.72rem">How long this proposal remains valid — free text, e.g. "15 days" or a date</span>
       </div>
 
@@ -1223,14 +1250,18 @@ function proformaPanel() {
 }
 
 function applyProformaPreset(i, selectEl) {
-  const label = selectEl.selectedOptions[0]?.dataset.label || "";
+  const opt = selectEl.selectedOptions[0];
+  const label = opt?.dataset.label || "";
   const rate = selectEl.value;
+  const currency = opt?.dataset.currency || "INR";
   if (!label) return;
   const form = selectEl.closest("form") || document;
   const descField = form.querySelector(`[name="item${i}_desc"]`);
   const rateField = form.querySelector(`[name="item${i}_rate"]`);
+  const currencyField = form.querySelector(`[name="item${i}_currency"]`);
   if (descField) descField.value = label;
   if (rateField && rate) rateField.value = rate;
+  if (currencyField) currencyField.value = currency;
 }
 
 async function generateProforma() {
@@ -1243,7 +1274,7 @@ async function generateProforma() {
   }
 
   const items = [1, 2, 3, 4, 5]
-    .map(i => ({ description: d[`item${i}_desc`], qty: d[`item${i}_qty`], rate: d[`item${i}_rate`] }))
+    .map(i => ({ description: d[`item${i}_desc`], qty: d[`item${i}_qty`], rate: d[`item${i}_rate`], currency: d[`item${i}_currency`] || "INR" }))
     .filter(it => it.description && it.description.trim());
 
   if (!items.length) {

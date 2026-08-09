@@ -1,6 +1,7 @@
 // pages/api/paypal/create-order.js
 import { prisma } from "../../../lib/prisma";
 import { createOrder as createPaypalOrder } from "../../../lib/paypal";
+import { getFxRates } from "../../../lib/fxRates";
 
 export const config = {
   api: {
@@ -9,14 +10,6 @@ export const config = {
     },
   },
 };
-
-// NOTE: PayPal settlement for an India-based business account is USD-only —
-// INR cross-border settlement isn't supported. This is a fixed fallback
-// conversion rate; swap for a live FX API (e.g. exchangerate.host) if precise
-// pricing matters. Update this constant periodically in the meantime.
-// Aligned with public/client.js's fx.USD.rate (0.012) so a price shown on
-// the site and the amount actually captured via PayPal always match exactly.
-const INR_TO_USD_RATE = 0.012;
 
 function makePublicId() {
   const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -74,7 +67,8 @@ export default async function handler(req, res) {
     }
 
     const publicId = makePublicId();
-    const usdAmount = Math.max(amount * INR_TO_USD_RATE, 0.5); // PayPal minimum is ~$0.01, keep a sane floor
+    const fxRates = await getFxRates();
+    const usdAmount = Math.max(amount * fxRates.USD.rate, 0.5); // PayPal minimum is ~$0.01, keep a sane floor
 
     const dbOrder = await prisma.customerOrder.create({
       data: {
