@@ -78,7 +78,7 @@ async function notify(record, customer, location, purpose, preferredDates) {
   });
 
   await sendEmail({
-    to: "postman@khagatara.com",
+    to: "info@khagatara.com",
     toName: "Postman Admin",
     subject: `New inspection request — ${record.publicId}`,
     html: `
