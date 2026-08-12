@@ -164,6 +164,16 @@ async function loadLiveFxRates() {
 }
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", loadLiveFxRates);
+  window.addEventListener("DOMContentLoaded", () => {
+    // TEMPORARY debug badge — shows actual viewport size on-screen.
+    // Remove once the overflow issue is confirmed fixed.
+    const badge = document.createElement("div");
+    badge.style.cssText = "position:fixed;top:8px;left:8px;z-index:99999;background:#000;color:#0f0;font:12px monospace;padding:4px 8px;border-radius:4px;pointer-events:none";
+    const update = () => { badge.textContent = `viewport: ${window.innerWidth}×${window.innerHeight}`; };
+    update();
+    window.addEventListener("resize", update);
+    document.body.appendChild(badge);
+  });
 }
 
 const state = { moduleId: "print-post", childIndex: 3, currency: "INR" };
