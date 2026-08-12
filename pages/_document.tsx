@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         {/* Global stylesheets — loaded here, not in next/head */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="stylesheet" href="/styles.css" />
+        <link rel="stylesheet" href="/styles.css?v=20260812" />
         <link rel="stylesheet" href="/fonts.css" />
         <link
           rel="stylesheet"
