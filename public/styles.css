@@ -425,6 +425,8 @@ input[type="range"] {
 .panel {
   padding: 20px;
   min-height: 600px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .panel h3 {
