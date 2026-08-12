@@ -508,7 +508,7 @@ input[type="range"] {
   line-height: 1.6;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1300px) {
   .app-shell {
     grid-template-columns: 1fr;
   }

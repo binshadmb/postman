@@ -164,16 +164,6 @@ async function loadLiveFxRates() {
 }
 if (typeof window !== "undefined") {
   window.addEventListener("DOMContentLoaded", loadLiveFxRates);
-  window.addEventListener("DOMContentLoaded", () => {
-    // TEMPORARY debug badge — shows actual viewport size on-screen.
-    // Remove once the overflow issue is confirmed fixed.
-    const badge = document.createElement("div");
-    badge.style.cssText = "position:fixed;top:8px;left:8px;z-index:99999;background:#000;color:#0f0;font:12px monospace;padding:4px 8px;border-radius:4px;pointer-events:none";
-    const update = () => { badge.textContent = `viewport: ${window.innerWidth}×${window.innerHeight}`; };
-    update();
-    window.addEventListener("resize", update);
-    document.body.appendChild(badge);
-  });
 }
 
 const state = { moduleId: "print-post", childIndex: 3, currency: "INR" };
@@ -480,7 +470,7 @@ function currencyField() {
 }
 
 function calcShell(title, fields, total, rows) {
-  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:18px;max-width:100%;overflow-x:auto">
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;max-width:100%;overflow-x:auto">
     <form id="calcForm" style="display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:14px;min-width:0">
       ${fields}
     </form>
