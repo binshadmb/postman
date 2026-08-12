@@ -477,7 +477,7 @@ function calcShell(title, fields, total, rows) {
     <aside style="align-self:start;display:grid;gap:14px;padding:18px;padding-bottom:80px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);min-width:0;overflow-wrap:break-word">
       <span style="color:var(--muted);font-size:0.85rem">${title}</span>
       <strong style="font-size:2.6rem;font-weight:800">${money(total)}</strong>
-      ${(rows || []).map(([k, v]) => `<div style="display:flex;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid var(--line)"><span>${k}</span><strong style="text-align:right">${v}</strong></div>`).join("")}
+      ${(rows || []).map(([k, v]) => `<div style="display:flex;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid var(--line)"><span style="min-width:0">${k}</span><strong style="text-align:right;min-width:0;word-break:break-word">${v}</strong></div>`).join("")}
       <button type="button" onclick="proceedToCheckout(${total}, { module: state.moduleId })" style="margin-top:8px;background:var(--red);color:#fff;border:none;border-radius:7px;padding:10px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">Proceed to checkout →</button>
     </aside>
   </div>`;
