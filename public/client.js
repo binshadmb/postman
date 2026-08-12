@@ -2002,10 +2002,6 @@ document.addEventListener("input", (e) => {
     captureCurrentPanelData();
     renderPanel();
   }
-  if (e.target.id === "fontSize") {
-    document.documentElement.style.setProperty("--base-font-size", `${e.target.value}px`);
-    localStorage.setItem("postmanFontSize", e.target.value);
-  }
 });
 
 document.addEventListener("change", (e) => {
@@ -2042,12 +2038,31 @@ function initChildTabsArrows() {
 
 // ── Init ───────────────────────────────────────────────────────────────────
 
+const FONT_MIN = 12.5, FONT_MAX = 18, FONT_STEP = 0.5;
+
 const savedTheme = localStorage.getItem("postmanTheme") || "system";
-const savedFont  = localStorage.getItem("postmanFontSize") || "15";
+const savedFont  = parseFloat(localStorage.getItem("postmanFontSize")) || 15;
 $("themeSelect").value = savedTheme;
-$("fontSize").value    = savedFont;
 document.documentElement.dataset.theme = savedTheme === "system" ? "" : savedTheme;
 document.documentElement.style.setProperty("--base-font-size", `${savedFont}px`);
+
+function adjustFont(delta) {
+  const current = parseFloat(document.documentElement.style.getPropertyValue("--base-font-size")) || 15;
+  const next = Math.min(FONT_MAX, Math.max(FONT_MIN, current + delta));
+  document.documentElement.style.setProperty("--base-font-size", `${next}px`);
+  localStorage.setItem("postmanFontSize", String(next));
+}
+$("fontDecrease").addEventListener("click", () => adjustFont(-FONT_STEP));
+$("fontIncrease").addEventListener("click", () => adjustFont(FONT_STEP));
+
+const landingViewEl = $("landingView");
+const appShellEl = $("appShell");
+$("getStartedBtn").addEventListener("click", () => {
+  landingViewEl.hidden = true;
+  appShellEl.style.display = "grid";
+  homeView.hidden = false;
+  moduleView.hidden = true;
+});
 
 renderMotherTabs();
 loadLiveConfig();

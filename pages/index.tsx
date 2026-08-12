@@ -45,7 +45,75 @@ export default function Home() {
         />
       </Head>
 
-      <div className="app-shell">
+      {/* ── Landing (static, separate from the functional app) ──────────── */}
+      <section id="landingView" className="landing-view">
+        <section className="hero-new" id="heroSlider">
+          <div className="hero-badge" id="heroBadge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
+          <h1 id="heroTitle">Send Documents in India<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
+          <p className="hero-subtitle" id="heroSubtitle">Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.</p>
+          <div className="hero-dots" id="heroDots" aria-hidden="true" />
+        </section>
+
+        <section className="hero-steps">
+          <div className="hero-step-card blue">
+            <div className="hero-badge-num">01</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-file-arrow-up"></i></div>
+            <h2>Upload<br />your document</h2>
+            <span className="hero-tag">PDF, JPG, PNG</span>
+          </div>
+          <div className="hero-arrow blue"><i className="fa-solid fa-arrow-right"></i></div>
+          <div className="hero-step-card green">
+            <div className="hero-badge-num">02</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-sliders"></i></div>
+            <h2>Choose<br />print settings</h2>
+            <span className="hero-tag">Copies · Paper · Quality</span>
+          </div>
+          <div className="hero-arrow green"><i className="fa-solid fa-arrow-right"></i></div>
+          <div className="hero-step-card orange">
+            <div className="hero-badge-num">03</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-location-dot"></i></div>
+            <h2>Enter<br />delivery address</h2>
+            <span className="hero-tag">Across India</span>
+          </div>
+          <div className="hero-arrow orange"><i className="fa-solid fa-arrow-right"></i></div>
+          <div className="hero-step-card purple">
+            <div className="hero-badge-num">04</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-print"></i></div>
+            <h2>We print,<br />dispatch &amp; notify</h2>
+            <span className="hero-tag">SMS / Email update</span>
+          </div>
+        </section>
+
+        <section className="hero-features">
+          <div className="hero-feature">
+            <div className="hero-ficon blue"><i className="fa-solid fa-indian-rupee-sign"></i></div>
+            <div><span className="hero-ftitle blue">Economical</span><p>Best prices always</p></div>
+          </div>
+          <div className="hero-feature">
+            <div className="hero-ficon green"><i className="fa-solid fa-shield-halved"></i></div>
+            <div><span className="hero-ftitle green">Secure</span><p>Your documents are safe</p></div>
+          </div>
+          <div className="hero-feature">
+            <div className="hero-ficon orange"><i className="fa-solid fa-clock"></i></div>
+            <div><span className="hero-ftitle orange">Fast service</span><p>Quick printing &amp; delivery</p></div>
+          </div>
+          <div className="hero-feature">
+            <div className="hero-ficon purple"><i className="fa-solid fa-location-dot"></i></div>
+            <div><span className="hero-ftitle purple">All India reach</span><p>Delivering to every pincode</p></div>
+          </div>
+        </section>
+
+        <section className="hero-closing">
+          <i className="fa-solid fa-file-lines"></i>
+          <p>Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.</p>
+          <p className="hero-closing-strong">Simple steps. Trusted service. Right to your doorstep.</p>
+          <div className="quick-actions" style={{marginTop: "18px", justifyContent: "center"}}>
+            <button className="primary-action" type="button" id="getStartedBtn">Get Started →</button>
+          </div>
+        </section>
+      </section>
+
+      <div className="app-shell" id="appShell" style={{display: "none"}}>
         {/* ── Sidebar ──────────────────────────────────────────── */}
         <aside className="sidebar">
           <a className="brand" href="#home" aria-label="Postman Khagatara home">
@@ -77,85 +145,25 @@ export default function Home() {
             </label>
             <label>
               Font
-              <input id="fontSize" type="range" min="12.5" max="18" step="0.5" defaultValue="15" />
+              <span className="font-adjust">
+                <button type="button" id="fontDecrease" aria-label="Decrease font size">A−</button>
+                <button type="button" id="fontIncrease" aria-label="Increase font size">A+</button>
+              </span>
             </label>
             <button className="account-button" type="button" id="accountBtn">Account</button>
           </header>
 
-          {/* Home view */}
+          {/* Home view — shown inside the app after Get Started */}
           <section id="homeView" className="home-view">
-            {/* ── Hero ── */}
-            <section className="hero-new" id="heroSlider">
-              <div className="hero-badge" id="heroBadge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
-              <h1 id="heroTitle">Send Documents in India<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
-              <p className="hero-subtitle" id="heroSubtitle">Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.</p>
-              <div className="hero-dots" id="heroDots" aria-hidden="true" />
-            </section>
-
-            {/* ── Steps ── */}
-            <section className="hero-steps">
-              <div className="hero-step-card blue">
-                <div className="hero-badge-num">01</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-file-arrow-up"></i></div>
-                <h2>Upload<br />your document</h2>
-                <span className="hero-tag">PDF, JPG, PNG</span>
-              </div>
-              <div className="hero-arrow blue"><i className="fa-solid fa-arrow-right"></i></div>
-              <div className="hero-step-card green">
-                <div className="hero-badge-num">02</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-sliders"></i></div>
-                <h2>Choose<br />print settings</h2>
-                <span className="hero-tag">Copies · Paper · Quality</span>
-              </div>
-              <div className="hero-arrow green"><i className="fa-solid fa-arrow-right"></i></div>
-              <div className="hero-step-card orange">
-                <div className="hero-badge-num">03</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-location-dot"></i></div>
-                <h2>Enter<br />delivery address</h2>
-                <span className="hero-tag">Across India</span>
-              </div>
-              <div className="hero-arrow orange"><i className="fa-solid fa-arrow-right"></i></div>
-              <div className="hero-step-card purple">
-                <div className="hero-badge-num">04</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-print"></i></div>
-                <h2>We print,<br />dispatch &amp; notify</h2>
-                <span className="hero-tag">SMS / Email update</span>
-              </div>
-            </section>
-
-            {/* ── Feature strip ── */}
-            <section className="hero-features">
-              <div className="hero-feature">
-                <div className="hero-ficon blue"><i className="fa-solid fa-indian-rupee-sign"></i></div>
-                <div><span className="hero-ftitle blue">Economical</span><p>Best prices always</p></div>
-              </div>
-              <div className="hero-feature">
-                <div className="hero-ficon green"><i className="fa-solid fa-shield-halved"></i></div>
-                <div><span className="hero-ftitle green">Secure</span><p>Your documents are safe</p></div>
-              </div>
-              <div className="hero-feature">
-                <div className="hero-ficon orange"><i className="fa-solid fa-clock"></i></div>
-                <div><span className="hero-ftitle orange">Fast service</span><p>Quick printing &amp; delivery</p></div>
-              </div>
-              <div className="hero-feature">
-                <div className="hero-ficon purple"><i className="fa-solid fa-location-dot"></i></div>
-                <div><span className="hero-ftitle purple">All India reach</span><p>Delivering to every pincode</p></div>
-              </div>
-            </section>
-
-            {/* ── Closing ── */}
             <section className="hero-closing">
               <i className="fa-solid fa-file-lines"></i>
-              <p>Documents, forms, certificates or anything important — we print and send it to your loved ones anywhere in India, economically.</p>
-              <p className="hero-closing-strong">Simple steps. Trusted service. Right to your doorstep.</p>
+              <p className="hero-closing-strong">What would you like to do?</p>
               <div className="quick-actions" style={{marginTop: "18px", justifyContent: "center"}}>
                 <button className="primary-action" type="button" data-open="print-post">New print order</button>
                 <button className="secondary-action" type="button" data-open="track">Track order</button>
                 <button className="secondary-action" type="button" data-open="cards">Send a card</button>
               </div>
             </section>
-
-            {/* Module cards removed */}
           </section>
 
           {/* Module view */}

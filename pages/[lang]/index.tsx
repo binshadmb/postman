@@ -60,7 +60,75 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
         />
       </Head>
 
-      <div className="app-shell" lang={lang} dir={dir}>
+      {/* ── Landing (static, separate from the functional app) ──────────── */}
+      <section id="landingView" className="landing-view" lang={lang} dir={dir}>
+        <section className="hero-new" id="heroSlider">
+          <div className="hero-badge" id="heroBadge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
+          <h1 id="heroTitle">{t.home?.headline}<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
+          <p className="hero-subtitle" id="heroSubtitle">{t.home?.subheadline}</p>
+          <div className="hero-dots" id="heroDots" aria-hidden="true" />
+        </section>
+
+        <section className="hero-steps">
+          <div className="hero-step-card blue">
+            <div className="hero-badge-num">01</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-file-arrow-up"></i></div>
+            <h2>{t.home?.step1_title}</h2>
+            <span className="hero-tag">{t.home?.step1_tag}</span>
+          </div>
+          <div className="hero-arrow blue"><i className="fa-solid fa-arrow-right"></i></div>
+          <div className="hero-step-card green">
+            <div className="hero-badge-num">02</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-sliders"></i></div>
+            <h2>{t.home?.step2_title}</h2>
+            <span className="hero-tag">{t.home?.step2_tag}</span>
+          </div>
+          <div className="hero-arrow green"><i className="fa-solid fa-arrow-right"></i></div>
+          <div className="hero-step-card orange">
+            <div className="hero-badge-num">03</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-location-dot"></i></div>
+            <h2>{t.home?.step3_title}</h2>
+            <span className="hero-tag">{t.home?.step3_tag}</span>
+          </div>
+          <div className="hero-arrow orange"><i className="fa-solid fa-arrow-right"></i></div>
+          <div className="hero-step-card purple">
+            <div className="hero-badge-num">04</div>
+            <div className="hero-step-icon"><i className="fa-solid fa-print"></i></div>
+            <h2>{t.home?.step4_title}</h2>
+            <span className="hero-tag">{t.home?.step4_tag}</span>
+          </div>
+        </section>
+
+        <section className="hero-features">
+          <div className="hero-feature">
+            <div className="hero-ficon blue"><i className="fa-solid fa-indian-rupee-sign"></i></div>
+            <div><span className="hero-ftitle blue">{t.home?.feature_economical_title}</span><p>{t.home?.feature_economical_desc}</p></div>
+          </div>
+          <div className="hero-feature">
+            <div className="hero-ficon green"><i className="fa-solid fa-shield-halved"></i></div>
+            <div><span className="hero-ftitle green">{t.home?.feature_secure_title}</span><p>{t.home?.feature_secure_desc}</p></div>
+          </div>
+          <div className="hero-feature">
+            <div className="hero-ficon orange"><i className="fa-solid fa-clock"></i></div>
+            <div><span className="hero-ftitle orange">{t.home?.feature_fast_title}</span><p>{t.home?.feature_fast_desc}</p></div>
+          </div>
+          <div className="hero-feature">
+            <div className="hero-ficon purple"><i className="fa-solid fa-location-dot"></i></div>
+            <div><span className="hero-ftitle purple">{t.home?.feature_reach_title}</span><p>{t.home?.feature_reach_desc}</p></div>
+          </div>
+        </section>
+
+        <section className="hero-closing">
+          <i className="fa-solid fa-file-lines"></i>
+          <p>{t.home?.closing_line}</p>
+          <p className="hero-closing-strong">{t.home?.closing_strong}</p>
+          <div className="quick-actions" style={{marginTop: "18px", justifyContent: "center"}}>
+            <button className="primary-action" type="button" id="getStartedBtn">{t.home?.cta_upload || "Get Started"} →</button>
+          </div>
+        </section>
+      </section>
+
+      <div className="app-shell" id="appShell" style={{display: "none"}} lang={lang} dir={dir}>
         <aside className="sidebar">
           <a className="brand" href={`/${lang}`} aria-label="Postman Khagatara home">
             <span className="brand-mark">PK</span>
@@ -89,76 +157,18 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
             </label>
             <label>
               Font
-              <input id="fontSize" type="range" min="12.5" max="18" step="0.5" defaultValue="15" />
+              <span className="font-adjust">
+                <button type="button" id="fontDecrease" aria-label="Decrease font size">A−</button>
+                <button type="button" id="fontIncrease" aria-label="Increase font size">A+</button>
+              </span>
             </label>
             <button className="account-button" type="button" id="accountBtn">{t.nav?.account}</button>
             <LangSwitcher currentLang={lang} />
           </header>
 
           <section id="homeView" className="home-view">
-            {/* ── Hero ── */}
-            <section className="hero-new" id="heroSlider">
-              <div className="hero-badge" id="heroBadge"><i className="fa-solid fa-file-lines"></i> Document Service</div>
-              <h1 id="heroTitle">{t.home?.headline}<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
-              <p className="hero-subtitle" id="heroSubtitle">{t.home?.subheadline}</p>
-              <div className="hero-dots" id="heroDots" aria-hidden="true" />
-            </section>
-
-            {/* ── Steps ── */}
-            <section className="hero-steps">
-              <div className="hero-step-card blue">
-                <div className="hero-badge-num">01</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-file-arrow-up"></i></div>
-                <h2>{t.home?.step1_title}</h2>
-                <span className="hero-tag">{t.home?.step1_tag}</span>
-              </div>
-              <div className="hero-arrow blue"><i className="fa-solid fa-arrow-right"></i></div>
-              <div className="hero-step-card green">
-                <div className="hero-badge-num">02</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-sliders"></i></div>
-                <h2>{t.home?.step2_title}</h2>
-                <span className="hero-tag">{t.home?.step2_tag}</span>
-              </div>
-              <div className="hero-arrow green"><i className="fa-solid fa-arrow-right"></i></div>
-              <div className="hero-step-card orange">
-                <div className="hero-badge-num">03</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-location-dot"></i></div>
-                <h2>{t.home?.step3_title}</h2>
-                <span className="hero-tag">{t.home?.step3_tag}</span>
-              </div>
-              <div className="hero-arrow orange"><i className="fa-solid fa-arrow-right"></i></div>
-              <div className="hero-step-card purple">
-                <div className="hero-badge-num">04</div>
-                <div className="hero-step-icon"><i className="fa-solid fa-print"></i></div>
-                <h2>{t.home?.step4_title}</h2>
-                <span className="hero-tag">{t.home?.step4_tag}</span>
-              </div>
-            </section>
-
-            {/* ── Feature strip ── */}
-            <section className="hero-features">
-              <div className="hero-feature">
-                <div className="hero-ficon blue"><i className="fa-solid fa-indian-rupee-sign"></i></div>
-                <div><span className="hero-ftitle blue">{t.home?.feature_economical_title}</span><p>{t.home?.feature_economical_desc}</p></div>
-              </div>
-              <div className="hero-feature">
-                <div className="hero-ficon green"><i className="fa-solid fa-shield-halved"></i></div>
-                <div><span className="hero-ftitle green">{t.home?.feature_secure_title}</span><p>{t.home?.feature_secure_desc}</p></div>
-              </div>
-              <div className="hero-feature">
-                <div className="hero-ficon orange"><i className="fa-solid fa-clock"></i></div>
-                <div><span className="hero-ftitle orange">{t.home?.feature_fast_title}</span><p>{t.home?.feature_fast_desc}</p></div>
-              </div>
-              <div className="hero-feature">
-                <div className="hero-ficon purple"><i className="fa-solid fa-location-dot"></i></div>
-                <div><span className="hero-ftitle purple">{t.home?.feature_reach_title}</span><p>{t.home?.feature_reach_desc}</p></div>
-              </div>
-            </section>
-
-            {/* ── Closing ── */}
             <section className="hero-closing">
               <i className="fa-solid fa-file-lines"></i>
-              <p>{t.home?.closing_line}</p>
               <p className="hero-closing-strong">{t.home?.closing_strong}</p>
               <div className="quick-actions" style={{marginTop: "18px", justifyContent: "center"}}>
                 <button className="primary-action" type="button" data-open="print-post">{t.home?.cta_upload}</button>
@@ -167,6 +177,7 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
               </div>
             </section>
           </section>
+
 
           <section id="moduleView" className="module-view" hidden>
             <div className="module-head">
