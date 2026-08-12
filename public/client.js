@@ -474,7 +474,7 @@ function calcShell(title, fields, total, rows) {
     <form id="calcForm" style="display:grid;grid-template-columns:repeat(2,minmax(140px,1fr));gap:14px;min-width:0">
       ${fields}
     </form>
-    <aside style="align-self:start;display:grid;gap:14px;padding:18px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);min-width:0;overflow-wrap:break-word">
+    <aside style="align-self:start;display:grid;gap:14px;padding:18px;padding-bottom:80px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);min-width:0;overflow-wrap:break-word">
       <span style="color:var(--muted);font-size:0.85rem">${title}</span>
       <strong style="font-size:2.6rem;font-weight:800">${money(total)}</strong>
       ${(rows || []).map(([k, v]) => `<div style="display:flex;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid var(--line)"><span>${k}</span><strong style="text-align:right">${v}</strong></div>`).join("")}
@@ -1057,6 +1057,7 @@ function flyerDistributionPanel() {
           <p style="margin:0;color:var(--muted);font-size:0.85rem">Distributed to public spots — apartment/flat entrances, IT park entrances, college gates, bus stops, etc. Minimum order: 1,000 copies.</p>
           ${numField("qty", "Quantity (minimum 1,000)", d.qty, 1000)}
           ${textField("area", "City / Area for distribution", "e.g. Kochi, Trivandrum")}
+          ${opt("audienceType", "Target Audience / Distribution Spot", ["Mixed / General Public", "Schools", "Colleges", "IT Parks / Firms", "Apartments / Flats", "Bus Stops", "Markets / Commercial Areas"], d.audienceType || "Mixed / General Public")}
           <p style="margin:0;color:var(--muted);font-size:0.8rem">Distribution continues in that area until the ordered quantity is exhausted.</p>
           <p style="margin:0;color:var(--muted);font-size:0.8rem"><strong>Proof provided:</strong> a WhatsApp video of the printed stock, and a short site video during distribution. No individual delivery tracking is available for this option.</p>
         </div>
@@ -1078,9 +1079,14 @@ const FLYER_BULK_PRICES = {
 };
 
 function flyerCalc() {
-  const d = { size: "A4", color: "B&W", sides: "Single-sided", distType: "Given Address", mailType: "Registered", envelopes: 1, qty: 1000, ...activeDraft(), ...currentFormData() };
+  const d = { size: "A4", color: "B&W", sides: "Single-sided", distType: "Given Address", mailType: "Registered", envelopes: 1, qty: 1000, currency: "USD", ...activeDraft(), ...currentFormData() };
   const isGiven = d.distType === "Given Address";
   const isDouble = d.sides === "Double-sided";
+
+  // This module is priced in USD natively — default the display currency to
+  // USD on first open (site-wide default is INR), while still letting the
+  // customer switch it via the dropdown below.
+  state.currency = d.currency || "USD";
 
   let totalUSD, breakdownRows;
 
@@ -1102,6 +1108,7 @@ function flyerCalc() {
     breakdownRows = [
       ["Setup fee (once)", `$${price.setup}`],
       ["Per copy", `$${perCopy.toFixed(2)} × ${qty}`],
+      ["Target audience", d.audienceType || "Mixed / General Public"],
       ["Proof", "WhatsApp + site video, no individual tracking"],
     ];
   }
@@ -1113,7 +1120,14 @@ function flyerCalc() {
   // customer's currency is USD.
   const totalINR = Math.round(totalUSD / fx.USD.rate);
 
+  const currencyField = `<label style="display:grid;gap:4px;color:var(--muted);grid-column:1 / -1;max-width:220px">Display Currency
+    <select name="currency" onchange="captureCurrentPanelData(); renderPanel()"
+      style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px">
+      ${Object.keys(fx).map(c => `<option${c === state.currency ? " selected" : ""}>${esc(c)}</option>`).join("")}
+    </select></label>`;
+
   return calcShell("Estimated Flyer Distribution Price", [
+    currencyField,
     `<p style="grid-column:1 / -1;margin:0;color:var(--muted);font-size:0.85rem">${esc(FLYER_DISCLAIMER)}</p>`,
   ].join(""), totalINR, breakdownRows);
 }
