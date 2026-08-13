@@ -67,6 +67,7 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
           <h1 id="heroTitle">{t.home?.headline}<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
           <p className="hero-subtitle" id="heroSubtitle">{t.home?.subheadline}</p>
           <div className="hero-dots" id="heroDots" aria-hidden="true" />
+          <button className="primary-action" type="button" id="getStartedBtnTop" style={{marginTop: "20px"}}>{t.home?.cta_upload || "Get Started"} →</button>
         </section>
 
         <section className="hero-steps">

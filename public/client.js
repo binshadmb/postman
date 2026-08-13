@@ -2057,12 +2057,15 @@ $("fontIncrease").addEventListener("click", () => adjustFont(FONT_STEP));
 
 const landingViewEl = $("landingView");
 const appShellEl = $("appShell");
-$("getStartedBtn").addEventListener("click", () => {
+function revealApp() {
   landingViewEl.hidden = true;
   appShellEl.style.display = "grid";
   homeView.hidden = false;
   moduleView.hidden = true;
-});
+}
+$("getStartedBtn").addEventListener("click", revealApp);
+const getStartedBtnTop = document.getElementById("getStartedBtnTop");
+if (getStartedBtnTop) getStartedBtnTop.addEventListener("click", revealApp);
 
 renderMotherTabs();
 loadLiveConfig();
