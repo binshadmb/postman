@@ -52,7 +52,7 @@ export default function Home() {
           <h1 id="heroTitle">Send Documents in India<br /><span className="hero-accent" id="heroAccent">— Economically</span></h1>
           <p className="hero-subtitle" id="heroSubtitle">Simple steps to print and send your important documents across India at the most <strong>economical</strong> cost.</p>
           <div className="hero-dots" id="heroDots" aria-hidden="true" />
-          <button className="primary-action" type="button" id="getStartedBtnTop" style={{marginTop: "20px"}}>Get Started →</button>
+          <button className="primary-action hero-cta-right" type="button" id="getStartedBtnTop">Get Started →</button>
         </section>
 
         <section className="hero-steps">

@@ -752,6 +752,7 @@ input[type="range"] {
   position: absolute;
   inset: -10% -20%;
   z-index: -2;
+  border-radius: inherit;
   background:
     radial-gradient(320px 320px at 12% 18%, var(--blob-1), transparent 70%),
     radial-gradient(280px 280px at 88% 12%, var(--blob-2), transparent 70%),
@@ -759,6 +760,22 @@ input[type="range"] {
     radial-gradient(260px 260px at 8% 88%, var(--blob-4), transparent 70%);
   filter: blur(10px);
   animation: heroDrift 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.hero-cta-right {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+@media (max-width: 720px) {
+  .hero-cta-right {
+    position: static;
+    transform: none;
+    margin-top: 20px;
+  }
 }
 
 .hero-new::after {
