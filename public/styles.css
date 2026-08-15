@@ -773,11 +773,11 @@ input[type="range"] {
 .hero-cta-right {
   position: absolute;
   right: 24px;
-  top: 50%;
+  top: 78%;
   transform: translateY(-50%);
   z-index: 2;
 }
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .hero-cta-right {
     position: static;
     transform: none;
