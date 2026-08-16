@@ -428,9 +428,9 @@ function opt(name, label, values, selected) {
     </select></label>`;
 }
 
-function numField(name, label, value, min) {
+function numField(name, label, value, min, placeholder) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
-    <input name="${name}" type="number" min="${min || 1}" value="${esc(value)}"
+    <input name="${name}" type="number" min="${min || 1}" value="${esc(value)}" placeholder="${esc(placeholder || "")}"
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px"></label>`;
 }
 
@@ -1237,8 +1237,8 @@ function proformaPanel() {
             ${proformaItemPreset(i)}
             <div style="display:grid;grid-template-columns:2fr 0.5fr 0.6fr 0.5fr;gap:8px">
               ${textField(`item${i}_desc`, "", "Item / service description")}
-              ${numField(`item${i}_qty`, "", draftValue(`item${i}_qty`, ""), 0)}
-              ${numField(`item${i}_rate`, "", draftValue(`item${i}_rate`, ""), 0)}
+              ${numField(`item${i}_qty`, "", draftValue(`item${i}_qty`, ""), 0, "1")}
+              ${numField(`item${i}_rate`, "", draftValue(`item${i}_rate`, ""), 0, "0.00")}
               ${proformaCurrencyMini(`item${i}_currency`, draftValue(`item${i}_currency`, "INR"))}
             </div>
           </div>`).join("")}
