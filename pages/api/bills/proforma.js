@@ -112,7 +112,7 @@ export default async function handler(req, res) {
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `inline; filename="${publicId}.pdf"`);
     res.setHeader("X-Document-Id", doc.publicId);
-    return res.status(200).send(pdfBuffer);
+    return res.status(200).send(Buffer.from(pdfBuffer));
   } catch (err) {
     console.error("Proforma generation error:", err);
     return res.status(500).json({ error: "Failed to generate proforma" });
