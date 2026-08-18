@@ -1043,6 +1043,7 @@ function flyerDistributionPanel() {
   return `<h3 style="margin-top:0">Distribution</h3>
     ${backBtn("flyer-distribution", 1, "Print Options")}
     <div style="display:grid;gap:16px;max-width:640px">
+      ${contactBlock()}
       ${opt("distType", "Distribution Type", ["Given Address", "No Address — Bulk / Random"], d.distType)}
       ${isGiven ? `
         <div style="border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--surface-2);display:grid;gap:12px">
@@ -1738,10 +1739,10 @@ async function buildOrderPayload(amountInInr, orderNotes) {
     return null;
   }
 
-  const operationalModules = ["print-post", "registered-mail", "ads", "bulk", "cards"];
+  const operationalModules = ["print-post", "registered-mail", "ads", "bulk", "cards", "flyer-distribution"];
   if (operationalModules.includes(state.moduleId) && !draft.customerEmail) {
     alert("Please enter the customer email before checkout.");
-    openModule(state.moduleId, state.moduleId === "print-post" ? 2 : 0);
+    openModule(state.moduleId, state.moduleId === "print-post" ? 2 : state.moduleId === "flyer-distribution" ? 2 : 0);
     return null;
   }
 
