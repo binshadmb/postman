@@ -1789,12 +1789,20 @@ async function buildOrderPayload(amountInInr, orderNotes) {
 }
 
 function showPaymentSuccess(orderId, note) {
+  const draft = activeDraft();
+  const isFlyerBulk = state.moduleId === "flyer-distribution" && draft.distType === "No Address — Bulk / Random";
   panelEl.innerHTML = `
     <div style="display:grid;gap:16px;max-width:560px;text-align:center;padding:32px 0">
       <div style="font-size:2.5rem">✅</div>
       <h3 style="margin:0;color:var(--green)">Payment Successful</h3>
       <p style="color:var(--muted);margin:0">Your Order ID: <strong>${orderId}</strong></p>
       <p style="color:var(--muted);margin:0;font-size:0.9rem">${note || "We will print and post your document. A confirmation email will be sent shortly."}</p>
+      ${isFlyerBulk ? `
+        <div style="border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--surface-2);text-align:left">
+          <strong>Proof &amp; updates via WhatsApp</strong>
+          <p style="margin:6px 0 0;color:var(--muted);font-size:0.85rem">Message us on WhatsApp at <a href="https://wa.me/917034101134" target="_blank" style="color:var(--teal);font-weight:600">+91 70341 01134</a> — we'll send the printed-stock video and distribution proof there.</p>
+        </div>
+      ` : ""}
       <button type="button" onclick="openModule('track',0)"
         style="margin:8px auto 0;background:var(--red);color:#fff;border:none;border-radius:7px;padding:11px 24px;cursor:pointer;font-weight:600">
         Track Your Order →
