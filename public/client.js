@@ -1941,6 +1941,69 @@ async function payWithPayPal(payload) {
   }
 }
 
+let cashfreeSdkPromise = null;
+function loadCashfreeSdk() {
+  if (window.Cashfree) return Promise.resolve();
+  if (cashfreeSdkPromise) return cashfreeSdkPromise;
+  cashfreeSdkPromise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("Failed to load Cashfree SDK"));
+    document.head.appendChild(script);
+  });
+  return cashfreeSdkPromise;
+}
+
+async function payWithCashfree(payload) {
+  try {
+    const res = await fetch("/api/cashfree/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Could not start Cashfree payment. Please try again or email postman@khagatara.com.");
+      console.error("Cashfree create-order failed:", data);
+      return;
+    }
+
+    await loadCashfreeSdk();
+    const cashfree = window.Cashfree({ mode: "production" });
+
+    const result = await cashfree.checkout({
+      paymentSessionId: data.paymentSessionId,
+      redirectTarget: "_modal",
+    });
+
+    if (result.error) {
+      console.error("Cashfree checkout error:", result.error);
+      alert("Payment was not completed. Please try again or choose a different payment method.");
+      return;
+    }
+
+    // Payment attempt finished (modal closed) — verify actual status server-side.
+    const verifyRes = await fetch("/api/cashfree/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId: data.orderId }),
+    });
+    const verifyData = await verifyRes.json();
+
+    if (verifyRes.ok && verifyData.verified) {
+      showPaymentSuccess(verifyData.orderId);
+    } else {
+      alert("We could not confirm your payment yet. If you completed payment, please email postman@khagatara.com with order ID: " + data.orderId);
+      console.error("Cashfree verify response:", verifyData);
+    }
+  } catch (err) {
+    console.error("Cashfree checkout error:", err);
+    alert("Something went wrong starting Cashfree payment. Please try again.");
+  }
+}
+
 async function proceedToCheckout(amountInInr, orderNotes) {
   const payload = await buildOrderPayload(amountInInr, orderNotes);
   if (!payload) return;
@@ -1958,11 +2021,16 @@ async function proceedToCheckout(amountInInr, orderNotes) {
           style="background:#003087;color:#fff;border:none;border-radius:7px;padding:12px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">
           Pay with PayPal (International)
         </button>
+        <button type="button" id="payWithCashfreeBtn"
+          style="background:#12A150;color:#fff;border:none;border-radius:7px;padding:12px 18px;cursor:pointer;font-size:0.95rem;font-weight:600">
+          Pay with Cashfree (India &amp; International)
+        </button>
       </div>
     </div>`;
 
   document.getElementById("payWithRazorpayBtn").addEventListener("click", () => payWithRazorpay(payload));
   document.getElementById("payWithPaypalBtn").addEventListener("click", () => payWithPayPal(payload));
+  document.getElementById("payWithCashfreeBtn").addEventListener("click", () => payWithCashfree(payload));
 }
 
 // ── Event listeners ────────────────────────────────────────────────────────
