@@ -19,6 +19,7 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
         <title>Postman — Khagatara</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={t.home?.subheadline} />
+        <meta name="keywords" content="print and post India, document printing India, send documents to India, print documents from abroad, NRI printing service, NRI courier service India, send post to India from abroad, registered mail India, certified mail India, speed post India, greeting cards India, send greeting card to India, newspaper ad placement India, obituary ad booking India, flyer distribution India, leaflet distribution India, bulk mail India, business inspection service India, proforma invoice generator, postman khagatara" />
         <meta property="og:title" content="Postman — Khagatara" />
         <meta property="og:description" content={t.home?.subheadline} />
         <meta property="og:url" content={`https://postman.khagatara.com/${lang}/`} />
