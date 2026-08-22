@@ -436,13 +436,13 @@ function numField(name, label, value, min, placeholder) {
 
 function textField(name, label, placeholder) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
-    <input name="${name}" type="text" dir="auto" placeholder="${esc(placeholder)}" value="${esc(draftValue(name, ""))}"
+    <input name="${name}" type="text" dir="auto" autocomplete="off" placeholder="${esc(placeholder)}" value="${esc(draftValue(name, ""))}"
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);min-height:36px"></label>`;
 }
 
 function textAreaField(name, label, placeholder, rows = 3) {
   return `<label style="display:grid;gap:4px;color:var(--muted)">${label}
-    <textarea name="${name}" rows="${rows}" dir="auto" placeholder="${esc(placeholder)}"
+    <textarea name="${name}" rows="${rows}" dir="auto" autocomplete="off" placeholder="${esc(placeholder)}"
       style="border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface);color:var(--ink);resize:vertical">${esc(draftValue(name, ""))}</textarea></label>`;
 }
 
@@ -471,7 +471,7 @@ function currencyField() {
 
 function calcShell(title, fields, total, rows) {
   return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;width:100%;max-width:calc(100vw - 80px);overflow-x:auto;box-sizing:border-box">
-    <form id="calcForm" style="display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:14px;min-width:0">
+    <form id="calcForm" autocomplete="off" style="display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:14px;min-width:0">
       ${fields}
     </form>
     <aside style="align-self:start;display:grid;gap:14px;padding:18px;padding-bottom:80px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);min-width:0;max-width:100%;box-sizing:border-box;overflow-wrap:break-word">
