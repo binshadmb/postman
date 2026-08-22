@@ -14,10 +14,7 @@ export default function Contact() {
 
       <section style={cardStyle}>
         <strong>WhatsApp / Telegram</strong>
-        <p>
-          {/* TODO: add actual number */}
-          A WhatsApp or Telegram contact number is shared directly with you once your order is confirmed and booked.
-        </p>
+        <p><a href="https://wa.me/917034101134" target="_blank" rel="noopener noreferrer">+91 70341 01134</a></p>
         <p style={{ fontSize: "0.9rem", color: "#6b6558" }}>
           This channel is used only for order-specific communication — approving a design or brochure proof, confirming distribution details, or receiving a live proof/shoot video (for example, Flyer/Leaflet Bulk Distribution). It is not a general support line; for all other queries, please email us.
         </p>
