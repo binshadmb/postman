@@ -1167,6 +1167,7 @@ async function submitInspectionRequest() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Failed to submit request");
+    clearAllDrafts();
     panelEl.innerHTML = `
       <div style="display:grid;gap:16px;max-width:560px;text-align:center;padding:32px 0">
         <div style="font-size:2.5rem">📩</div>
@@ -1323,9 +1324,9 @@ async function generateProforma() {
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
 
-    // Clear this module's draft so old text (including anything sensitive
-    // typed for testing) can't silently resurface in a future document.
-    orderDraft[state.moduleId] = {};
+    // Clear every module's draft — not just this one — so old text can't
+    // silently resurface for the next person on a shared computer.
+    clearAllDrafts();
 
     panelEl.innerHTML = `
       <h3 style="margin-top:0">Proforma Generated</h3>
@@ -1792,9 +1793,14 @@ async function buildOrderPayload(amountInInr, orderNotes) {
   };
 }
 
+function clearAllDrafts() {
+  Object.keys(orderDraft).forEach((key) => { orderDraft[key] = {}; });
+}
+
 function showPaymentSuccess(orderId, note) {
   const draft = activeDraft();
   const isFlyerBulk = state.moduleId === "flyer-distribution" && draft.distType === "No Address — Bulk / Random";
+  clearAllDrafts();
   panelEl.innerHTML = `
     <div style="display:grid;gap:16px;max-width:560px;text-align:center;padding:32px 0">
       <div style="font-size:2.5rem">✅</div>
