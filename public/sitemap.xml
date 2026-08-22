@@ -7,55 +7,6 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Document Print & Post -->
-  <url>
-    <loc>https://postman.khagatara.com/#print-post</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Greeting Cards -->
-  <url>
-    <loc>https://postman.khagatara.com/#cards</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Registered / Certified Mail -->
-  <url>
-    <loc>https://postman.khagatara.com/#registered-mail</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Newspaper / Media Ad Placement -->
-  <url>
-    <loc>https://postman.khagatara.com/#ads</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Bulk / Business Mail -->
-  <url>
-    <loc>https://postman.khagatara.com/#bulk</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Track Order -->
-  <url>
-    <loc>https://postman.khagatara.com/#track</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Account -->
-  <url>
-    <loc>https://postman.khagatara.com/#account</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
   <!-- Terms -->
   <url>
     <loc>https://postman.khagatara.com/terms</loc>
