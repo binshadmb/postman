@@ -1323,6 +1323,10 @@ async function generateProforma() {
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
 
+    // Clear this module's draft so old text (including anything sensitive
+    // typed for testing) can't silently resurface in a future document.
+    orderDraft[state.moduleId] = {};
+
     panelEl.innerHTML = `
       <h3 style="margin-top:0">Proforma Generated</h3>
       <p style="color:var(--muted);margin:0 0 14px">Reference: <strong>${esc(docId || "")}</strong> — saved and ready to print or send.</p>
