@@ -1,6 +1,7 @@
 "use client";
 import Head from "next/head";
 import Script from "next/script";
+import { hreflangTags } from "../lib/i18n";
 
 export default function Home() {
   return (
@@ -8,8 +9,8 @@ export default function Home() {
       <Head>
         <title>Postman — Khagatara</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads and bulk mail — handled locally for overseas senders." />
-        <meta name="keywords" content="print and post India, document printing Kerala, registered mail India, speed post India, greeting cards India, newspaper ad placement India, postman khagatara" />
+        <meta name="description" content="Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads, flyer distribution, bulk mail, and business inspection — handled locally for overseas senders." />
+        <meta name="keywords" content="print and post India, document printing Kerala, registered mail India, speed post India, greeting cards India, newspaper ad placement India, flyer distribution India, leaflet distribution India, bulk mail India, business inspection service India, proforma invoice generator, postman khagatara" />
         <meta property="og:title" content="Postman — Khagatara" />
         <meta property="og:description" content="Print, post, track and prove delivery inside India. For overseas senders." />
         <meta property="og:url" content="https://postman.khagatara.com/" />
@@ -17,6 +18,9 @@ export default function Home() {
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://postman.khagatara.com/" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {hreflangTags("/").map((h) => (
+          <link key={h.hreflang} rel={h.rel} hrefLang={h.hreflang} href={h.href} />
+        ))}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -25,19 +29,21 @@ export default function Home() {
               "@type": "LocalBusiness",
               "name": "Postman — Khagatara",
               "url": "https://postman.khagatara.com",
-              "description": "Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads and bulk mail handled locally for overseas senders.",
+              "description": "Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads, flyer distribution, bulk mail, and business inspection handled locally for overseas senders.",
               "areaServed": "IN",
               "serviceType": [
                 "Document Print & Post",
                 "Greeting Cards",
                 "Registered Mail",
                 "Newspaper Ad Placement",
+                "Flyer / Leaflet Distribution",
                 "Bulk Business Mail",
+                "Business Inspection / Discussion",
                 "Order Tracking"
               ],
               "contactPoint": {
                 "@type": "ContactPoint",
-                "email": "postman@khagatara.com",
+                "email": "info@khagatara.com",
                 "contactType": "customer service"
               }
             })
