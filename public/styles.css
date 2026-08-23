@@ -577,6 +577,32 @@ input[type="range"] {
   gap: 14px;
 }
 
+.enquiry-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 14px 18px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.enquiry-banner a {
+  color: var(--red);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.enquiry-banner a:hover {
+  text-decoration: underline;
+}
+
 .site-footer {
   display: flex;
   flex-wrap: wrap;

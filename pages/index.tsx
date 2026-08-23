@@ -197,6 +197,10 @@ export default function Home() {
               <button className="scroll-arrow" id="childTabsRight" type="button" aria-label="Scroll tabs right">&#8594;</button>
             </div>
             <div id="panel" className="panel" />
+            <div className="enquiry-banner">
+              <span>Have a doubt about this service?</span>
+              <a href="mailto:info@khagatara.com">Contact us at info@khagatara.com →</a>
+            </div>
           </section>
 
           <footer className="site-footer">

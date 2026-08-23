@@ -203,6 +203,10 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
               <button className="scroll-arrow" id="childTabsRight" type="button" aria-label="Scroll tabs right">&#8594;</button>
             </div>
             <div id="panel" className="panel" />
+            <div className="enquiry-banner">
+              <span>{t.enquiry?.text || "Have a doubt about this service?"}</span>
+              <a href="mailto:info@khagatara.com">{t.enquiry?.cta || "Contact us at info@khagatara.com →"}</a>
+            </div>
           </section>
 
           <footer className="site-footer">
