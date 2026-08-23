@@ -118,6 +118,13 @@ export default function Home() {
             <button className="primary-action" type="button" id="getStartedBtn">Get Started →</button>
           </div>
         </section>
+
+        <footer className="site-footer">
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/refund">Refund/Cancellation</a>
+          <a href="/contact">Contact</a>
+        </footer>
       </section>
 
       <div className="app-shell" id="appShell" style={{display: "none"}}>

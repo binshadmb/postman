@@ -128,6 +128,13 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
             <button className="primary-action" type="button" id="getStartedBtn">{t.home?.cta_upload || "Get Started"} →</button>
           </div>
         </section>
+
+        <footer className="site-footer">
+          <a href="/terms">{t.footer?.terms}</a>
+          <a href="/privacy">{t.footer?.privacy}</a>
+          <a href="/refund">{t.footer?.refund}</a>
+          <a href="/contact">{t.footer?.contact}</a>
+        </footer>
       </section>
 
       <div className="app-shell" id="appShell" style={{display: "none"}} lang={lang} dir={dir}>
@@ -199,10 +206,10 @@ export default function Home({ lang, dir, t, hreflangs }: Props) {
           </section>
 
           <footer className="site-footer">
-            <a href={`/${lang}/terms`}>{t.footer?.terms}</a>
-            <a href={`/${lang}/privacy`}>{t.footer?.privacy}</a>
-            <a href={`/${lang}/refund`}>{t.footer?.refund}</a>
-            <a href={`/${lang}/contact`}>{t.footer?.contact}</a>
+            <a href="/terms">{t.footer?.terms}</a>
+            <a href="/privacy">{t.footer?.privacy}</a>
+            <a href="/refund">{t.footer?.refund}</a>
+            <a href="/contact">{t.footer?.contact}</a>
           </footer>
         </main>
       </div>
