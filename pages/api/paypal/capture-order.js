@@ -1,6 +1,7 @@
 // pages/api/paypal/capture-order.js
 import { prisma } from "../../../lib/prisma";
 import { captureOrder as capturePaypalOrder } from "../../../lib/paypal";
+import { notifyNewOrder } from "../../../lib/notifyNewOrder";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -51,6 +52,8 @@ export default async function handler(req, res) {
         ],
       },
     });
+
+    await notifyNewOrder(order);
 
     return res.status(200).json({
       verified: true,

@@ -1,6 +1,7 @@
 // pages/api/cashfree/verify.js
 import { prisma } from "../../../lib/prisma";
 import { getCashfreeOrderStatus } from "../../../lib/cashfree";
+import { notifyNewOrder } from "../../../lib/notifyNewOrder";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -50,6 +51,8 @@ export default async function handler(req, res) {
         ],
       },
     });
+
+    await notifyNewOrder(order);
 
     return res.status(200).json({ verified: true, orderId: order.publicId });
   } catch (err) {

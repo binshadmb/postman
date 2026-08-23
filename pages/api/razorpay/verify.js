@@ -1,6 +1,7 @@
 // pages/api/razorpay/verify.js
 import crypto from "crypto";
 import { prisma } from "../../../lib/prisma";
+import { notifyNewOrder } from "../../../lib/notifyNewOrder";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -55,6 +56,8 @@ export default async function handler(req, res) {
         ],
       },
     });
+
+    await notifyNewOrder(order);
 
     return res.status(200).json({
       verified: true,
