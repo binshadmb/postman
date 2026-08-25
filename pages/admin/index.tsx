@@ -121,6 +121,19 @@ export default function AdminPanel() {
     if (res.ok) refreshOrders();
   }
 
+  const DELETABLE_STATUSES = ["PAYMENT_PENDING", "CANCELLED", "IN_REVIEW"];
+
+  async function deleteOrder(orderId: string, publicId: string) {
+    if (!confirm(`Delete order ${publicId}? This cannot be undone.`)) return;
+    const res = await fetch(`/api/admin/orders/${orderId}`, { method: "DELETE" });
+    if (res.ok) {
+      refreshOrders();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      alert(data.error || "Failed to delete order.");
+    }
+  }
+
   if (!config) {
     return <div style={{ padding: 40, fontFamily: "Inter, system-ui, sans-serif" }}>Loading…</div>;
   }
@@ -179,15 +192,30 @@ export default function AdminPanel() {
                         {order.module} · ₹{order.amount.toLocaleString("en-IN")} · {new Date(order.createdAt).toLocaleString()}
                       </div>
                     </div>
-                    <select
-                      value={order.status}
-                      onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                      style={{ minHeight: 36, borderRadius: 7, border: "1px solid #d8d3c6", padding: "6px 10px" }}
-                    >
-                      {["PAYMENT_PENDING", "PAID", "IN_REVIEW", "PRINTED", "POSTED", "FULFILLED", "CANCELLED", "REFUNDED"].map((status) => (
-                        <option key={status} value={status}>{status}</option>
-                      ))}
-                    </select>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <select
+                        value={order.status}
+                        onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                        style={{ minHeight: 36, borderRadius: 7, border: "1px solid #d8d3c6", padding: "6px 10px" }}
+                      >
+                        {["PAYMENT_PENDING", "PAID", "IN_REVIEW", "PRINTED", "POSTED", "FULFILLED", "CANCELLED", "REFUNDED"].map((status) => (
+                          <option key={status} value={status}>{status}</option>
+                        ))}
+                      </select>
+                      {DELETABLE_STATUSES.includes(order.status) && (
+                        <button
+                          onClick={() => deleteOrder(order.id, order.publicId)}
+                          title="Delete this order"
+                          style={{
+                            minHeight: 36, borderRadius: 7, border: "1px solid #d99",
+                            background: "#fff5f5", color: "#c0392b", padding: "6px 10px",
+                            cursor: "pointer", fontSize: "0.85rem",
+                          }}
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(180px, 1fr))", gap: 12 }}>
