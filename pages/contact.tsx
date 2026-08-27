@@ -3,7 +3,11 @@ import Head from "next/head";
 export default function Contact() {
   return (
     <main style={pageStyle}>
-      <Head><title>Contact - Postman Khagatara</title></Head>
+      <Head>
+        <title>Contact - Postman Khagatara</title>
+        <meta name="description" content="Contact Postman Khagatara for order support, upload issues, refund requests, or fulfillment questions. Reach us by email or WhatsApp for order-specific communication." />
+        <meta name="keywords" content="contact postman khagatara, print and post India support, NRI printing service contact, document printing India customer support, khagatara WhatsApp support, order support India print service, send documents to India help, registered mail India contact" />
+      </Head>
       <h1>Contact Postman Khagatara</h1>
       <p>For order support, upload issues, refund requests, or fulfillment questions, email us with your order ID.</p>
 

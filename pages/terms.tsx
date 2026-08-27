@@ -3,7 +3,11 @@ import Head from "next/head";
 export default function Terms() {
   return (
     <main style={pageStyle}>
-      <Head><title>Terms of Service - Postman Khagatara</title></Head>
+      <Head>
+        <title>Terms of Service - Postman Khagatara</title>
+        <meta name="description" content="Terms of Service for Postman Khagatara — document review, prohibited content, and service terms for print, post, and delivery orders submitted from abroad and within India." />
+        <meta name="keywords" content="postman khagatara terms of service, print and post India terms, document printing service agreement, NRI printing service terms, khagatara terms and conditions, print and post India legal terms" />
+      </Head>
       <h1>Terms of Service</h1>
 
       <p>Postman — Khagatara helps customers submit documents, greeting-card instructions, and postal details so we can print, prepare, and post items inside India.</p>

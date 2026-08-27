@@ -3,7 +3,11 @@ import Head from "next/head";
 export default function Refund() {
   return (
     <main style={pageStyle}>
-      <Head><title>Refund and Cancellation Policy - Postman Khagatara</title></Head>
+      <Head>
+        <title>Refund and Cancellation Policy - Postman Khagatara</title>
+        <meta name="description" content="Refund and Cancellation Policy for Postman Khagatara — cancellation charges, refund eligibility, and processing details for print, post, and delivery orders inside India." />
+        <meta name="keywords" content="postman khagatara refund policy, print and post India cancellation, document printing refund India, NRI printing service refund, khagatara order cancellation, print and post India refund terms" />
+      </Head>
       <h1>Refund and Cancellation Policy</h1>
 
       <h2>1. Cancellation Before Work Begins (Enquiry / Review Stage)</h2>

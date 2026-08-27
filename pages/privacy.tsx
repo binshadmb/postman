@@ -3,7 +3,11 @@ import Head from "next/head";
 export default function Privacy() {
   return (
     <main style={pageStyle}>
-      <Head><title>Privacy Policy - Postman Khagatara</title></Head>
+      <Head>
+        <title>Privacy Policy - Postman Khagatara</title>
+        <meta name="description" content="Privacy Policy and Service Conditions for Postman Khagatara — how we collect, use, store, and protect customer information for document printing, posting, and delivery services inside India." />
+        <meta name="keywords" content="postman khagatara privacy policy, print and post India privacy, document printing data security, NRI printing service privacy policy, khagatara service conditions, data protection print and post India" />
+      </Head>
       <h1>Privacy Policy and Service Conditions</h1>
 
       <p>We collect only the information reasonably required to process, print, prepare, post, and support print-and-post orders placed through our service.</p>
