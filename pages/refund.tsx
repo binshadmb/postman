@@ -7,6 +7,28 @@ export default function Refund() {
         <title>Refund and Cancellation Policy - Postman Khagatara</title>
         <meta name="description" content="Refund and Cancellation Policy for Postman Khagatara — cancellation charges, refund eligibility, and processing details for print, post, and delivery orders inside India." />
         <meta name="keywords" content="postman khagatara refund policy, print and post India cancellation, document printing refund India, NRI printing service refund, khagatara order cancellation, print and post India refund terms" />
+        <meta property="og:title" content="Refund and Cancellation Policy - Postman Khagatara" />
+        <meta property="og:description" content="Cancellation charges, refund eligibility, and processing details for print, post, and delivery orders with Postman Khagatara." />
+        <meta property="og:url" content="https://postman.khagatara.com/refund" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://postman.khagatara.com/refund" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "Refund and Cancellation Policy - Postman Khagatara",
+              "url": "https://postman.khagatara.com/refund",
+              "isPartOf": {
+                "@type": "WebSite",
+                "name": "Postman — Khagatara",
+                "url": "https://postman.khagatara.com"
+              }
+            })
+          }}
+        />
       </Head>
       <h1>Refund and Cancellation Policy</h1>
 

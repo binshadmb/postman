@@ -7,6 +7,28 @@ export default function Terms() {
         <title>Terms of Service - Postman Khagatara</title>
         <meta name="description" content="Terms of Service for Postman Khagatara — document review, prohibited content, and service terms for print, post, and delivery orders submitted from abroad and within India." />
         <meta name="keywords" content="postman khagatara terms of service, print and post India terms, document printing service agreement, NRI printing service terms, khagatara terms and conditions, print and post India legal terms" />
+        <meta property="og:title" content="Terms of Service - Postman Khagatara" />
+        <meta property="og:description" content="Document review, prohibited content, and service terms for print, post, and delivery orders with Postman Khagatara." />
+        <meta property="og:url" content="https://postman.khagatara.com/terms" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://postman.khagatara.com/terms" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "Terms of Service - Postman Khagatara",
+              "url": "https://postman.khagatara.com/terms",
+              "isPartOf": {
+                "@type": "WebSite",
+                "name": "Postman — Khagatara",
+                "url": "https://postman.khagatara.com"
+              }
+            })
+          }}
+        />
       </Head>
       <h1>Terms of Service</h1>
 

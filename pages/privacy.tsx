@@ -7,6 +7,28 @@ export default function Privacy() {
         <title>Privacy Policy - Postman Khagatara</title>
         <meta name="description" content="Privacy Policy and Service Conditions for Postman Khagatara — how we collect, use, store, and protect customer information for document printing, posting, and delivery services inside India." />
         <meta name="keywords" content="postman khagatara privacy policy, print and post India privacy, document printing data security, NRI printing service privacy policy, khagatara service conditions, data protection print and post India" />
+        <meta property="og:title" content="Privacy Policy - Postman Khagatara" />
+        <meta property="og:description" content="How Postman Khagatara collects, uses, stores, and protects customer information for document printing, posting, and delivery services." />
+        <meta property="og:url" content="https://postman.khagatara.com/privacy" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://postman.khagatara.com/privacy" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "Privacy Policy - Postman Khagatara",
+              "url": "https://postman.khagatara.com/privacy",
+              "isPartOf": {
+                "@type": "WebSite",
+                "name": "Postman — Khagatara",
+                "url": "https://postman.khagatara.com"
+              }
+            })
+          }}
+        />
       </Head>
       <h1>Privacy Policy and Service Conditions</h1>
 

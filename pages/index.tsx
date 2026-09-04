@@ -7,11 +7,11 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Postman — Khagatara</title>
+        <title>Postman — Print, Post & Document Delivery in India | Khagatara</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Print, post, track and prove delivery inside India. Document printing, greeting cards, registered mail, newspaper ads, flyer distribution, bulk mail, and business inspection — handled locally for overseas senders." />
         <meta name="keywords" content="print and post India, document printing India, document printing Kerala, print and post Kerala, send documents to India, print documents from abroad, NRI printing service, NRI courier service India, send post to India from abroad, registered mail India, certified mail India, speed post India, courier service India, greeting cards India, send greeting card to India, birthday card delivery India, anniversary card delivery India, festival greeting cards India, personalised greeting card India, newspaper ad placement India, obituary ad booking India, death notice publication India, matrimonial ad booking India, matrimonial classified newspaper India, legal notice publication India, gazette notice publication India, statutory notice newspaper India, tender notice publication India, public notice publication India, classified ad India newspaper, display ad newspaper India, flyer distribution India, leaflet distribution India, flyer printing and distribution, pamphlet distribution service India, bulk mail India, business mail service India, bulk business mail Kerala, CSV bulk mail India, batch print and post India, business inspection service India, site visit service India, proforma invoice generator, invoice generator India, print and mail service Thiruvananthapuram, print and post Trivandrum, document delivery service India, send parcel to India, send documents to India from USA, send documents to India from UK, send documents to India from UAE, send documents to India from Dubai, send documents to India from Canada, send documents to India from Australia, send documents to India from Gulf, NRI document delivery India, track order India, order tracking print and post, postman khagatara, khagatara print and post" />
-        <meta property="og:title" content="Postman — Khagatara" />
+        <meta property="og:title" content="Postman — Print, Post & Document Delivery in India | Khagatara" />
         <meta property="og:description" content="Print, post, track and prove delivery inside India. For overseas senders." />
         <meta property="og:url" content="https://postman.khagatara.com/" />
         <meta property="og:type" content="website" />

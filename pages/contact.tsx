@@ -7,9 +7,38 @@ export default function Contact() {
         <title>Contact - Postman Khagatara</title>
         <meta name="description" content="Contact Postman Khagatara for order support, upload issues, refund requests, or fulfillment questions. Reach us by email or WhatsApp for order-specific communication." />
         <meta name="keywords" content="contact postman khagatara, print and post India support, NRI printing service contact, document printing India customer support, khagatara WhatsApp support, order support India print service, send documents to India help, registered mail India contact" />
+        <meta property="og:title" content="Contact - Postman Khagatara" />
+        <meta property="og:description" content="Contact Postman Khagatara for order support, upload issues, refund requests, or fulfillment questions." />
+        <meta property="og:url" content="https://postman.khagatara.com/contact" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://postman.khagatara.com/contact" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ContactPage",
+              "name": "Contact Postman Khagatara",
+              "url": "https://postman.khagatara.com/contact",
+              "mainEntity": {
+                "@type": "Organization",
+                "name": "Postman — Khagatara",
+                "email": "info@khagatara.com",
+                "contactPoint": {
+                  "@type": "ContactPoint",
+                  "email": "info@khagatara.com",
+                  "telephone": "+91-70341-01134",
+                  "contactType": "customer service",
+                  "areaServed": "IN",
+                }
+              }
+            })
+          }}
+        />
       </Head>
       <h1>Contact Postman Khagatara</h1>
-      <p>For order support, upload issues, refund requests, or fulfillment questions, email us with your order ID.</p>
+      <p>For order support, upload issues, refund requests, or fulfillment questions, email us with your order ID. We handle every order individually, so having your order ID ready helps us find the right details quickly and get back to you with an accurate answer.</p>
 
       <section style={cardStyle}>
         <strong>Email</strong>
@@ -27,6 +56,11 @@ export default function Contact() {
       <section style={cardStyle}>
         <strong>Service</strong>
         <p>Document Print & Post, greeting-card preparation, registered/certified mail support, newspaper/media ad assistance, flyer/leaflet distribution, business inspection requests, and bulk/business mail workflows inside India.</p>
+      </section>
+
+      <section style={cardStyle}>
+        <strong>Response Time</strong>
+        <p>We typically respond to emails within one business day. WhatsApp messages related to an active order are usually answered faster, since that channel is reserved for order-specific proofs and confirmations.</p>
       </section>
     </main>
   );
